@@ -35,8 +35,6 @@ opennms:
     storage:
       etc: 1Gi
       rrd: 100Gi
-  uiServers:
-    replicaCount: 0
 
 #sentinel:
 #  replicaCount: 1

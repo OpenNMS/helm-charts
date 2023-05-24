@@ -91,9 +91,6 @@ In opennms/values.yaml
   * This aligns with the version in minion.yaml.
 
 In helm-cloud.yaml
-* opennms.uiServers.replicaCount: 1
-  * This gives us a UI.
-
 In dependencies/kafka.yaml, change the following:
 * host: kafka.sud_domain1.domain1
 

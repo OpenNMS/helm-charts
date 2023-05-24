@@ -9,8 +9,6 @@ dependencies:
 opennms:
   configuration:
     enable-alec: false
-  uiServers:
-    replicaCount: 0
 
 sentinel:
   replicaCount: 0
