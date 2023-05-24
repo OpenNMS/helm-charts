@@ -1,5 +1,4 @@
 #!/bin/bash
-# @author Alejandro Galue <agalue@opennms.com>
 #
 # WARNING: For testing purposes only
 

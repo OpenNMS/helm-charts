@@ -16,14 +16,22 @@ promptAndConfirm(){
     esac
 }
 
-export example_path=""
+checkRC(){
+    return_code=$?
+    if [ $return_code -ne 0 ]; then
+        printf "\033[31m%s\n\033[0m" "An error occured as the return code is not 0!"
+        exit $return_code
+    fi 
+}
+
+export root_path=""
 if [ ! -d "examples" ]; then
  if [ -d "../examples" ]; then
-  example_path="../"
+  root_path="../"
  fi
 fi
 
-export log_file="${example_path}log.txt"
+export log_file="${root_path}log.txt"
 
 export our_domain=""
 export our_namespace=""
@@ -61,7 +69,7 @@ echo ""
 printf "\033[36m%s\033[0m\033[0m\033[33m %s\n\033[0m" "You can find a copy of the logs in" "$log_file"
 echo ""
 printf "\033[36m%s\033[0m:\033[0m\033[33m %s\n\033[0m" "Step 1" "Modifying dependencies/kafka.yaml"
-sed -rie 's/(host: kafka(-0)?).*/\1'$our_kafka_domain'/g' "${example_path}dependencies/kafka.yaml"
+sed -rie 's/(host: kafka(-0)?).*/\1'$our_kafka_domain'/g' "${root_path}dependencies/kafka.yaml"
 echo ""
 
 # Ingress is not really active/installed, lets install it
@@ -71,15 +79,19 @@ helm upgrade --install ingress-nginx ingress-nginx \
   --namespace ingress-nginx --create-namespace >> $log_file 2>&1
 
 sleep 10
+checkRC
+
 echo ""
 
 # Start the dependencies
 printf "\033[36m%s\033[0m:\033[0m\033[33m %s\n\033[0m" "Step 3" "Starting Dependencies"
-./start-dependencies.sh  >> $log_file 2>&1
+${root_path}scripts/start-dependencies.sh  >> $log_file 2>&1
+checkRC
 echo ""
 
 printf "\033[36m%s\033[0m:\033[0m\033[33m %s\n\033[0m" "Step 4" "Installing OpenNMS"
-helm upgrade --install -f ${example_path}minimal-resources.yaml -f ${example_path}kill-it-with-fire.yaml -f ${example_path}bare-bones.yaml --set domain=$our_domain monms ./opennms >> $log_file 2>&1
+helm upgrade --install -f ${root_path}examples/minimal-resources.yaml -f ${root_path}examples/kill-it-with-fire.yaml -f ${root_path}examples/bare-bones.yaml --set domain=$our_domain $our_namespace ${root_path}opennms >> $log_file 2>&1
+checkRC
 echo ""
 
 printf "\033[36m%s\033[0m:\033[0m\033[33m %s\n\033[0m" "Step 5" "Waiting for OpenNMS Stateful container to come up"
@@ -93,7 +105,7 @@ done
 echo ""
 
 if $domain_defined; then
- printf "\033[36m%s\033[0m:\033[0m\033[33m %s\n\033[0m" "Step 6" "Checking to see if OpenNMS instance is accessible"
+ printf "\033[36m%s\033[0m:\033[0m\033[33m %s\n\033[0m" "Step 6" "Waiting for OpenNMS instance url to be accessible"
  curl -k -s --retry 50 -f --retry-all-errors --retry-delay 5 -o /dev/null "https://onms-core.$our_namespace.$our_domain/opennms/login.jsp"
 fi
 tail -10 $log_file

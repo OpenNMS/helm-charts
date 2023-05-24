@@ -1,5 +1,4 @@
 #!/bin/bash
-# @author Alejandro Galue <agalue@opennms.com>
 #
 # WARNING: For testing purposes only
 
@@ -9,6 +8,12 @@ trap 's=$?; echo >&2 "$0: Error on line "$LINENO": $BASH_COMMAND"; exit $s' ERR
 for cmd in "kubectl" "helm" "keytool"; do
   type $cmd >/dev/null 2>&1 || { echo >&2 "$cmd required but it's not installed; aborting."; exit 1; }
 done
+
+if [ ! -d "examples" ]; then
+ if [ -d "../examples" ]; then
+  cd ../
+ fi
+fi
 
 # Optional dependencies
 INSTALL_ELASTIC=${INSTALL_ELASTIC:-false} # needed for Flow processing
