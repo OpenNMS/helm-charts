@@ -1,0 +1,47 @@
+# WARNING: For testing purposes only
+
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: onms-db
+spec:
+  secretName: onms-db-certs
+  dnsNames:
+  - onms-db
+  - onms-db.shared
+  - onms-db.shared.svc
+  - onms-db.shared.svc.cluster.local
+  issuerRef:
+    name: opennms-issuer
+    kind: ClusterIssuer
+    group: cert-manager.io
+
+---
+apiVersion: acid.zalan.do/v1
+kind: postgresql
+metadata:
+  name: onms-db
+spec:
+  teamId: onms
+  volume:
+    size: 100Gi
+  numberOfInstances: 1
+  users:
+    opennms:
+    - superuser
+    - createdb
+  postgresql:
+    version: "14"
+  spiloFSGroup: 103
+  patroni:
+    initdb:
+      encoding: UTF8
+      locale: en_US.UTF-8
+      data-checksums: "true"
+  tls:
+    secretName: onms-db-certs
+  enableMasterLoadBalancer: false
+  enableReplicaLoadBalancer: false
+  enableConnectionPooler: false
+  enableReplicaConnectionPooler: false

@@ -1,0 +1,74 @@
+{{- $use_ui := gt (((.Values.opennms).uiServers).replicaCount|int) 0 }}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: onms-ingress
+  namespace: {{ .Release.Name }}
+  labels:
+    {{- include "opennms.labels" . | nindent 4 }}
+  annotations:
+    ingress.kubernetes.io/affinity: cookie
+    ingress.kubernetes.io/session-cookie-name: route
+    ingress.kubernetes.io/session-cookie-hash: sha1
+    ingress.kubernetes.io/force-ssl-redirect: "true"
+    {{- if ((.Values.ingress).certManager).clusterIssuer }}
+    cert-manager.io/cluster-issuer: {{ .Values.ingress.certManager.clusterIssuer }}
+    {{- end }}
+    {{- with .Values.ingress.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  ingressClassName: {{ .Values.ingress.className }}
+  tls:
+    - secretName: onms-ingress-cert
+      hosts:
+        {{- if $use_ui }}
+        - onms.{{ include "opennms.domain" . }}
+        {{- end }}
+        - onms-core.{{ include "opennms.domain" . }}
+        {{- if gt ((.Values.grafana).replicaCount|int) 0 }}
+        - grafana.{{ include "opennms.domain" . }}
+        {{- end }}
+  rules:
+    {{- if $use_ui }}
+    - host: onms.{{ include "opennms.domain" . }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: onms-ui
+                port:
+                  number: 8980
+          - path: /opennms/nrt
+            pathType: Prefix
+            backend:
+              service:
+                name: onms-core
+                port:
+                  number: 8980
+    {{- end }}
+    - host: onms-core.{{ include "opennms.domain" . }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: onms-core
+                port:
+                  number: 8980
+    {{- if gt ((.Values.grafana).replicaCount|int) 0 }}
+    - host: grafana.{{ include "opennms.domain" . }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: grafana
+                port:
+                  number: 3000
+    {{- end }}

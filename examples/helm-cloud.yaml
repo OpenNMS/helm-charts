@@ -1,0 +1,68 @@
+# @author Alejandro Galue <agalue@opennms.com>
+# Example content for the Helm Chart values with modest resources for a Cloud Deployment
+
+dependencies:
+  loki:
+    hostname: loki.shared.svc
+    port: 3100
+  kafka:
+    hostname: onms-kafka-bootstrap.shared.svc # Please change it
+    port: 9093
+    configuration:
+      sasl_mechanism: SCRAM-SHA-512
+      security_protocol: SASL_SSL
+  elasticsearch:
+    hostname: onms-es-http.shared.svc # Please change it
+    port: 9200
+    configuration:
+      flows:
+        index_strategy: daily
+        replication_factor: 0
+        num_shards: 1
+  postgresql:
+    hostname: onms-db.shared.svc # Please change it
+    port: 5432
+
+opennms:
+  resources:
+    limits:
+      cpu: '2'
+      memory: 8Gi
+    requests:
+      cpu: '2'
+      memory: 4Gi
+  configuration:
+    storage:
+      etc: 1Gi
+      rrd: 100Gi
+  uiServers:
+    replicaCount: 0
+
+#sentinel:
+#  replicaCount: 1
+#  resources:
+#    limits:
+#      cpu: '1'
+#      memory: 4Gi
+#    requests:
+#      cpu: '1'
+#      memory: 2Gi
+
+grafana:
+  replicaCount: 2
+  resources:
+    limits:
+      cpu: 200m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+  imageRenderer:
+    replicaCount: 2
+    resources:
+      limits:
+        cpu: 200m
+        memory: 256Mi
+      requests:
+        cpu: 100m
+        memory: 128Mi

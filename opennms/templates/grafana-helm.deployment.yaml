@@ -1,0 +1,112 @@
+{{- if gt ((.Values.grafana).replicaCount|int) 0 }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana
+  namespace: {{ .Release.Name }}
+  labels:
+    app: grafana
+    {{- include "opennms.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.grafana.replicaCount }}
+  selector:
+    matchLabels:
+      app: grafana
+      {{- include "opennms.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: grafana
+        {{- include "opennms.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- range $k, $r := .Values.imagePullSecrets }}
+        - name: {{ $r.name }}
+        {{- end }}
+      {{- end }}
+      initContainers:
+      - name: init # Should run once (regardless of the replicas)
+        image: {{ printf "%s:%s" (((.Values.grafana.configuration.database).image).repository | default "postgres") (((.Values.grafana.configuration.database).image).tag | default "12") }}
+        imagePullPolicy: {{ ((.Values.grafana.configuration.database).image).imagePullPolicy | default "IfNotPresent" }}
+        securityContext:
+          runAsUser: 999 # postgres user
+        command:
+        - sh
+        - /init.sh
+        envFrom:
+        - configMapRef:
+            name: app-settings
+        - secretRef:
+            name: app-credentials
+        env:
+        - name: GF_DATABASE_HOST
+          value: $(POSTGRES_HOST):$(POSTGRES_PORT)
+        - name: GF_SESSION_PROVIDER_CONFIG
+          value: dbname=$(GF_DATABASE_NAME) user=$(GF_DATABASE_USER) password=$(GF_DATABASE_PASSWORD) host=$(POSTGRES_HOST) port=$(POSTGRES_PORT) sslmode=$(GF_DATABASE_SSL_MODE)
+        volumeMounts:
+        - name: scripts
+          mountPath: /init.sh
+          subPath: grafana-init.sh
+        - name: jks
+          mountPath: /etc/java/jks
+      containers:
+      - name: grafana-helm
+        image: {{ printf "%s:%s" .Values.grafana.image.repository .Values.grafana.image.tag }}
+        imagePullPolicy: {{ .Values.grafana.image.imagePullPolicy }}
+        ports:
+        - containerPort: 3000
+          name: http
+        envFrom:
+        - configMapRef:
+            name: app-settings
+        - secretRef:
+            name: app-credentials
+        env:
+        - name: GF_DATABASE_HOST
+          value: $(POSTGRES_HOST):$(POSTGRES_PORT)
+        - name: GF_SESSION_PROVIDER_CONFIG
+          value: dbname=$(GF_DATABASE_NAME) user=$(GF_DATABASE_USER) password=$(GF_DATABASE_PASSWORD) host=$(POSTGRES_HOST) port=$(POSTGRES_PORT) sslmode=$(GF_DATABASE_SSL_MODE)
+        {{- if gt (((.Values.grafana).imageRenderer).replicaCount|int) 0 }}
+        - name: GF_RENDERING_SERVER_URL
+          value: http://grafana-renderer.{{ .Release.Name }}:8081/render
+        - name: GF_RENDERING_CALLBACK_URL
+          value: http://grafana.{{ .Release.Name }}:3000/
+        {{- end }}
+        volumeMounts:
+        - name: config
+          mountPath: /etc/grafana/provisioning/plugins/helm.yaml
+          subPath: plugins.helm.yaml
+        - name: config
+          mountPath: /etc/grafana/provisioning/datasources/helm.yaml
+          subPath: datasources.helm.yaml
+        - name: jks
+          mountPath: /etc/java/jks
+        {{- with .Values.grafana.resources }}
+        resources:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /
+            port: http
+          initialDelaySeconds: 30
+          periodSeconds: 60
+      volumes:
+      - name: scripts
+        configMap:
+          name: app-scripts
+      - name: config
+        configMap:
+          name: helm-config
+      - name: jks
+        secret:
+          secretName: app-jks
+{{- end }}

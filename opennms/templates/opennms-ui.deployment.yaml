@@ -1,0 +1,178 @@
+{{- if gt (((.Values.opennms).uiServers).replicaCount|int) 0 }}
+{{- $image := printf "%s:%s" .Values.opennms.image.repository (.Values.opennms.image.tag | default .Values.opennmsVersion) -}}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: onms-ui
+  namespace: {{ .Release.Name }}
+  labels:
+    app: onms-ui
+    {{- include "opennms.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.opennms.uiServers.replicaCount }}
+  selector:
+    matchLabels:
+      app: onms-ui
+      {{- include "opennms.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: onms-ui
+        {{- include "opennms.selectorLabels" . | nindent 8 }}
+    spec:
+      terminationGracePeriodSeconds: {{ .Values.opennms.uiServers.terminationGracePeriodSeconds | default 120 }}
+      {{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- range $k, $r := .Values.imagePullSecrets }}
+        - name: {{ $r.name }}
+        {{- end }}
+      {{- end }}
+      initContainers:
+      # Initializes OpenNMS Configuration
+      # Requires the same image/version used at runtime
+      - name: init
+        image: {{ $image }}
+        imagePullPolicy: {{ .Values.opennms.image.imagePullPolicy }}
+        command: [ bash, /scripts/onms-ui-init.sh ]
+        envFrom:
+        - configMapRef:
+            name: app-settings
+        - secretRef:
+            name: app-credentials
+        volumeMounts:
+        - name: overlay
+          mountPath: /opt/opennms-overlay # Required by the script - OVERLAY_DIR
+        - name: etc-core
+          mountPath: /opennms-core/etc # Required by the script - CORE_CONFIG_DIR
+        - name: scripts
+          mountPath: /scripts # Required by the script
+      containers:
+      - name: onms
+        image: {{ $image }}
+        imagePullPolicy: {{ .Values.opennms.image.imagePullPolicy }}
+        args:
+        - -s
+        ports:
+        - containerPort: 8101
+          name: karaf
+        - containerPort: 8980
+          name: http
+        envFrom:
+        - configMapRef:
+            name: app-settings
+        - secretRef:
+            name: app-credentials
+        volumeMounts:
+        {{- if (include "opennms.enable_tss_rrd" .) }}
+        - name: rrd-core
+          mountPath: /opennms-data/rrd
+        {{- end }}
+        {{- if .Values.opennms.configuration.storage.mibs }}
+        - name: mibs-core
+          mountPath: /opt/opennms/share/mibs
+        {{- end }}
+        - name: etc-core
+          mountPath: /opennms-core/etc # Must match CORE_CONFIG_DIR from onms-ui-init.sh
+        - name: overlay
+          mountPath: /opt/opennms-overlay
+        - name: logs
+          mountPath: /opt/opennms/logs
+        - name: jks
+          mountPath: /etc/java/jks
+        - name: jks
+          mountPath: /opt/opennms/.postgresql/root.crt
+          subPath: postgresql-ca.crt
+        env:
+        - name: OPENNMS_DATABASE_CONNECTION_MAXPOOL
+          value: {{ .Values.opennms.uiServers.configuration.database.pool_size | default "50" | quote }}
+        {{- $opt :=  include "opennms.jvmOptions" . }}
+        {{- if .Values.opennms.uiServers.resources }}
+        {{- with .Values.opennms.uiServers.resources }}
+        {{- if ((.requests).memory) }}
+        - name: MEM_TOTAL_MB
+          valueFrom:
+            resourceFieldRef:
+              resource: requests.memory
+              divisor: 1Mi
+        - name: JAVA_OPTS
+          value: -Xms$(MEM_TOTAL_MB)m -Xmx$(MEM_TOTAL_MB)m {{ $opt }}
+        {{- end }}
+        resources:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        {{- else }}
+        - name: JAVA_OPTS
+          value: {{ $opt }}
+        {{- end }}
+        startupProbe:
+          httpGet:
+            path: /opennms/login.jsp
+            port: http
+          failureThreshold: 30
+          periodSeconds: 60
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /opennms/login.jsp
+            port: http
+          periodSeconds: 15
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /opennms/login.jsp
+            port: http
+          periodSeconds: 60
+          timeoutSeconds: 5
+      {{- if ((.Values.dependencies).loki).hostname }}
+      - name: promtail
+        image: {{ printf "%s:%s" .Values.promtail.image.repository (.Values.promtail.image.tag | default "latest") }}
+        imagePullPolicy: {{ .Values.promtail.image.pullPolicy }}
+        args:
+        - -config.file=/etc/promtail/promtail.yaml
+        volumeMounts:
+        - name: logs
+          mountPath: /opt/opennms/logs
+        - name: jks
+          mountPath: /etc/jks
+        - name: promtail
+          mountPath: /etc/promtail/promtail.yaml
+          subPath: promtail.onms_ui.config.yaml
+        {{- with .Values.promtail.resources }}
+        resources:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+      {{- end }}
+      volumes:
+      - name: overlay
+        emptyDir: {}
+      - name: logs
+        emptyDir: {}
+      {{- if ((.Values.dependencies).loki).hostname }}
+      - name: promtail
+        configMap:
+          name: promtail-config
+      {{- end }}
+      - name: scripts
+        configMap:
+          name: app-scripts
+      - name: jks
+        secret:
+          secretName: app-jks
+      - name: etc-core
+        persistentVolumeClaim:
+          claimName: onms-etc-pvc
+          readOnly: true
+      {{- if (include "opennms.enable_tss_rrd" .) }}
+      - name: rrd-core
+        persistentVolumeClaim:
+          claimName: onms-rrd-pvc
+          readOnly: true
+      {{- end }}
+      {{- if .Values.opennms.configuration.storage.mibs }}
+      - name: mibs-core
+        persistentVolumeClaim:
+          claimName: onms-mibs-pvc
+          readOnly: true
+      {{- end }}
+{{- end }}

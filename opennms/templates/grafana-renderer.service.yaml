@@ -1,0 +1,18 @@
+{{- if and (gt ((.Values.grafana).replicaCount|int) 0) (gt (((.Values.grafana).imageRenderer).replicaCount|int) 0) }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana-renderer
+  namespace: {{ .Release.Name }}
+  labels:
+    app: grafana-renderer
+    {{- include "opennms.labels" . | nindent 4 }}
+spec:
+  ports:
+  - port: 8081
+    name: http
+  selector:
+    app: grafana-renderer
+    {{- include "opennms.selectorLabels" . | nindent 4 }}
+{{ end }}
