@@ -1,4 +1,4 @@
-# OpenNMS K8s PoC
+# OpenNMS Helm Charts
 
 The objective of this project is to serve as a reference to implement [OpenNMS](https://www.opennms.com/) running in [Kubernetes](https://kubernetes.io/), deployed via [Helm](https://helm.sh/).
 
