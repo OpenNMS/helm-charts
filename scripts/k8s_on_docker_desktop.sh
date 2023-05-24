@@ -64,7 +64,7 @@ else
  echo ""
 fi
 
-promptAndConfirm "Do the information above look correct? [y/n]"
+promptAndConfirm "Does the information above look correct? [y/n]"
 echo ""
 printf "\033[36m%s\033[0m\033[0m\033[33m %s\n\033[0m" "You can find a copy of the logs in" "$log_file"
 echo ""
