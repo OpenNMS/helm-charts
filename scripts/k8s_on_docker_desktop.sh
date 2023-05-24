@@ -107,5 +107,15 @@ echo ""
 if $domain_defined; then
  printf "\033[36m%s\033[0m:\033[0m\033[33m %s\n\033[0m" "Step 6" "Waiting for OpenNMS instance url to be accessible"
  curl -k -s --retry 50 -f --retry-all-errors --retry-delay 5 -o /dev/null "https://onms-core.$our_namespace.$our_domain/opennms/login.jsp"
+else 
+ printf "\033[36m%s\033[0m:\033[0m\033[33m %s\n\033[0m" "Reminder" "It is recommended to add the following line to /etc/hosts."
+ printf "\t%s\n" "127.0.0.1 onms-core.$our_namespace.$our_domain"
 fi
+echo ""
+
 tail -10 $log_file
+
+printf "\033[36m%s\033[0m:\033[0m\033[33m %s\n\033[0m" "Step 7" "Undo changes to dependencies/kafka.yaml and remove dependencies/kafka.yamle"
+sed -rie 's/(host: kafka(-0)?).*/\1.k8s.agalue.net/g' "${root_path}dependencies/kafka.yaml"
+rm "${root_path}dependencies/kafka.yamle"
+echo ""
