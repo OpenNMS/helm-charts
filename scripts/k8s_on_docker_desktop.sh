@@ -113,9 +113,9 @@ else
 fi
 echo ""
 
-tail -10 $log_file
-
 printf "\033[36m%s\033[0m:\033[0m\033[33m %s\n\033[0m" "Step 7" "Undo changes to dependencies/kafka.yaml and remove dependencies/kafka.yamle"
 sed -rie 's/(host: kafka(-0)?).*/\1.k8s.agalue.net/g' "${root_path}dependencies/kafka.yaml"
 rm "${root_path}dependencies/kafka.yamle"
 echo ""
+
+tail -8 $log_file
