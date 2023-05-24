@@ -46,10 +46,10 @@ spec:
       configuration:
         class: nginx
         bootstrap:
-          host: kafka.domain1.com
+          host: kafka.k8s.agalue.net
         brokers:
         - broker: 0
-          host: kafka-0.domain1.com
+          host: kafka-0.k8s.agalue.net
     - name: plain
       port: 9095
       type: internal
