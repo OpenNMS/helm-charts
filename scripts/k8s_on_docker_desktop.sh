@@ -77,9 +77,9 @@ printf "\033[36m%s\033[0m:\033[0m\033[33m %s\n\033[0m" "Step 2" "Check/Install I
 helm upgrade --install ingress-nginx ingress-nginx \
   --repo https://kubernetes.github.io/ingress-nginx \
   --namespace ingress-nginx --create-namespace >> $log_file 2>&1
+checkRC
 
 sleep 10
-checkRC
 
 echo ""
 
