@@ -84,11 +84,11 @@ echo ""
 
 printf "\033[36m%s\033[0m:\033[0m\033[33m %s\n\033[0m" "Step 5" "Waiting for OpenNMS Stateful container to come up"
 
-replicate_status=$(kubectl get statefulset.apps/onms-core -n monms -o=jsonpath='{.status.availableReplicas}')
+replicate_status=$(kubectl get statefulset.apps/onms-core -n $our_namespace -o=jsonpath='{.status.availableReplicas}')
 
 while [ "$replicate_status" -ne 1 ]
 do 
-replicate_status=$(kubectl get statefulset.apps/onms-core -n monms -o=jsonpath='{.status.availableReplicas}')
+replicate_status=$(kubectl get statefulset.apps/onms-core -n $our_namespace -o=jsonpath='{.status.availableReplicas}')
 done
 echo ""
 
