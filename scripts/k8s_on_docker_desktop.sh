@@ -90,7 +90,7 @@ checkRC
 echo ""
 
 printf "\033[36m%s\033[0m:\033[0m\033[33m %s\n\033[0m" "Step 4" "Installing OpenNMS"
-helm upgrade --install -f ${root_path}examples/minimal-resources.yaml -f ${root_path}examples/kill-it-with-fire.yaml -f ${root_path}examples/bare-bones.yaml --set domain=$our_domain $our_namespace ${root_path}opennms >> $log_file 2>&1
+helm upgrade --install -f ${root_path}examples/kill-it-with-fire.yaml --set domain=$our_domain $our_namespace ${root_path}opennms >> $log_file 2>&1
 checkRC
 echo ""
 
