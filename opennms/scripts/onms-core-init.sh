@@ -1,5 +1,4 @@
 #!/bin/bash
-# @author Alejandro Galue <agalue@opennms.com>
 #
 # Intended to be used as part of an InitContainer expecting the same Container Image as OpenNMS
 # Designed for Horizon 29 or Meridian 2021 and 2022. Newer or older versions are not supported.

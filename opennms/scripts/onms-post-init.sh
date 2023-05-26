@@ -1,5 +1,4 @@
 #!/bin/bash
-# @author Alejandro Galue <agalue@opennms.com>
 #
 # External environment variables used by this script:
 # OPENNMS_SERVER
