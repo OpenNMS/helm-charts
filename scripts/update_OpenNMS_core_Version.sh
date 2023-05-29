@@ -25,7 +25,7 @@ fi
 echo ""
 
 printf "\033[36m%s\033[0m:\033[0m\033[33m %s\n\033[0m" "Step 2" "Modifying opennms/Chart.yaml"
-sed -rie 's/(appVersion: ?).*/\1'$new_version'/g' "${root_path}opennms/Chart.yaml"
+sed -rie 's/(appVersion: ?).*/\1\"'$new_version'\"/g' "${root_path}opennms/Chart.yaml"
 if [ -f "${root_path}opennms/Chart.yamle" ]; then
  rm ${root_path}opennms/Chart.yamle
 fi
