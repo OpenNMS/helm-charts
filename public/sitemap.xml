@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<url>
+<loc>https://github.com/OpenNMS/helm-charts/opennmshelmcharts/1.0.0-SNAPSHOT/about/about.html</loc>
+<lastmod>2023-05-30T20:58:49.021Z</lastmod>
+</url>
+<url>
+<loc>https://github.com/OpenNMS/helm-charts/opennmshelmcharts/1.0.0-SNAPSHOT/configuration/index.html</loc>
+<lastmod>2023-05-30T20:58:49.021Z</lastmod>
+</url>
+<url>
+<loc>https://github.com/OpenNMS/helm-charts/opennmshelmcharts/1.0.0-SNAPSHOT/index.html</loc>
+<lastmod>2023-05-30T20:58:49.021Z</lastmod>
+</url>
+<url>
+<loc>https://github.com/OpenNMS/helm-charts/opennmshelmcharts/1.0.0-SNAPSHOT/installation/installation.html</loc>
+<lastmod>2023-05-30T20:58:49.021Z</lastmod>
+</url>
+<url>
+<loc>https://github.com/OpenNMS/helm-charts/opennmshelmcharts/1.0.0-SNAPSHOT/installation/introduction.html</loc>
+<lastmod>2023-05-30T20:58:49.021Z</lastmod>
+</url>
+<url>
+<loc>https://github.com/OpenNMS/helm-charts/opennmshelmcharts/1.0.0-SNAPSHOT/operation/index.html</loc>
+<lastmod>2023-05-30T20:58:49.021Z</lastmod>
+</url>
+<url>
+<loc>https://github.com/OpenNMS/helm-charts/opennmshelmcharts/1.0.0-SNAPSHOT/reference/index.html</loc>
+<lastmod>2023-05-30T20:58:49.021Z</lastmod>
+</url>
+</urlset>

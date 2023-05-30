@@ -1,15 +1,15 @@
 .About
-* xref:about:index.adoc[Page1]
+* xref:about:about.adoc[]
 
 .Installation
-* xref:installation:index.adoc[Page1]
-* xref:installation:Ubuntu.adoc[Ubuntu]
+* xref:installation:introdcution.adoc[]
+* xref:installation:installation.adoc[]
 
 .Configuration
-* xref:configuration:index.adoc[Page1]
+* xref:configuration:index.adoc[]
 
 .Operation
-* xref:operation:index.adoc[Page1]
+* xref:operation:index.adoc[]
 
 .Reference
-* xref:reference:index.adoc[Page1]
+* xref:reference:index.adoc[]

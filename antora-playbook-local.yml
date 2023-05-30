@@ -1,7 +1,7 @@
 site:
-  title: OpenNMS Helm Charts Documentation
+  title: OpenNMS Helm Charts
   url: https://github.com/OpenNMS/helm-charts
-  start_page: helm-charts::index.adoc
+  start_page: opennmshelmcharts::index.adoc
 content:
   sources:
     - url: .
