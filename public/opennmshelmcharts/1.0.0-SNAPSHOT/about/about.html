@@ -89,7 +89,7 @@
     <span class="nav-text">Installation</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
-    <span class="nav-text"><a href="#installation:introdcution.adoc" class="page unresolved"></a></span>
+    <a class="nav-link" href="../installation/introduction.html">installation:introduction.adoc</a>
   </li>
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="../installation/installation.html">installation:installation.adoc</a>
@@ -101,7 +101,7 @@
     <span class="nav-text">Configuration</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="../configuration/index.html">configuration:index.adoc</a>
+    <a class="nav-link" href="../configuration/configuration.html">configuration:configuration.adoc</a>
   </li>
 </ul>
   </li>
@@ -110,7 +110,7 @@
     <span class="nav-text">Operation</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="../operation/index.html">operation:index.adoc</a>
+    <a class="nav-link" href="../operation/operation.html">operation:operation.adoc</a>
   </li>
 </ul>
   </li>
@@ -119,7 +119,7 @@
     <span class="nav-text">Reference</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="../reference/index.html">reference:index.adoc</a>
+    <a class="nav-link" href="../reference/reference.html">reference:reference.adoc</a>
   </li>
 </ul>
   </li>
@@ -161,8 +161,30 @@
   <div class="content">
 <article class="doc">
 <h1 class="page">About OpenNMS Helm Charts</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
 <p>OpenNMS Helm Charts makes it easier for users to run OpenNMS Horizon or Meridian in a Kubernetes cluster.</p>
+</div>
+<div class="paragraph">
+<p>Each deployment through OpenNMS Helm Charts has a single Core server, multiple read-only UI servers, Grafana and a custom Ingress that shares the RRD files and some configuration files, and Sentinels for flow processing.</p>
+</div>
+<div class="paragraph">
+<p><em>How many Sentinels?</em></p>
+</div>
+<div class="paragraph">
+<p>Note that this is one way to approach the solution.
+We recommend that you study the content of the Helm chart and tune it for your needs.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2>Architecture</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><em>need some descriptive text around this</em></p>
+</div>
+</div>
 </div>
 </article>
 <aside class="toc sidebar" data-title="Contents" data-levels="2">

@@ -2,14 +2,14 @@
 * xref:about:about.adoc[]
 
 .Installation
-* xref:installation:introdcution.adoc[]
+* xref:installation:introduction.adoc[]
 * xref:installation:installation.adoc[]
 
 .Configuration
-* xref:configuration:index.adoc[]
+* xref:configuration:configuration.adoc[]
 
 .Operation
-* xref:operation:index.adoc[]
+* xref:operation:operation.adoc[]
 
 .Reference
-* xref:reference:index.adoc[]
+* xref:reference:reference.adoc[]

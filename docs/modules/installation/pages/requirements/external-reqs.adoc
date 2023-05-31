@@ -1,0 +1,25 @@
+
+=== External Dependencies
+
+Kafka, Elasticsearch, and PostgreSQL to run externally (and maintained separately from the solution), all with SSL enabled.
+
+* PostgreSQL server as the central database for OpenNMS and Grafana.
+  * For Google Cloud, the solution was tested using Google SQL for PostgreSQL with SSL and a Private IP.
+
+* Kafka cluster for OpenNMS-to-Minion communication.
+
+* Elasticsearch cluster for flow persistence.
+
+* Grafana Loki server for log aggregation.
+  * [logcli](https://grafana.com/docs/loki/latest/getting-started/logcli/) helps extract OpenNMS logs from the command line for troubleshooting purposes.
+
+* [Google Filestore](https://cloud.google.com/filestore) or [Azure Files](https://azure.microsoft.com/en-us/services/storage/files/) for the OpenNMS configuration and RRD files (managed by provider)
+  * The documentation recommends 1.21 or later for the CSI driver.
+  * Only applicable when using dedicated OpenNMS UI instances.
+
+* Private Container Registry for custom Meridian Images (if applicable), in case OpenNMS Horizon is not an option.
+
+* [cert-manager](https://cert-manager.readthedocs.io/en/latest/) to provide HTTPS/TLS support to the web-based services managed by the ingress controller.
+  * A `ClusterIssuer` is required to use it across multiple independent OpenNMS installations.
+
+* Nginx Ingress Controller, as the solution has not been tested with other Ingress implementaions.

@@ -1,0 +1,30 @@
+= Introduction
+:imagesdir: ../assets/images
+:!sectids:
+:tabs:
+
+
+== Requirements
+
+* **Ensure you have a deep understanding of how Kubernetes and Helm work.**
+
+[tabs]
+====
+Local::
++
+--
+include::requirements/local-reqs.adoc[]
+--
+
+Kubernetes::
++
+--
+include::requirements/kubernetes-reqs.adoc[]
+--
+
+External dependencies::
++
+--
+include::requirements/external-reqs.adoc[]
+--
+====

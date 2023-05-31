@@ -5,6 +5,18 @@
 
 OpenNMS Helm Charts makes it easier for users to run OpenNMS Horizon or Meridian in a Kubernetes cluster.
 
+Each deployment through OpenNMS Helm Charts has a single Core server, multiple read-only UI servers, Grafana and a custom Ingress that shares the RRD files and some configuration files, and Sentinels for flow processing.
+
+_How many Sentinels?_
+
+Note that this is one way to approach the solution.
+We recommend that you study the content of the Helm chart and tune it for your needs.
+
+== Architecture
+
+_need some descriptive text around this_
+
+
 
 
 
