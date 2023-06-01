@@ -78,7 +78,6 @@ which keytool
 Run Scripts: 
 ```
 ./start-dependencies.sh 
-./create-storageclass.sh aks onms-share 
 ```
 
 ## Step 4 - Change yaml Configs before Deploying OpenNMS
@@ -100,7 +99,6 @@ Run:
 ```
 helm install -f helm-cloud.yaml \
   --set domain=$DOMAIN \
-  --set storageClass=onms-share \
   --set ingress.certManager.clusterIssuer=opennms-issuer \
   --set dependencies.truststore.content=$(cat jks/truststore.jks | base64) \
   --set dependencies.postgresql.ca_cert=$(cat jks/postgresql-ca.crt | base64) \
