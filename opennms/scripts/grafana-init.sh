@@ -1,5 +1,4 @@
 #!/bin/bash
-# @author Alejandro Galue <agalue@opennms.com>
 #
 # Intended to be used as part of an InitContainer expecting to run using the postgres image
 #

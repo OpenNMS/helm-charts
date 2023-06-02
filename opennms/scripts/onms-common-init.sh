@@ -1,5 +1,4 @@
 #!/bin/bash
-# @author Alejandro Galue <agalue@opennms.com>
 #
 # Intended to be used from the corresponding initialization script
 # Includes common settings for both, the Core OpenNMS Instance and the UI-only OpenNMS Instance

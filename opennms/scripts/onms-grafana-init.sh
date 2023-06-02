@@ -1,5 +1,4 @@
 #!/bin/bash
-# @author Alejandro Galue <agalue@opennms.com>
 #
 # Intended to be used from the OpenNMS initialization script
 # Designed for Horizon 29 or Meridian 2021 and 2022. Newer or older versions are not supported.
