@@ -181,29 +181,32 @@ We recommend that you study the content of the Helm chart and tune it for your n
 <div class="sect1">
 <h2>Architecture</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p>The following illustrates the general architecture for the OpenNMS Helm Charts solution.</p>
+</div>
 <div class="imageblock">
 <div class="content">
-<img src="_images/about/helm-charts-diagrams001.png" alt="General architecture for OpenNMS Helm Charts">
+<img src="_images/about/helm-charts-diagrams001.png" alt="General architecture for OpenNMS Helm Charts" width="700">
 </div>
 <div class="title">Figure 1. General architecture</div>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="_images/about/helm-charts-diagrams002.png" alt="Customer Namespace Deployment Diagram">
+<img src="_images/about/helm-charts-diagrams002.png" alt="Customer Namespace Deployment Diagram" width="500">
 </div>
 <div class="title">Figure 2. Customer namespace deployment</div>
 </div>
 <div class="paragraph">
-<div class="title">Shared volumes</div>
 <p>The following describes the use case when having dedicated OpenNMS UI instances:</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="_images/about/helm-charts-diagrams003.png" alt="Shared volumes">
+<img src="_images/about/helm-charts-diagrams003.png" alt="Shared volumes" width="500">
 </div>
+<div class="title">Figure 3. Shared volumes</div>
 </div>
 <div class="paragraph">
-<p>The above does note apply when creating an environment without UI instances, meaning the Helm Chart won&#8217;t use the custom <code>StorageClass</code>.
+<p>The above does not apply when creating an environment without UI instances, meaning the Helm Chart won&#8217;t use the custom <code>StorageClass</code>.
 Instead, it assumes the usage of the default from your Kubernetes cluster. For example, on GKE, it is called <code>standard</code> and uses <code>kubernetes.io/gce-pd</code>.</p>
 </div>
 </div>
@@ -221,7 +224,8 @@ In this case, you would have to build the Docker images and place them on a priv
 Doing that falls outside the scope of this documentation; refer to the main OpenNMS GitHub repository for guidance on <a href="https://github.com/OpenNMS/opennms/tree/master/opennms-container">how to build container images</a>.</p>
 </div>
 <div class="paragraph">
-<p>Due to how the current Docker Images were designed and implemented, the solution requires multiple specialized scripts to configure each application properly. You could build your images and move the logic from the scripts executed via <code>initContainers</code> to your custom entry point script and simplify the Helm Chart.</p>
+<p>Due to how the current Docker Images were designed and implemented, the solution requires multiple specialized scripts to configure each application properly.
+You could build your images and move the logic from the scripts executed via <code>initContainers</code> to your custom entry point script and simplify the Helm Chart.</p>
 </div>
 <div class="paragraph">
 <p>The scripts configure only a certain number of things.
