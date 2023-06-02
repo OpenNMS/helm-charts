@@ -1,12 +1,15 @@
 = Introduction
 :imagesdir: ../assets/images
 :!sectids:
-:tabs:
 
+OpenNMS Helm Charts is based and tested against the latest Horizon 29 and should work with Meridian 2021 and 2022.
+Versions newer than that won't work without modifying the logic of the Helm chart and initialization scripts.[insert link]
 
 == Requirements
 
-* **Ensure you have a deep understanding of how Kubernetes and Helm work.**
+Before you begin, ensure that you have a deep understanding of how Kubernetes and Helm work.
+
+The following tabs describe the requirements for your local machine, Kubernetes, and additional external dependencies:
 
 [tabs]
 ====
@@ -28,3 +31,5 @@ External dependencies::
 include::requirements/external-reqs.adoc[]
 --
 ====
+
+== Before you begin: Meridian

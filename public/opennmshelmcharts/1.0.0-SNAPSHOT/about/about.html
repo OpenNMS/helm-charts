@@ -181,8 +181,106 @@ We recommend that you study the content of the Helm chart and tune it for your n
 <div class="sect1">
 <h2>Architecture</h2>
 <div class="sectionbody">
+<div class="imageblock">
+<div class="content">
+<img src="_images/about/helm-charts-diagrams001.png" alt="General architecture for OpenNMS Helm Charts">
+</div>
+<div class="title">Figure 1. General architecture</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/about/helm-charts-diagrams002.png" alt="Customer Namespace Deployment Diagram">
+</div>
+<div class="title">Figure 2. Customer namespace deployment</div>
+</div>
 <div class="paragraph">
-<p><em>need some descriptive text around this</em></p>
+<div class="title">Shared volumes</div>
+<p>The following describes the use case when having dedicated OpenNMS UI instances:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/about/helm-charts-diagrams003.png" alt="Shared volumes">
+</div>
+</div>
+<div class="paragraph">
+<p>The above does note apply when creating an environment without UI instances, meaning the Helm Chart won&#8217;t use the custom <code>StorageClass</code>.
+Instead, it assumes the usage of the default from your Kubernetes cluster. For example, on GKE, it is called <code>standard</code> and uses <code>kubernetes.io/gce-pd</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2>Design</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The solution is based and tested against the latest Horizon 29 and should work with Meridian 2021 and 2022.
+However, versions newer than that won&#8217;t work without modifying the logic of the Helm Chart and initialization scripts.</p>
+</div>
+<div class="paragraph">
+<p>Remember that you need a subscription to use Meridian.
+In this case, you would have to build the Docker images and place them on a private registry to use Meridian with this deployment.
+Doing that falls outside the scope of this documentation; refer to the main OpenNMS GitHub repository for guidance on <a href="https://github.com/OpenNMS/opennms/tree/master/opennms-container">how to build container images</a>.</p>
+</div>
+<div class="paragraph">
+<p>Due to how the current Docker Images were designed and implemented, the solution requires multiple specialized scripts to configure each application properly. You could build your images and move the logic from the scripts executed via <code>initContainers</code> to your custom entry point script and simplify the Helm Chart.</p>
+</div>
+<div class="paragraph">
+<p>The scripts configure only a certain number of things.
+Each deployment would likely need additional configuration, which is the main reason for using a Persistent Volume for the Configuration Directory of the Core OpenNMS instance.</p>
+</div>
+<div class="paragraph">
+<p>We must place the core configuration on a PVC configured as <code>ReadWriteMany</code> to allow the usage of independent UI servers so that the Core can make changes and the UI instances can read from them. Unfortunately, this imposes some restrictions on the chosen cloud provider.
+For example, in Google Cloud, you would have to use [Google Filestore](<a href="https://cloud.google.com/filestore" class="bare">https://cloud.google.com/filestore</a>), which cannot have volumes less than 1TB, exaggerated for what the configuration directory would ever have (if UI servers are required).
+In contrast, that&#8217;s not a problem when using [Azure Files](<a href="https://azure.microsoft.com/en-us/services/storage/files/" class="bare">https://azure.microsoft.com/en-us/services/storage/files/</a>), which has more flexibility than Google Filestore. The former exposes the volumes via SMB or NFS with essentially any size, whereas the latter only uses NFS with size restrictions.</p>
+</div>
+<div class="paragraph">
+<p>One advantage of configuring that volume is allowing backups and access to the files without accessing the OpenNMS instances running in Kubernetes.</p>
+</div>
+<div class="paragraph">
+<p>The reasoning for the UI servers is to alleviate the Core Server from ReST and UI-only requests. Unfortunately, this makes the deployment more complex.
+It is a trade-off you would have to evaluate. Field tests are required to decide whether or not this is needed and how many instances would be required.</p>
+</div>
+<div class="paragraph">
+<p>The UI servers need to access multiple files from the Core server to serve multiple requests (including the ReST API).
+For this reason, a solution based on symlinks is in place via the initialization scripts. Also, to reduce the complexity, the UI servers are forced to be read-only, meaning even users with <code>ROLD_ADMIN</code> cannot make any changes (not even through ReST).
+You should apply any configuration change via the Core Instance.</p>
+</div>
+<div class="paragraph">
+<p>Similarly, when using RRDtool instead of Newts/Cassandra or Cortex, a shared volume with <code>ReadWriteMany</code> is required for the same reasons (the Core would be writing to it, and the UI servers would be reading from it).
+Additionally, when switching strategies and migration are required, you could work outside Kubernetes.</p>
+</div>
+<div class="paragraph">
+<p>Please note that the volumes would still be configured that way even if you decide not to use UI instances; unless you modify the logic of the Helm Chart.</p>
+</div>
+<div class="paragraph">
+<p>To alleviate load from OpenNMS, you can optionally start Sentinel instances for Flow Processing.
+That requires having an Elasticsearch cluster available. When Sentinels are present, Telemetryd would be disabled in OpenNMS.</p>
+</div>
+<div class="paragraph">
+<p>The OpenNMS Core and Sentinels would be backed by a <code>StatefulSet</code> but keep in mind that there can be one and only one Core instance.
+To have multiple Sentinels, make sure to have enough partitions for the Flow topics in your Kafka clusters, as all of them would be part of the same consumer group.</p>
+</div>
+<div class="paragraph">
+<p>The current OpenNMS instances are not friendly when accessing log files.
+The Helm Chart allows you to configure [Grafana Loki](<a href="https://grafana.com/oss/loki/" class="bare">https://grafana.com/oss/loki/</a>) to centralize all the log messages.
+When the Loki server is configured, the Core instance, the UI instances, and the Sentinel instances will be forwarding logs to Loki. The current solution uses the sidecar pattern using [Grafana Promtail](<a href="https://grafana.com/docs/loki/latest/clients/promtail/" class="bare">https://grafana.com/docs/loki/latest/clients/promtail/</a>) to deliver the logs.</p>
+</div>
+<div class="paragraph">
+<p>All the Docker Images can be customizable via Helm Values.
+The solution allows you to configure custom Docker Registries to access your custom images, or when all the images you&#8217;re planning to use won&#8217;t be in Docker Hub or your Kubernetes cluster won&#8217;t have Internet Access.
+Please keep in mind that your custom images should be based on those currently in use.</p>
+</div>
+<div class="paragraph">
+<p>If you plan to use the TSS Cortex plugin, the current solution will download the KAR file from GitHub every time the containers start.
+If your cluster doesn&#8217;t have Internet access, you must build custom images with the KAR file.</p>
+</div>
+<div class="paragraph">
+<p>For the ALEC KAR plugin, the latest release will be fetched from GitHub like the TSS Cortex Plugin above unless <code>alecImage</code> is set, in which case it will be loaded from the specified Docker image.</p>
+</div>
+<div class="paragraph">
+<p>Also, the Helm Chart assumes that all external dependencies are running somewhere else.
+None of them would be initialized or maintained here.
+Those are Loki, PostgreSQL, Elasticsearch, Kafka and Cortex (when applies).
+There is a script provided to startup a set of dependencies for testing as a part of the same cluster but <strong>this is not intended for production use.</strong></p>
 </div>
 </div>
 </div>

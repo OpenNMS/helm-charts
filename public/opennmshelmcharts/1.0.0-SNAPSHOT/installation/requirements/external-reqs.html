@@ -155,18 +155,20 @@
 </div>
   <div class="content">
 <article class="doc">
-<div class="sect2">
-<h3 id="_external_dependencies"><a class="anchor" href="#_external_dependencies"></a>External Dependencies</h3>
 <div class="paragraph">
-<p>Kafka, Elasticsearch, and PostgreSQL to run externally (and maintained separately from the solution), all with SSL enabled.</p>
+<p>Kafka, Elasticsearch, and PostgreSQL running externally (and maintained separately from the solution), all with SSL enabled.</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
 <p>PostgreSQL server as the central database for OpenNMS and Grafana.</p>
-</li>
+<div class="ulist">
+<ul>
 <li>
-<p>For Google Cloud, the solution was tested using Google SQL for PostgreSQL with SSL and a Private IP.</p>
+<p>For Google Cloud, the solution was tested using Google SQL for PostgreSQL with SSL and a private IP.</p>
+</li>
+</ul>
+</div>
 </li>
 <li>
 <p>Kafka cluster for OpenNMS-to-Minion communication.</p>
@@ -176,33 +178,44 @@
 </li>
 <li>
 <p>Grafana Loki server for log aggregation.</p>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://grafana.com/docs/loki/latest/getting-started/logcli/">logcli</a> helps extract OpenNMS logs from the command line for troubleshooting purposes.</p>
+</li>
+</ul>
+</div>
 </li>
 <li>
-<p>[logcli](<a href="https://grafana.com/docs/loki/latest/getting-started/logcli/" class="bare">https://grafana.com/docs/loki/latest/getting-started/logcli/</a>) helps extract OpenNMS logs from the command line for troubleshooting purposes.</p>
-</li>
-<li>
-<p>[Google Filestore](<a href="https://cloud.google.com/filestore" class="bare">https://cloud.google.com/filestore</a>) or [Azure Files](<a href="https://azure.microsoft.com/en-us/services/storage/files/" class="bare">https://azure.microsoft.com/en-us/services/storage/files/</a>) for the OpenNMS configuration and RRD files (managed by provider)</p>
-</li>
+<p><a href="https://cloud.google.com/filestore">Google Filestore</a> or <a href="https://azure.microsoft.com/en-us/services/storage/files/">Azure Files</a> for the OpenNMS configuration and RRD files (managed by provider)</p>
+<div class="ulist">
+<ul>
 <li>
 <p>The documentation recommends 1.21 or later for the CSI driver.</p>
 </li>
 <li>
 <p>Only applicable when using dedicated OpenNMS UI instances.</p>
 </li>
-<li>
-<p>Private Container Registry for custom Meridian Images (if applicable), in case OpenNMS Horizon is not an option.</p>
+</ul>
+</div>
 </li>
 <li>
-<p>[cert-manager](<a href="https://cert-manager.readthedocs.io/en/latest/" class="bare">https://cert-manager.readthedocs.io/en/latest/</a>) to provide HTTPS/TLS support to the web-based services managed by the ingress controller.</p>
+<p>Private container registry for custom Meridian images (if applicable), if OpenNMS Horizon is not an option.</p>
 </li>
 <li>
-<p>A <code>ClusterIssuer</code> is required to use it across multiple independent OpenNMS installations.</p>
-</li>
+<p><a href="https://cert-manager.readthedocs.io/en/latest/">cert-manager</a> to provide HTTPS/TLS support to the web-based services the ingress controller manages.</p>
+<div class="ulist">
+<ul>
 <li>
-<p>Nginx Ingress Controller, as the solution has not been tested with other Ingress implementaions.</p>
+<p>A <code>ClusterIssuer</code> to use it across multiple independent OpenNMS installations.</p>
 </li>
 </ul>
 </div>
+</li>
+<li>
+<p>Nginx Ingress Controller, as the solution has not been tested with other Ingress implementations.</p>
+</li>
+</ul>
 </div>
 </article>
 <aside class="toc sidebar" data-title="Contents" data-levels="2">

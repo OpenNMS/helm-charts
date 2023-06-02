@@ -187,44 +187,59 @@ The name of the <code>namespace</code> will be used as:</p>
 It should not contain special characters and must follow FQDN restrictions.</p>
 </li>
 <li>
-<p>A single instance of OpenNMS Core (backend) for centralized monitoring running ALEC in standalone mode (if enabled).
-OpenNMS doesn&#8217;t support distributed mode, meaning the <code>StatefulSet</code> cannot have more than one replica.</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>A shared volume for the RRD files, mounted as read-write on the Core instance, and as read-only on the UI instances if applies.</p>
-</div>
+<p>A single instance of OpenNMS Core (backend) for centralized monitoring running ALEC in standalone mode (if enabled).</p>
 <div class="ulist">
 <ul>
 <li>
-<p>A shared volume for the core configuration files, mounted as read-only on the UI instances if applies.
-The purpose is to share configuration across all the OpenNMS instances (i.e., <code>users.xml</code>, <code>groups.xml</code>, among others).</p>
+<p>OpenNMS doesn&#8217;t support distributed mode, meaning the <code>StatefulSet</code> cannot have more than one replica.</p>
+</li>
+</ul>
+</div>
 </li>
 <li>
-<p>Multiple instances of Grafana (frontend), using PostgreSQL as the backend, pointing to the OpenNMS UI service when available.
-When UI instances are not present, the OpenNMS Helm data sources would point to the OpenNMS Core service.</p>
+<p>A shared volume for the RRD files, mounted as read-write on the Core instance, and as read-only on the UI instances if applicable.</p>
 </li>
 <li>
-<p><code>Secrets</code> to store the credentials, certificates and truststores.</p>
+<p>A shared volume for the core configuration files, mounted as read-only on the UI instances if applicable.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Allows for sharing configuration across all the OpenNMS instances (for example, <code>users.xml</code>, and <code>groups.xml</code>).</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Multiple instances of Grafana (frontend), using PostgreSQL as the backend, pointing to the OpenNMS UI service when available.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>When UI instances are not present, the OpenNMS Helm Chart data sources point to the OpenNMS Core service.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><code>Secrets</code> to store the credentials, certificates, and truststores.</p>
 </li>
 <li>
 <p><code>ConfigMaps</code> to store initialization scripts and standard configuration settings.</p>
 </li>
 <li>
-<p>An <code>Ingress</code> to control TLS termination and provide access to all the components (using Nginx).</p>
-</li>
-<li>
-<p>You could manage certificates using LetsEncrypt via <code>cert-manager</code>, but we only requires the name of a <code>ClusterIssuer</code>.</p>
-</li>
+<p>An <code>Ingress</code> to control TLS termination and provide access to all the components (using Nginx).<sup class="footnote">[<a id="_footnoteref_1" class="footnote" href="#_footnotedef_1" title="View footnote.">1</a>]</sup></p>
+<div class="ulist">
+<ul>
 <li>
 <p>To integrate with Google Cloud DNS managed zones or Azure DNS, we need a wild-card entry for the chosen domain against the IP of the Ingress Controller.</p>
 </li>
 </ul>
 </div>
-<div class="sect1">
-<h2 id="_optional_requirements"><a class="anchor" href="#_optional_requirements"></a>Optional requirements</h2>
-<div class="sectionbody">
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Optional requirements for additional implementation scenarios</strong></p>
+</div>
 <div class="ulist">
 <ul>
 <li>
@@ -248,7 +263,7 @@ When UI instances are not present, the OpenNMS Helm data sources would point to 
 <div class="ulist">
 <ul>
 <li>
-<p>When Sentinels are present, <code>Telemetryd</code> would be disabled on the OpenNMS Core instance.</p>
+<p>When Sentinels are present, <code>Telemetryd</code> is disabled on the OpenNMS Core instance.</p>
 </li>
 </ul>
 </div>
@@ -260,14 +275,12 @@ When UI instances are not present, the OpenNMS Helm data sources would point to 
 <li>
 <p>Required only when having dedicated OpenNMS UI instances or when using the default RRD storage for time series data (not Cortex); otherwise, the default <code>StorageClass</code> is used (for example, for Google Cloud, it would be <code>standard</code> based on <code>kubernetes.io/gce-pd</code>.)</p>
 </li>
-</ul>
-</div>
-</li>
 <li>
 <p>Use the same <code>UID</code> and <code>GID</code> as the OpenNMS image with proper file modes.</p>
 </li>
 <li>
-<p>Due to how Google Filestore works, we need to specify <code>securityContext.fsGroup</code> (not required for Azure Files). Check [here](<a href="https://github.com/kubernetes-sigs/gcp-filestore-csi-driver/blob/master/docs/kubernetes/fsgroup.md" class="bare">https://github.com/kubernetes-sigs/gcp-filestore-csi-driver/blob/master/docs/kubernetes/fsgroup.md</a>) for more information.</p>
+<p>Due to how Google Filestore works, we need to specify <code>securityContext.fsGroup</code> (not required for Azure Files).
+Check <a href="https://github.com/kubernetes-sigs/gcp-filestore-csi-driver/blob/master/docs/kubernetes/fsgroup.md">CSI driver FsGroup User Guide</a> for more information.</p>
 </li>
 <li>
 <p>Keep in mind that the minimum size of a Google Filestore instance is 1TB.</p>
@@ -277,8 +290,8 @@ When UI instances are not present, the OpenNMS Helm data sources would point to 
 </li>
 </ul>
 </div>
-<div class="paragraph">
-<p>*</p>
+</li>
+</ul>
 </div>
 <div class="admonitionblock important">
 <table>
@@ -289,11 +302,15 @@ When UI instances are not present, the OpenNMS Helm data sources would point to 
 <td class="content">
 Unless you build custom KAR images for OpenNMS, the latest available version of the ALEC and TSS Cortex KAR plugins (when enabled) will be downloaded directly from GitHub every time the OpenNMS Core container starts, as those binaries are not part of the current Docker image for OpenNMS.
 To get KAR plugins from Docker to avoid contacting GitHub, set <code>alecImage</code> and/or <code>cortexTssImage</code> values as appropriate.
-See [kar-containers/README.md](kar-containers/README.md) for information on the Docker containers.
+See <a href="https://github.com/opennms-forge/onms-k8s-poc/blob/main/kar-containers/README.md">kar-containers/README.md</a> for information on the Docker containers.
 </td>
 </tr>
 </table>
 </div>
+<div id="footnotes">
+<hr>
+<div class="footnote" id="_footnotedef_1">
+<a href="#_footnoteref_1">1</a>. You can manage certificates using Let&#8217;s Encrypt via <code>cert-manager</code>, but we only require the name of a <code>ClusterIssuer</code>.
 </div>
 </div>
 </article>
