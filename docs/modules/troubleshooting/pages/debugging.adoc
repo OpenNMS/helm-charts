@@ -1,7 +1,7 @@
 
-# Debugging
+= Debugging
 
-= `Error: UPGRADE FAILED: cannot patch "onms-post-config" with kind Job`
+`Error: UPGRADE FAILED: cannot patch "onms-post-config" with kind Job`
 
 If you get the message above with a huge long error message, it's because you are trying to upgrade a Helm release that still has the onms-post-config job around.
 Either the job never started (if the release is still coming up, or there was a problem leaving the release stuck), it is running, or it finished but hasn't been purged yet.

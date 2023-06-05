@@ -3,19 +3,19 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>User&#8217;s Guide to OpenNMS Helm Charts</title>
-    <link rel="canonical" href="https://github.com/OpenNMS/helm-charts/opennmshelmcharts/1.0.0-SNAPSHOT/index.html">
+    <title>Ingress</title>
+    <link rel="canonical" href="https://github.com/OpenNMS/helm-charts/opennmshelmcharts/1.0.0-SNAPSHOT/reference/ingress.html">
     <meta name="generator" content="Antora 2.2.0">
-    <link rel="stylesheet" href="../../_/css/site.css">
-    <link rel="stylesheet" href="../../_/css/search.css">
-    <link rel="stylesheet" href="../../_/css/admonition-labels.css">
-    <link rel="icon" href="../../_/img/favicon.svg">
+    <link rel="stylesheet" href="../../../_/css/site.css">
+    <link rel="stylesheet" href="../../../_/css/search.css">
+    <link rel="stylesheet" href="../../../_/css/admonition-labels.css">
+    <link rel="icon" href="../../../_/img/favicon.svg">
   </head>
   <body class="article">
 <header class="header">
   <nav class="navbar">
     <div class="navbar-brand">
-      <a href="https://www.opennms.com"><img class="navbar-logo" src="../../_/img/logotype.svg"/></a>
+      <a href="https://www.opennms.com"><img class="navbar-logo" src="../../../_/img/logotype.svg"/></a>
       <a class="navbar-site-title" href="https://github.com/OpenNMS/helm-charts">OpenNMS Helm Charts</a>
       <button class="navbar-burger" data-target="topbar-nav">
         <span></span>
@@ -73,14 +73,14 @@
     <div class="panels">
 <div class="nav-panel-menu is-active" data-panel="menu">
   <nav class="nav-menu">
-    <h3 class="title"><a href="index.html">OpenNMS Helm Charts</a></h3>
+    <h3 class="title"><a href="../index.html">OpenNMS Helm Charts</a></h3>
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
     <button class="nav-item-toggle"></button>
     <span class="nav-text">About</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="about/about.html">about:about.adoc</a>
+    <a class="nav-link" href="../about/about.html">about:about.adoc</a>
   </li>
 </ul>
   </li>
@@ -89,10 +89,10 @@
     <span class="nav-text">Installation</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="installation/introduction.html">installation:introduction.adoc</a>
+    <a class="nav-link" href="../installation/introduction.html">installation:introduction.adoc</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="installation/installation.html">installation:installation.adoc</a>
+    <a class="nav-link" href="../installation/installation.html">installation:installation.adoc</a>
   </li>
 </ul>
   </li>
@@ -101,7 +101,7 @@
     <span class="nav-text">Configuration</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="configuration/configuration.html">configuration:configuration.adoc</a>
+    <a class="nav-link" href="../configuration/configuration.html">configuration:configuration.adoc</a>
   </li>
 </ul>
   </li>
@@ -110,7 +110,7 @@
     <span class="nav-text">Operation</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="operation/operation.html">operation:operation.adoc</a>
+    <a class="nav-link" href="../operation/operation.html">operation:operation.adoc</a>
   </li>
 </ul>
   </li>
@@ -119,10 +119,10 @@
     <span class="nav-text">Reference</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="reference/reference.html">reference:reference.adoc</a>
+    <a class="nav-link" href="reference.html">reference:reference.adoc</a>
   </li>
-  <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="reference/ingress.html">reference:ingress.adoc</a>
+  <li class="nav-item is-current-page" data-depth="1">
+    <a class="nav-link" href="ingress.html">reference:ingress.adoc</a>
   </li>
 </ul>
   </li>
@@ -139,7 +139,7 @@
       <span class="title">OpenNMS Helm Charts</span>
       <ul class="versions">
         <li class="version is-current is-latest">
-          <a href="index.html">1.0.0-SNAPSHOT</a>
+          <a href="../index.html">1.0.0-SNAPSHOT</a>
         </li>
       </ul>
     </li>
@@ -151,24 +151,52 @@
 <main class="article">
 <div class="toolbar" role="navigation">
 <button class="nav-toggle"></button>
-  <a href="index.html" class="home-link is-current"></a>
+  <a href="../index.html" class="home-link"></a>
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
-    <li><a href="index.html">OpenNMS Helm Charts</a></li>
-    <li><a href="index.html">User&#8217;s Guide to OpenNMS Helm Charts</a></li>
+    <li><a href="../index.html">OpenNMS Helm Charts</a></li>
+    <li>Reference</li>
+    <li><a href="ingress.html">reference:ingress.adoc</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="file:///Users/bonrob/Documents/GitHub/helm-charts/docs/modules/ROOT/pages/index.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="file:///Users/bonrob/Documents/GitHub/helm-charts/docs/modules/reference/pages/ingress.adoc">Edit this Page</a></div>
 </div>
   <div class="content">
 <article class="doc">
-<h1 class="page">User&#8217;s Guide to OpenNMS Helm Charts</h1>
+<h1 class="page">Ingress</h1>
 <div class="paragraph">
-<p>OpenNMS Helm Charts is a project that makes it easier for users to run OpenNMS Horizon or Meridian in a <a href="https://kubernetes.io/">Kubernetes</a> cluster.
-It provides a package that includes all the resources needed to deploy OpenNMS through <a href="https://helm.sh/">Helm</a>, a tool that helps manage Kubernetes applications.</p>
+<p>Using Ingress facilitates access to the OpenNMS UI and Grafana.
+Ingress is not required, although it is a good thing to have.
+You could modify the Helm Chart to avoid Ingress altogether (or make it optional) and expose the WebUIs via <code>LoadBalancer</code> or <code>NodePort</code> services, but that won&#8217;t be covered here.</p>
 </div>
 <div class="paragraph">
-<p>This documentation describes how to deploy, configure, and maintain OpenNMS Helm Charts.</p>
+<p>For example, when deploying the Helm Chart names <code>acme</code> (remember about the rules for the <code>namespace</code>) with a value of <code>k8s.agalue.net</code> for the <code>domain</code>, it would create an Ingress instance exposing the following resources via custom FQDNs:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>OpenNMS UI (read-only): <code>onms.acme.k8s.agalue.net</code></p>
+</li>
+<li>
+<p>OpenNMS Core: <code>onms-core.acme.k8s.agalue.net</code></p>
+</li>
+<li>
+<p>Grafana: <code>grafana.acme.k8s.agalue.net</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>If you get a certificate error with Chrome in a local cluster because you don&#8217;t have a valid certificate, see <a href="https://cybercafe.dev/thisisunsafe-bypassing-chrome-security-warnings/">thisisunsafe - Bypassing chrome security warnings</a>.</p>
+</div>
+<div class="paragraph">
+<p>If you get a too many redirects error, try putting the path <code>/opennms/login.jsp</code> at the end of the OpenNMS UI URL to log in.
+You might be running into problem related to <a href="https://issues.opennms.org/browse/NMS-13901">NMS-13901</a>.</p>
+</div>
+<div class="paragraph">
+<p>To customize behavior, you could pass custom annotations via <code>ingress.annotations</code> when deploying the Helm Chart.</p>
+</div>
+<div class="paragraph">
+<p>Note that it is expected to have <a href="https://cert-manager.io/docs/">cert-manager</a> deployed on your Kubernetes cluster, as that would be used to manage the certificates (configured via <code>ingress.certManager.clusterIssuer</code>).</p>
 </div>
 </article>
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
@@ -182,8 +210,8 @@ It provides a package that includes all the resources needed to deploy OpenNMS t
   <p>Licensed under the terms of the AGPL-3.0.</p>
   <p><a href="https://docs.opennms.com/start-page/1.0.0/index.html" target="_blank">Legal Notice</a></p>
 </footer>
-<script src="../../_/js/site.js"></script>
-<script async src="../../_/js/vendor/highlight.js"></script>
+<script src="../../../_/js/site.js"></script>
+<script async src="../../../_/js/vendor/highlight.js"></script>
 <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-svg.js"></script>
 <script type="text/x-mathjax-config">

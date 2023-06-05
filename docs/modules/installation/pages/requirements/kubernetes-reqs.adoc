@@ -29,6 +29,8 @@ The name of the `namespace` will be used as:
 * An `Ingress` to control TLS termination and provide access to all the components (using Nginx).footnote:[You can manage certificates using Let's Encrypt via `cert-manager`, but we only require the name of a `ClusterIssuer`.]
 ** To integrate with Google Cloud DNS managed zones or Azure DNS, we need a wild-card entry for the chosen domain against the IP of the Ingress Controller.
 
+For more information about Ingress, see the xref:reference:ingress.adoc[reference section].
+
 *Optional requirements for additional implementation scenarios*
 
 * Multiple instances of read-only OpenNMS UI (frontend).
