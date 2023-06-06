@@ -3,19 +3,19 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Untitled</title>
-    <link rel="canonical" href="https://github.com/OpenNMS/helm-charts/opennmshelmcharts/1.0.0-SNAPSHOT/installation/requirements/external-reqs.html">
+    <title>Sentinel Installation</title>
+    <link rel="canonical" href="https://github.com/OpenNMS/helm-charts/opennmshelmcharts/1.0.0-SNAPSHOT/installation/sentinel.html">
     <meta name="generator" content="Antora 2.2.0">
-    <link rel="stylesheet" href="../../../../_/css/site.css">
-    <link rel="stylesheet" href="../../../../_/css/search.css">
-    <link rel="stylesheet" href="../../../../_/css/admonition-labels.css">
-    <link rel="icon" href="../../../../_/img/favicon.svg">
+    <link rel="stylesheet" href="../../../_/css/site.css">
+    <link rel="stylesheet" href="../../../_/css/search.css">
+    <link rel="stylesheet" href="../../../_/css/admonition-labels.css">
+    <link rel="icon" href="../../../_/img/favicon.svg">
   </head>
   <body class="article">
 <header class="header">
   <nav class="navbar">
     <div class="navbar-brand">
-      <a href="https://www.opennms.com"><img class="navbar-logo" src="../../../../_/img/logotype.svg"/></a>
+      <a href="https://www.opennms.com"><img class="navbar-logo" src="../../../_/img/logotype.svg"/></a>
       <a class="navbar-site-title" href="https://github.com/OpenNMS/helm-charts">OpenNMS Helm Charts</a>
       <button class="navbar-burger" data-target="topbar-nav">
         <span></span>
@@ -73,14 +73,14 @@
     <div class="panels">
 <div class="nav-panel-menu is-active" data-panel="menu">
   <nav class="nav-menu">
-    <h3 class="title"><a href="../../index.html">OpenNMS Helm Charts</a></h3>
+    <h3 class="title"><a href="../index.html">OpenNMS Helm Charts</a></h3>
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
     <button class="nav-item-toggle"></button>
     <span class="nav-text">About</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="../../about/about.html">about:about.adoc</a>
+    <a class="nav-link" href="../about/about.html">about:about.adoc</a>
   </li>
 </ul>
   </li>
@@ -89,10 +89,19 @@
     <span class="nav-text">Installation</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="../introduction.html">installation:introduction.adoc</a>
+    <a class="nav-link" href="introduction.html">installation:introduction.adoc</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="../installation.html">installation:installation.adoc</a>
+    <a class="nav-link" href="installation.html">installation:installation.adoc</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="meridian.html">installation:meridian.adoc</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="minion.html">installation:minion.adoc</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="1">
+    <a class="nav-link" href="sentinel.html">installation:sentinel.adoc</a>
   </li>
 </ul>
   </li>
@@ -101,7 +110,7 @@
     <span class="nav-text">Configuration</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="../../configuration/configuration.html">configuration:configuration.adoc</a>
+    <a class="nav-link" href="../configuration/configuration.html">configuration:configuration.adoc</a>
   </li>
 </ul>
   </li>
@@ -110,7 +119,7 @@
     <span class="nav-text">Operation</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="../../operation/operation.html">operation:operation.adoc</a>
+    <a class="nav-link" href="../operation/operation.html">operation:operation.adoc</a>
   </li>
 </ul>
   </li>
@@ -119,10 +128,10 @@
     <span class="nav-text">Reference</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="../../reference/reference.html">reference:reference.adoc</a>
+    <a class="nav-link" href="../reference/reference.html">reference:reference.adoc</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="../../reference/ingress.html">reference:ingress.adoc</a>
+    <a class="nav-link" href="../reference/ingress.html">reference:ingress.adoc</a>
   </li>
 </ul>
   </li>
@@ -139,7 +148,7 @@
       <span class="title">OpenNMS Helm Charts</span>
       <ul class="versions">
         <li class="version is-current is-latest">
-          <a href="../../index.html">1.0.0-SNAPSHOT</a>
+          <a href="../index.html">1.0.0-SNAPSHOT</a>
         </li>
       </ul>
     </li>
@@ -151,75 +160,20 @@
 <main class="article">
 <div class="toolbar" role="navigation">
 <button class="nav-toggle"></button>
-  <a href="../../index.html" class="home-link"></a>
+  <a href="../index.html" class="home-link"></a>
 <nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../index.html">OpenNMS Helm Charts</a></li>
+    <li>Installation</li>
+    <li><a href="sentinel.html">installation:sentinel.adoc</a></li>
+  </ul>
 </nav>
-  <div class="edit-this-page"><a href="file:///Users/bonrob/Documents/GitHub/helm-charts/docs/modules/installation/pages/requirements/external-reqs.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="file:///Users/bonrob/Documents/GitHub/helm-charts/docs/modules/installation/pages/sentinel.adoc">Edit this Page</a></div>
 </div>
   <div class="content">
 <article class="doc">
-<div class="paragraph">
-<p>Kafka, Elasticsearch, and PostgreSQL running externally (and maintained separately from the solution), all with SSL enabled.</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>PostgreSQL server as the central database for OpenNMS and Grafana.</p>
-<div class="ulist">
-<ul>
-<li>
-<p>For Google Cloud, the solution was tested using Google SQL for PostgreSQL with SSL and a private IP.</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>Kafka cluster for OpenNMS-to-Minion communication.</p>
-</li>
-<li>
-<p>Elasticsearch cluster for flow persistence.</p>
-</li>
-<li>
-<p>Grafana Loki server for log aggregation.</p>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="https://grafana.com/docs/loki/latest/getting-started/logcli/">logcli</a> helps extract OpenNMS logs from the command line for troubleshooting purposes.</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p><a href="https://cloud.google.com/filestore">Google Filestore</a> or <a href="https://azure.microsoft.com/en-us/services/storage/files/">Azure Files</a> for the OpenNMS configuration and RRD files (managed by provider)</p>
-<div class="ulist">
-<ul>
-<li>
-<p>The documentation recommends 1.21 or later for the CSI driver.</p>
-</li>
-<li>
-<p>Only applicable when using dedicated OpenNMS UI instances.</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>Private container registry for custom Meridian images (if applicable), if OpenNMS Horizon is not an option.</p>
-</li>
-<li>
-<p><a href="https://cert-manager.readthedocs.io/en/latest/">cert-manager</a> to provide HTTPS/TLS support to the web-based services the ingress controller manages.</p>
-<div class="ulist">
-<ul>
-<li>
-<p>A <code>ClusterIssuer</code> to use it across multiple independent OpenNMS installations.</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>Nginx Ingress Controller, as the solution has not been tested with other Ingress implementations.</p>
-</li>
-</ul>
-</div>
+<h1 class="page">Sentinel Installation</h1>
+
 </article>
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
@@ -232,8 +186,8 @@
   <p>Licensed under the terms of the AGPL-3.0.</p>
   <p><a href="https://docs.opennms.com/start-page/1.0.0/index.html" target="_blank">Legal Notice</a></p>
 </footer>
-<script src="../../../../_/js/site.js"></script>
-<script async src="../../../../_/js/vendor/highlight.js"></script>
+<script src="../../../_/js/site.js"></script>
+<script async src="../../../_/js/vendor/highlight.js"></script>
 <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-svg.js"></script>
 <script type="text/x-mathjax-config">

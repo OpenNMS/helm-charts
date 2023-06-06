@@ -94,6 +94,15 @@
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="installation.html">installation:installation.adoc</a>
   </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="meridian.html">installation:meridian.adoc</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="minion.html">installation:minion.adoc</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="sentinel.html">installation:sentinel.adoc</a>
+  </li>
 </ul>
   </li>
   <li class="nav-item" data-depth="0">
@@ -168,35 +177,21 @@
 <div class="sectionbody">
 <div class="paragraph">
 <p>OpenNMS Helm Charts is based and tested against the latest Horizon 29 and should work with Meridian 2021 and 2022.
-Versions newer than that won&#8217;t work without modifying the logic of the Helm chart and initialization scripts.[insert link]</p>
+You will have to modify the logic of the Helm chart an initialization scripts [insert link] to use versions newer Horizon or Meridian versions.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2>Requirements</h2>
+<h2 id="requirements"><a class="anchor" href="#requirements"></a>Requirements</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Before you begin, ensure that you have a deep understanding of how Kubernetes and Helm work.</p>
 </div>
 <div class="paragraph">
-<p>The following tabs describe the requirements for your local machine, Kubernetes, and additional external dependencies:</p>
+<p>The following tabs describe the requirements for your local machine, Kubernetes, and additional external dependencies.</p>
 </div>
-<div class="tabset is-loading">
-<div class="ulist tabs">
-<ul>
-<li>
-<p><a id="tabset1_local"></a>Local</p>
-</li>
-<li>
-<p><a id="tabset1_kubernetes"></a>Kubernetes</p>
-</li>
-<li>
-<p><a id="tabset1_external-dependencies"></a>External dependencies</p>
-</li>
-</ul>
-</div>
-<div class="content">
-<div class="tab-pane" aria-labelledby="tabset1_local">
+<div class="sect2">
+<h3>Local</h3>
 <div class="paragraph">
 <p>You must have the following installed on your machine:</p>
 </div>
@@ -217,7 +212,8 @@ Versions newer than that won&#8217;t work without modifying the logic of the Hel
 <p>When using cloud resources, make sure you have <a href="https://learn.microsoft.com/en-us/cli/azure/reference-index?view=azure-cli-latest">az</a> for Azure or <a href="https://cloud.google.com/sdk/gcloud">gcloud</a> for Google Cloud.</p>
 </div>
 </div>
-<div class="tab-pane" aria-labelledby="tabset1_kubernetes">
+<div class="sect2">
+<h3>Kubernetes</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -374,7 +370,8 @@ See <a href="https://github.com/opennms-forge/onms-k8s-poc/blob/main/kar-contain
 </table>
 </div>
 </div>
-<div class="tab-pane" aria-labelledby="tabset1_external-dependencies">
+<div class="sect2">
+<h3>External dependencies</h3>
 <div class="paragraph">
 <p>Kafka, Elasticsearch, and PostgreSQL running externally (and maintained separately from the solution), all with SSL enabled.</p>
 </div>
@@ -440,12 +437,18 @@ See <a href="https://github.com/opennms-forge/onms-k8s-poc/blob/main/kar-contain
 </div>
 </div>
 </div>
-</div>
-</div>
 <div class="sect1">
-<h2>Before you begin: Meridian</h2>
+<h2>Additional Meridian requirements</h2>
 <div class="sectionbody">
-
+<div class="paragraph">
+<p>Keep in mind that you need a subscription to use Meridian.
+In this case, you would have to build the Docker images and place them on a private registry to use Meridian with this deployment.
+Doing that falls outside the scope of this documentation, but the main GitHub Repository for OpenNMS offers a guide that you could use as a reference.</p>
+</div>
+<div class="paragraph">
+<p>Due to how the current Docker Images were designed and implemented, the solution requires multiple specialized scripts to configure each application properly.
+You could build your images and move the logic from the scripts executed via initContainers to your custom entry point script and simplify the Helm Chart.</p>
+</div>
 </div>
 </div>
 <div id="footnotes">

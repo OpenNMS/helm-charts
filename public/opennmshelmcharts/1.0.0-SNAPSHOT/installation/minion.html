@@ -3,19 +3,19 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Untitled</title>
-    <link rel="canonical" href="https://github.com/OpenNMS/helm-charts/opennmshelmcharts/1.0.0-SNAPSHOT/installation/requirements/kubernetes-reqs.html">
+    <title>Minion Installation</title>
+    <link rel="canonical" href="https://github.com/OpenNMS/helm-charts/opennmshelmcharts/1.0.0-SNAPSHOT/installation/minion.html">
     <meta name="generator" content="Antora 2.2.0">
-    <link rel="stylesheet" href="../../../../_/css/site.css">
-    <link rel="stylesheet" href="../../../../_/css/search.css">
-    <link rel="stylesheet" href="../../../../_/css/admonition-labels.css">
-    <link rel="icon" href="../../../../_/img/favicon.svg">
+    <link rel="stylesheet" href="../../../_/css/site.css">
+    <link rel="stylesheet" href="../../../_/css/search.css">
+    <link rel="stylesheet" href="../../../_/css/admonition-labels.css">
+    <link rel="icon" href="../../../_/img/favicon.svg">
   </head>
   <body class="article">
 <header class="header">
   <nav class="navbar">
     <div class="navbar-brand">
-      <a href="https://www.opennms.com"><img class="navbar-logo" src="../../../../_/img/logotype.svg"/></a>
+      <a href="https://www.opennms.com"><img class="navbar-logo" src="../../../_/img/logotype.svg"/></a>
       <a class="navbar-site-title" href="https://github.com/OpenNMS/helm-charts">OpenNMS Helm Charts</a>
       <button class="navbar-burger" data-target="topbar-nav">
         <span></span>
@@ -73,14 +73,14 @@
     <div class="panels">
 <div class="nav-panel-menu is-active" data-panel="menu">
   <nav class="nav-menu">
-    <h3 class="title"><a href="../../index.html">OpenNMS Helm Charts</a></h3>
+    <h3 class="title"><a href="../index.html">OpenNMS Helm Charts</a></h3>
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
     <button class="nav-item-toggle"></button>
     <span class="nav-text">About</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="../../about/about.html">about:about.adoc</a>
+    <a class="nav-link" href="../about/about.html">about:about.adoc</a>
   </li>
 </ul>
   </li>
@@ -89,10 +89,19 @@
     <span class="nav-text">Installation</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="../introduction.html">installation:introduction.adoc</a>
+    <a class="nav-link" href="introduction.html">installation:introduction.adoc</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="../installation.html">installation:installation.adoc</a>
+    <a class="nav-link" href="installation.html">installation:installation.adoc</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="meridian.html">installation:meridian.adoc</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="1">
+    <a class="nav-link" href="minion.html">installation:minion.adoc</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="sentinel.html">installation:sentinel.adoc</a>
   </li>
 </ul>
   </li>
@@ -101,7 +110,7 @@
     <span class="nav-text">Configuration</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="../../configuration/configuration.html">configuration:configuration.adoc</a>
+    <a class="nav-link" href="../configuration/configuration.html">configuration:configuration.adoc</a>
   </li>
 </ul>
   </li>
@@ -110,7 +119,7 @@
     <span class="nav-text">Operation</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="../../operation/operation.html">operation:operation.adoc</a>
+    <a class="nav-link" href="../operation/operation.html">operation:operation.adoc</a>
   </li>
 </ul>
   </li>
@@ -119,10 +128,10 @@
     <span class="nav-text">Reference</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="../../reference/reference.html">reference:reference.adoc</a>
+    <a class="nav-link" href="../reference/reference.html">reference:reference.adoc</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="../../reference/ingress.html">reference:ingress.adoc</a>
+    <a class="nav-link" href="../reference/ingress.html">reference:ingress.adoc</a>
   </li>
 </ul>
   </li>
@@ -139,7 +148,7 @@
       <span class="title">OpenNMS Helm Charts</span>
       <ul class="versions">
         <li class="version is-current is-latest">
-          <a href="../../index.html">1.0.0-SNAPSHOT</a>
+          <a href="../index.html">1.0.0-SNAPSHOT</a>
         </li>
       </ul>
     </li>
@@ -151,174 +160,20 @@
 <main class="article">
 <div class="toolbar" role="navigation">
 <button class="nav-toggle"></button>
-  <a href="../../index.html" class="home-link"></a>
+  <a href="../index.html" class="home-link"></a>
 <nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../index.html">OpenNMS Helm Charts</a></li>
+    <li>Installation</li>
+    <li><a href="minion.html">installation:minion.adoc</a></li>
+  </ul>
 </nav>
-  <div class="edit-this-page"><a href="file:///Users/bonrob/Documents/GitHub/helm-charts/docs/modules/installation/pages/requirements/kubernetes-reqs.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="file:///Users/bonrob/Documents/GitHub/helm-charts/docs/modules/installation/pages/minion.adoc">Edit this Page</a></div>
 </div>
   <div class="content">
 <article class="doc">
-<div class="ulist">
-<ul>
-<li>
-<p>Kubernetes version 1.20+.</p>
-</li>
-<li>
-<p>All components on a single <code>namespace</code> represent a single OpenNMS environment or customer deployment or a single tenant.
-The name of the <code>namespace</code> will be used as:</p>
-</li>
-<li>
-<p>Customer/deployment identifier.</p>
-</li>
-<li>
-<p>The name of the deployed Helm application.</p>
-</li>
-<li>
-<p>A prefix for the OpenNMS and Grafana databases in PostgreSQL.</p>
-</li>
-<li>
-<p>A prefix for the index names in Elasticsearch when processing flows.</p>
-</li>
-<li>
-<p>A prefix for the topics in Kafka (requires configuring the OpenNMS instance ID on Minions).</p>
-</li>
-<li>
-<p>A prefix for the Consumer Group IDs in OpenNMS and Sentinel.</p>
-</li>
-<li>
-<p>Part of the subdomain used by the Ingress Controller to expose WebUIs.
-It should not contain special characters and must follow FQDN restrictions.</p>
-</li>
-<li>
-<p>A single instance of OpenNMS Core (backend) for centralized monitoring running ALEC in standalone mode (if enabled).</p>
-<div class="ulist">
-<ul>
-<li>
-<p>OpenNMS doesn&#8217;t support distributed mode, meaning the <code>StatefulSet</code> cannot have more than one replica.</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>A shared volume for the RRD files, mounted as read-write on the Core instance, and as read-only on the UI instances if applicable.</p>
-</li>
-<li>
-<p>A shared volume for the core configuration files, mounted as read-only on the UI instances if applicable.</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Allows for sharing configuration across all the OpenNMS instances (for example, <code>users.xml</code>, and <code>groups.xml</code>).</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>Multiple instances of Grafana (frontend), using PostgreSQL as the backend, pointing to the OpenNMS UI service when available.</p>
-<div class="ulist">
-<ul>
-<li>
-<p>When UI instances are not present, the OpenNMS Helm Chart data sources point to the OpenNMS Core service.</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p><code>Secrets</code> to store the credentials, certificates, and truststores.</p>
-</li>
-<li>
-<p><code>ConfigMaps</code> to store initialization scripts and standard configuration settings.</p>
-</li>
-<li>
-<p>An <code>Ingress</code> to control TLS termination and provide access to all the components (using Nginx).<sup class="footnote">[<a id="_footnoteref_1" class="footnote" href="#_footnotedef_1" title="View footnote.">1</a>]</sup></p>
-<div class="ulist">
-<ul>
-<li>
-<p>To integrate with Google Cloud DNS managed zones or Azure DNS, we need a wild-card entry for the chosen domain against the IP of the Ingress Controller.</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>For more information about Ingress, see the <a href="../../reference/ingress.html" class="page">reference section</a>.</p>
-</div>
-<div class="paragraph">
-<p><strong>Optional requirements for additional implementation scenarios</strong></p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Multiple instances of read-only OpenNMS UI (frontend).</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Must be stateless (unconfigurable).</p>
-</li>
-<li>
-<p>The <code>Deployment</code> must work with multiple replicas.</p>
-</li>
-<li>
-<p>Any configuration change goes to the core server.</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>Multiple instances of Sentinel to handle Flows (requires Elasticsearch as an external dependency).</p>
-<div class="ulist">
-<ul>
-<li>
-<p>When Sentinels are present, <code>Telemetryd</code> is disabled on the OpenNMS Core instance.</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>Custom <code>StorageClass</code> for shared content (Google Filestore or Azure Files) to use <code>ReadWriteMany</code></p>
-<div class="ulist">
-<ul>
-<li>
-<p>Required only when having dedicated OpenNMS UI instances or when using the default RRD storage for time series data (not Cortex); otherwise, the default <code>StorageClass</code> is used (for example, for Google Cloud, it would be <code>standard</code> based on <code>kubernetes.io/gce-pd</code>.)</p>
-</li>
-<li>
-<p>Use the same <code>UID</code> and <code>GID</code> as the OpenNMS image with proper file modes.</p>
-</li>
-<li>
-<p>Due to how Google Filestore works, we need to specify <code>securityContext.fsGroup</code> (not required for Azure Files).
-Check <a href="https://github.com/kubernetes-sigs/gcp-filestore-csi-driver/blob/master/docs/kubernetes/fsgroup.md">CSI driver FsGroup User Guide</a> for more information.</p>
-</li>
-<li>
-<p>Keep in mind that the minimum size of a Google Filestore instance is 1TB.</p>
-</li>
-<li>
-<p>Keep in mind that a new PVC will be in place if the environment gets recreated, meaning new Filestore instances.</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
-<div class="admonitionblock important">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-important" title="Important"></i>
-</td>
-<td class="content">
-Unless you build custom KAR images for OpenNMS, the latest available version of the ALEC and TSS Cortex KAR plugins (when enabled) will be downloaded directly from GitHub every time the OpenNMS Core container starts, as those binaries are not part of the current Docker image for OpenNMS.
-To get KAR plugins from Docker to avoid contacting GitHub, set <code>alecImage</code> and/or <code>cortexTssImage</code> values as appropriate.
-See <a href="https://github.com/opennms-forge/onms-k8s-poc/blob/main/kar-containers/README.md">kar-containers/README.md</a> for information on the Docker containers.
-</td>
-</tr>
-</table>
-</div>
-<div id="footnotes">
-<hr>
-<div class="footnote" id="_footnotedef_1">
-<a href="#_footnoteref_1">1</a>. You can manage certificates using Let&#8217;s Encrypt via <code>cert-manager</code>, but we only require the name of a <code>ClusterIssuer</code>.
-</div>
-</div>
+<h1 class="page">Minion Installation</h1>
+
 </article>
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
@@ -331,8 +186,8 @@ See <a href="https://github.com/opennms-forge/onms-k8s-poc/blob/main/kar-contain
   <p>Licensed under the terms of the AGPL-3.0.</p>
   <p><a href="https://docs.opennms.com/start-page/1.0.0/index.html" target="_blank">Legal Notice</a></p>
 </footer>
-<script src="../../../../_/js/site.js"></script>
-<script async src="../../../../_/js/vendor/highlight.js"></script>
+<script src="../../../_/js/site.js"></script>
+<script async src="../../../_/js/vendor/highlight.js"></script>
 <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-svg.js"></script>
 <script type="text/x-mathjax-config">

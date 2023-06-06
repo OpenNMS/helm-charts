@@ -4,6 +4,9 @@
 .Installation
 * xref:installation:introduction.adoc[]
 * xref:installation:installation.adoc[]
+* xref:installation:meridian.adoc[]
+* xref:installation:minion.adoc[]
+* xref:installation:sentinel.adoc[]
 
 .Configuration
 * xref:configuration:configuration.adoc[]
