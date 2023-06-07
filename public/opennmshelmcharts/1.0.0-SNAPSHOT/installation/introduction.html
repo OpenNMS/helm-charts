@@ -95,9 +95,6 @@
     <a class="nav-link" href="installation.html">installation:installation.adoc</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="meridian.html">installation:meridian.adoc</a>
-  </li>
-  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="minion.html">installation:minion.adoc</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -120,6 +117,15 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="../operation/operation.html">operation:operation.adoc</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Troubleshooting</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../troubleshooting/debugging.html">troubleshooting:debugging.adoc</a>
   </li>
 </ul>
   </li>
@@ -176,8 +182,8 @@
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>OpenNMS Helm Charts is based and tested against the latest Horizon 29 and should work with Meridian 2021 and 2022.
-You will have to modify the logic of the Helm chart an initialization scripts [insert link] to use versions newer Horizon or Meridian versions.</p>
+<p>OpenNMS Helm Charts is based and tested against the latest Horizon.
+We do not yet support it for Meridian.</p>
 </div>
 </div>
 </div>
@@ -188,7 +194,8 @@ You will have to modify the logic of the Helm chart an initialization scripts [i
 <p>Before you begin, ensure that you have a deep understanding of how Kubernetes and Helm work.</p>
 </div>
 <div class="paragraph">
-<p>The following tabs describe the requirements for your local machine, Kubernetes, and additional external dependencies.</p>
+<p>The following describes the requirements for your local machine, Kubernetes, and additional external dependencies.
+We do not yet support cloud deployments.</p>
 </div>
 <div class="sect2">
 <h3>Local</h3>
@@ -220,37 +227,15 @@ You will have to modify the logic of the Helm chart an initialization scripts [i
 <p>Kubernetes version 1.20+.</p>
 </li>
 <li>
-<p>All components on a single <code>namespace</code> represent a single OpenNMS environment or customer deployment or a single tenant.
-The name of the <code>namespace</code> will be used as:</p>
-</li>
-<li>
-<p>Customer/deployment identifier.</p>
-</li>
-<li>
-<p>The name of the deployed Helm application.</p>
-</li>
-<li>
-<p>A prefix for the OpenNMS and Grafana databases in PostgreSQL.</p>
-</li>
-<li>
-<p>A prefix for the index names in Elasticsearch when processing flows.</p>
-</li>
-<li>
-<p>A prefix for the topics in Kafka (requires configuring the OpenNMS instance ID on Minions).</p>
-</li>
-<li>
-<p>A prefix for the Consumer Group IDs in OpenNMS and Sentinel.</p>
-</li>
-<li>
-<p>Part of the subdomain used by the Ingress Controller to expose WebUIs.
-It should not contain special characters and must follow FQDN restrictions.</p>
+<p>A single <code>namespace</code>, which represents a single OpenNMS environment or customer deployment or a single tenant.
+It must not contain special characters and must follow FQDN restrictions.</p>
 </li>
 <li>
 <p>A single instance of OpenNMS Core (backend) for centralized monitoring running ALEC in standalone mode (if enabled).</p>
 <div class="ulist">
 <ul>
 <li>
-<p>OpenNMS doesn&#8217;t support distributed mode, meaning the <code>StatefulSet</code> cannot have more than one replica.</p>
+<p>OpenNMS does not support distributed mode, meaning the <code>StatefulSet</code> cannot have more than one replica.</p>
 </li>
 </ul>
 </div>
@@ -286,13 +271,6 @@ It should not contain special characters and must follow FQDN restrictions.</p>
 </li>
 <li>
 <p>An <code>Ingress</code> to control TLS termination and provide access to all the components (using Nginx).<sup class="footnote">[<a id="_footnoteref_1" class="footnote" href="#_footnotedef_1" title="View footnote.">1</a>]</sup></p>
-<div class="ulist">
-<ul>
-<li>
-<p>To integrate with Google Cloud DNS managed zones or Azure DNS, we need a wild-card entry for the chosen domain against the IP of the Ingress Controller.</p>
-</li>
-</ul>
-</div>
 </li>
 </ul>
 </div>
@@ -326,29 +304,6 @@ It should not contain special characters and must follow FQDN restrictions.</p>
 <ul>
 <li>
 <p>When Sentinels are present, <code>Telemetryd</code> is disabled on the OpenNMS Core instance.</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>Custom <code>StorageClass</code> for shared content (Google Filestore or Azure Files) to use <code>ReadWriteMany</code></p>
-<div class="ulist">
-<ul>
-<li>
-<p>Required only when having dedicated OpenNMS UI instances or when using the default RRD storage for time series data (not Cortex); otherwise, the default <code>StorageClass</code> is used (for example, for Google Cloud, it would be <code>standard</code> based on <code>kubernetes.io/gce-pd</code>.)</p>
-</li>
-<li>
-<p>Use the same <code>UID</code> and <code>GID</code> as the OpenNMS image with proper file modes.</p>
-</li>
-<li>
-<p>Due to how Google Filestore works, we need to specify <code>securityContext.fsGroup</code> (not required for Azure Files).
-Check <a href="https://github.com/kubernetes-sigs/gcp-filestore-csi-driver/blob/master/docs/kubernetes/fsgroup.md">CSI driver FsGroup User Guide</a> for more information.</p>
-</li>
-<li>
-<p>Keep in mind that the minimum size of a Google Filestore instance is 1TB.</p>
-</li>
-<li>
-<p>Keep in mind that a new PVC will be in place if the environment gets recreated, meaning new Filestore instances.</p>
 </li>
 </ul>
 </div>
@@ -404,22 +359,6 @@ See <a href="https://github.com/opennms-forge/onms-k8s-poc/blob/main/kar-contain
 </div>
 </li>
 <li>
-<p><a href="https://cloud.google.com/filestore">Google Filestore</a> or <a href="https://azure.microsoft.com/en-us/services/storage/files/">Azure Files</a> for the OpenNMS configuration and RRD files (managed by provider)</p>
-<div class="ulist">
-<ul>
-<li>
-<p>The documentation recommends 1.21 or later for the CSI driver.</p>
-</li>
-<li>
-<p>Only applicable when using dedicated OpenNMS UI instances.</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>Private container registry for custom Meridian images (if applicable), if OpenNMS Horizon is not an option.</p>
-</li>
-<li>
 <p><a href="https://cert-manager.readthedocs.io/en/latest/">cert-manager</a> to provide HTTPS/TLS support to the web-based services the ingress controller manages.</p>
 <div class="ulist">
 <ul>
@@ -434,20 +373,6 @@ See <a href="https://github.com/opennms-forge/onms-k8s-poc/blob/main/kar-contain
 </li>
 </ul>
 </div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2>Additional Meridian requirements</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Keep in mind that you need a subscription to use Meridian.
-In this case, you would have to build the Docker images and place them on a private registry to use Meridian with this deployment.
-Doing that falls outside the scope of this documentation, but the main GitHub Repository for OpenNMS offers a guide that you could use as a reference.</p>
-</div>
-<div class="paragraph">
-<p>Due to how the current Docker Images were designed and implemented, the solution requires multiple specialized scripts to configure each application properly.
-You could build your images and move the logic from the scripts executed via initContainers to your custom entry point script and simplify the Helm Chart.</p>
 </div>
 </div>
 </div>

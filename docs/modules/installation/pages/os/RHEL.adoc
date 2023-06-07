@@ -1,0 +1,50 @@
+
+The following shows how to configure a UI for your Red Hat Rocky Alma VNC.
+
+. Type the following:
++
+`sudo dnf group install "Server with GUI"`
+
+. Install `tigervnc` server and `avahi`.
++
+`sudo dnf install tigervnc-server avahi`
+
+. Edit `vncserver` defaults file to specify resolution and any other settings.
++
+`sudo vi /etc/tigervnc/vncserver-config-defaults`
+
+. Edit `vncserver.users` to add user to VNC.
++
+`sudo vi /etc/tigervnc/vncserver.users`
+
+. Create VNC password for the account.
++
+`vncpasswd`
+
+. Enable both `vncserver` for the specified user and `avahi` daemon.
++
+[source, console]
+----
+sudo systemctl enable --now vncserver@:1.service
+sudo systemctl enable --now avahi-daemon
+----
+
+. Add information to the `avahi` daemon at `/etc/avahi/services.rfb.service.
++
+
+Note that the port number must match user account :1 = 5901
++
+[source, console]
+----
+sudo vi /etc/avahi/services/rfb.servie
+<?xml version="1.0" standalone='no'?>
+<!DOCTYPE service-group SYSTEM "avahi-service.dtd">
+<service-group>
+  <name replace-wildcards="yes">%h</name>
+  <service>
+    <type>_rfb._tcp</type><port>5901</port>
+  </service>
+</service-group>
+----
+
+//In first line above, should "rfb.servie" be "rfb.service"?

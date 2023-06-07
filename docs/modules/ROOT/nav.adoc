@@ -4,7 +4,6 @@
 .Installation
 * xref:installation:introduction.adoc[]
 * xref:installation:installation.adoc[]
-* xref:installation:meridian.adoc[]
 * xref:installation:minion.adoc[]
 * xref:installation:sentinel.adoc[]
 
@@ -13,6 +12,9 @@
 
 .Operation
 * xref:operation:operation.adoc[]
+
+.Troubleshooting
+* xref:troubleshooting:debugging.adoc[]
 
 .Reference
 * xref:reference:reference.adoc[]

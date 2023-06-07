@@ -95,9 +95,6 @@
     <a class="nav-link" href="installation.html">installation:installation.adoc</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="meridian.html">installation:meridian.adoc</a>
-  </li>
-  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="minion.html">installation:minion.adoc</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -120,6 +117,15 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="../operation/operation.html">operation:operation.adoc</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Troubleshooting</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../troubleshooting/debugging.html">troubleshooting:debugging.adoc</a>
   </li>
 </ul>
   </li>
@@ -173,18 +179,17 @@
   <div class="content">
 <article class="doc">
 <h1 class="page">Basic Installation</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
 <p>Before installing OpenNMS Helm Charts, make sure your environment meets the <a href="introduction.html#requirements" class="page">minimum requirements</a>.</p>
 </div>
 <div class="paragraph">
-<p>This section describes a basic local installation on different operation systems with a Horizon Core.
+<p>This section describes a basic local installation on different operating systems with a Horizon Core.
 For information on other installation options, see the following:</p>
 </div>
 <div class="ulist">
 <ul>
-<li>
-<p><a href="meridian.html" class="page">Meridian Core</a></p>
-</li>
 <li>
 <p><a href="minion.html" class="page">OpenNMS Minion for extended reach</a></p>
 </li>
@@ -192,6 +197,233 @@ For information on other installation options, see the following:</p>
 <p><a href="sentinel.html" class="page">OpenNMS Sentinel for scalability</a></p>
 </li>
 </ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2>Installation and configuration</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To install and configure OpenNMS Helm Charts, follow these steps:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Create a basic .yaml file.</p>
+<div class="paragraph">
+<p>The install script requires a <code>.yaml</code> file that contains at least the domain name that you are using.
+You may also want to specify the password for the OpenNMS instance.</p>
+</div>
+<div class="paragraph">
+<p>On GitHub, see <a href="https://github.com/OpenNMS/helm-charts/blob/main/opennms/values.yaml"><code>values.yaml</code></a> for additional configuration parameters you can specify.
+See <a href="https://github.com/OpenNMS/helm-charts/blob/65afc1f06b986884d61205462f2de6c69b6ebdb8/examples/helm-cloud.yaml#L4"><code>helm-cloud.yaml</code></a> for a sample file for testing purposes.</p>
+</div>
+</li>
+<li>
+<p>Configure your VNC with a UI.</p>
+</li>
+</ol>
+</div>
+<div class="tabset is-loading">
+<div class="ulist tabs">
+<ul>
+<li>
+<p><a id="tabset1_debian-ubuntu"></a>Debian/Ubuntu</p>
+</li>
+<li>
+<p><a id="tabset1_rhel"></a>RHEL</p>
+</li>
+</ul>
+</div>
+<div class="content">
+<div class="tab-pane" aria-labelledby="tabset1_debian-ubuntu">
+<div class="paragraph">
+<p>The following shows how to configure a UI for your Debian or Ubuntu VNC.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Type the following:</p>
+<div class="paragraph">
+<p><code>sudo apt install ubuntu-desktop-minimal</code></p>
+</div>
+</li>
+<li>
+<p>Install <code>tigervnc</code> server and <code>avahi</code>.</p>
+<div class="paragraph">
+<p><code>sudo apt install tigervnc-standalone-server avahi-daemon</code></p>
+</div>
+</li>
+<li>
+<p>Edit <code>vncserver</code> defaults file to specify resolution and any other settings.</p>
+<div class="paragraph">
+<p><code>sudo vi /etc/tigervnc/vncserver-config-defaults</code></p>
+</div>
+</li>
+<li>
+<p>Edit <code>vncserver.users</code> to add user to VNC.</p>
+<div class="paragraph">
+<p><code>sudo vi /etc/tigervnc/vncserver.users</code></p>
+</div>
+</li>
+<li>
+<p>Create VNC account password.</p>
+<div class="paragraph">
+<p><code>vncpasswd</code></p>
+</div>
+</li>
+<li>
+<p>Enable both <code>vncserver</code> for the user specified and <code>avahi</code> daemon.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">sudo systemctl enable --now tigervncserver@:1.service
+sudo systemctl enable --now avahi-daemon</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Add information to the <code>avahi</code> daemon at <code>/etc/avahi/services.rfb.service</code>.</p>
+<div class="paragraph">
+<p>Note that the port number must match user account :1 = 5901</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">sudo vi /etc/avahi/services/rfb.servie
+&lt;?xml version="1.0" standalone='no'?&gt;
+&lt;!DOCTYPE service-group SYSTEM "avahi-service.dtd"&gt;
+&lt;service-group&gt;
+  &lt;name replace-wildcards="yes"&gt;%h&lt;/name&gt;
+  &lt;service&gt;
+    &lt;type&gt;_rfb._tcp&lt;/type&gt;&lt;port&gt;5901&lt;/port&gt;
+  &lt;/service&gt;
+&lt;/service-group&gt;</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="tab-pane" aria-labelledby="tabset1_rhel">
+<div class="paragraph">
+<p>The following shows how to configure a UI for your Red Hat Rocky Alma VNC.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Type the following:</p>
+<div class="paragraph">
+<p><code>sudo dnf group install "Server with GUI"</code></p>
+</div>
+</li>
+<li>
+<p>Install <code>tigervnc</code> server and <code>avahi</code>.</p>
+<div class="paragraph">
+<p><code>sudo dnf install tigervnc-server avahi</code></p>
+</div>
+</li>
+<li>
+<p>Edit <code>vncserver</code> defaults file to specify resolution and any other settings.</p>
+<div class="paragraph">
+<p><code>sudo vi /etc/tigervnc/vncserver-config-defaults</code></p>
+</div>
+</li>
+<li>
+<p>Edit <code>vncserver.users</code> to add user to VNC.</p>
+<div class="paragraph">
+<p><code>sudo vi /etc/tigervnc/vncserver.users</code></p>
+</div>
+</li>
+<li>
+<p>Create VNC password for the account.</p>
+<div class="paragraph">
+<p><code>vncpasswd</code></p>
+</div>
+</li>
+<li>
+<p>Enable both <code>vncserver</code> for the specified user and <code>avahi</code> daemon.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">sudo systemctl enable --now vncserver@:1.service
+sudo systemctl enable --now avahi-daemon</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Add information to the <code>avahi</code> daemon at `/etc/avahi/services.rfb.service.</p>
+<div class="paragraph">
+<p>Note that the port number must match user account :1 = 5901</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">sudo vi /etc/avahi/services/rfb.servie
+&lt;?xml version="1.0" standalone='no'?&gt;
+&lt;!DOCTYPE service-group SYSTEM "avahi-service.dtd"&gt;
+&lt;service-group&gt;
+  &lt;name replace-wildcards="yes"&gt;%h&lt;/name&gt;
+  &lt;service&gt;
+    &lt;type&gt;_rfb._tcp&lt;/type&gt;&lt;port&gt;5901&lt;/port&gt;
+  &lt;/service&gt;
+&lt;/service-group&gt;</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3>Start the OpenNMS environment on your Kubernetes cluster</h3>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Locally you should run only one set.
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">helm upgrade --install -f helm-cloud.yaml \
+  --set domain=k8s.&lt;your-domain-name&gt;.net \
+  --set storageClass=onms-share \
+  --set ingress.certManager.clusterIssuer=opennms-issuer \
+  --set-file dependencies.truststore.content=jks/truststore.jks \
+  --set-file dependencies.postgresql.ca_cert=jks/postgresql-ca.crt \
+  --set dependencies.postgresql.hostname=onms-db.shared.svc \
+  --set dependencies.kafka.hostname=onms-kafka-bootstrap.shared.svc \
+  --set dependencies.elasticsearch.hostname=onms-es-http.shared.svc \
+  &lt;namespace&gt; ./opennms</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3>Check the output file</h3>
+<div class="paragraph">
+<p>When the update completes, check the output file to determine if you need to make changes.
+The <a href="https://github.com/OpenNMS/helm-charts/blob/65afc1f06b986884d61205462f2de6c69b6ebdb8/opennms/templates/NOTES.txt"><code>notes.txt</code></a> file illustrates sample output.
+The file also includes links to login to the Horizon Core and a Grafana URL.</p>
+</div>
+</div>
+<div class="sect2">
+<h3>Log in to the Horizon UI</h3>
+<div class="paragraph">
+<p>Click on the link in the output file to log in.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2>Post-installation tasks</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If you have any issues, refer to the <a href="../troubleshooting/debugging.html" class="page">troubleshooting section</a> or the <a href="../reference/reference.html" class="page">reference section</a> for additional information.</p>
+</div>
+</div>
 </div>
 </article>
 <aside class="toc sidebar" data-title="Contents" data-levels="2">

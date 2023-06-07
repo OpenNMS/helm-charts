@@ -3,19 +3,19 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Sentinel Installation</title>
-    <link rel="canonical" href="https://github.com/OpenNMS/helm-charts/opennmshelmcharts/1.0.0-SNAPSHOT/installation/sentinel.html">
+    <title>Untitled</title>
+    <link rel="canonical" href="https://github.com/OpenNMS/helm-charts/opennmshelmcharts/1.0.0-SNAPSHOT/installation/os/ubuntu.html">
     <meta name="generator" content="Antora 2.2.0">
-    <link rel="stylesheet" href="../../../_/css/site.css">
-    <link rel="stylesheet" href="../../../_/css/search.css">
-    <link rel="stylesheet" href="../../../_/css/admonition-labels.css">
-    <link rel="icon" href="../../../_/img/favicon.svg">
+    <link rel="stylesheet" href="../../../../_/css/site.css">
+    <link rel="stylesheet" href="../../../../_/css/search.css">
+    <link rel="stylesheet" href="../../../../_/css/admonition-labels.css">
+    <link rel="icon" href="../../../../_/img/favicon.svg">
   </head>
   <body class="article">
 <header class="header">
   <nav class="navbar">
     <div class="navbar-brand">
-      <a href="https://www.opennms.com"><img class="navbar-logo" src="../../../_/img/logotype.svg"/></a>
+      <a href="https://www.opennms.com"><img class="navbar-logo" src="../../../../_/img/logotype.svg"/></a>
       <a class="navbar-site-title" href="https://github.com/OpenNMS/helm-charts">OpenNMS Helm Charts</a>
       <button class="navbar-burger" data-target="topbar-nav">
         <span></span>
@@ -73,14 +73,14 @@
     <div class="panels">
 <div class="nav-panel-menu is-active" data-panel="menu">
   <nav class="nav-menu">
-    <h3 class="title"><a href="../index.html">OpenNMS Helm Charts</a></h3>
+    <h3 class="title"><a href="../../index.html">OpenNMS Helm Charts</a></h3>
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
     <button class="nav-item-toggle"></button>
     <span class="nav-text">About</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="../about/about.html">about:about.adoc</a>
+    <a class="nav-link" href="../../about/about.html">about:about.adoc</a>
   </li>
 </ul>
   </li>
@@ -89,16 +89,16 @@
     <span class="nav-text">Installation</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="introduction.html">installation:introduction.adoc</a>
+    <a class="nav-link" href="../introduction.html">installation:introduction.adoc</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="installation.html">installation:installation.adoc</a>
+    <a class="nav-link" href="../installation.html">installation:installation.adoc</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="minion.html">installation:minion.adoc</a>
+    <a class="nav-link" href="../minion.html">installation:minion.adoc</a>
   </li>
-  <li class="nav-item is-current-page" data-depth="1">
-    <a class="nav-link" href="sentinel.html">installation:sentinel.adoc</a>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../sentinel.html">installation:sentinel.adoc</a>
   </li>
 </ul>
   </li>
@@ -107,7 +107,7 @@
     <span class="nav-text">Configuration</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="../configuration/configuration.html">configuration:configuration.adoc</a>
+    <a class="nav-link" href="../../configuration/configuration.html">configuration:configuration.adoc</a>
   </li>
 </ul>
   </li>
@@ -116,7 +116,7 @@
     <span class="nav-text">Operation</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="../operation/operation.html">operation:operation.adoc</a>
+    <a class="nav-link" href="../../operation/operation.html">operation:operation.adoc</a>
   </li>
 </ul>
   </li>
@@ -125,7 +125,7 @@
     <span class="nav-text">Troubleshooting</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="../troubleshooting/debugging.html">troubleshooting:debugging.adoc</a>
+    <a class="nav-link" href="../../troubleshooting/debugging.html">troubleshooting:debugging.adoc</a>
   </li>
 </ul>
   </li>
@@ -134,10 +134,10 @@
     <span class="nav-text">Reference</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="../reference/reference.html">reference:reference.adoc</a>
+    <a class="nav-link" href="../../reference/reference.html">reference:reference.adoc</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="../reference/ingress.html">reference:ingress.adoc</a>
+    <a class="nav-link" href="../../reference/ingress.html">reference:ingress.adoc</a>
   </li>
 </ul>
   </li>
@@ -154,7 +154,7 @@
       <span class="title">OpenNMS Helm Charts</span>
       <ul class="versions">
         <li class="version is-current is-latest">
-          <a href="../index.html">1.0.0-SNAPSHOT</a>
+          <a href="../../index.html">1.0.0-SNAPSHOT</a>
         </li>
       </ul>
     </li>
@@ -166,20 +166,78 @@
 <main class="article">
 <div class="toolbar" role="navigation">
 <button class="nav-toggle"></button>
-  <a href="../index.html" class="home-link"></a>
+  <a href="../../index.html" class="home-link"></a>
 <nav class="breadcrumbs" aria-label="breadcrumbs">
-  <ul>
-    <li><a href="../index.html">OpenNMS Helm Charts</a></li>
-    <li>Installation</li>
-    <li><a href="sentinel.html">installation:sentinel.adoc</a></li>
-  </ul>
 </nav>
-  <div class="edit-this-page"><a href="file:///Users/bonrob/Documents/GitHub/helm-charts/docs/modules/installation/pages/sentinel.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="file:///Users/bonrob/Documents/GitHub/helm-charts/docs/modules/installation/pages/os/ubuntu.adoc">Edit this Page</a></div>
 </div>
   <div class="content">
 <article class="doc">
-<h1 class="page">Sentinel Installation</h1>
-
+<div class="paragraph">
+<p>The following shows how to configure a UI for your Debian or Ubuntu VNC.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Type the following:</p>
+<div class="paragraph">
+<p><code>sudo apt install ubuntu-desktop-minimal</code></p>
+</div>
+</li>
+<li>
+<p>Install <code>tigervnc</code> server and <code>avahi</code>.</p>
+<div class="paragraph">
+<p><code>sudo apt install tigervnc-standalone-server avahi-daemon</code></p>
+</div>
+</li>
+<li>
+<p>Edit <code>vncserver</code> defaults file to specify resolution and any other settings.</p>
+<div class="paragraph">
+<p><code>sudo vi /etc/tigervnc/vncserver-config-defaults</code></p>
+</div>
+</li>
+<li>
+<p>Edit <code>vncserver.users</code> to add user to VNC.</p>
+<div class="paragraph">
+<p><code>sudo vi /etc/tigervnc/vncserver.users</code></p>
+</div>
+</li>
+<li>
+<p>Create VNC account password.</p>
+<div class="paragraph">
+<p><code>vncpasswd</code></p>
+</div>
+</li>
+<li>
+<p>Enable both <code>vncserver</code> for the user specified and <code>avahi</code> daemon.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">sudo systemctl enable --now tigervncserver@:1.service
+sudo systemctl enable --now avahi-daemon</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Add information to the <code>avahi</code> daemon at <code>/etc/avahi/services.rfb.service</code>.</p>
+<div class="paragraph">
+<p>Note that the port number must match user account :1 = 5901</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">sudo vi /etc/avahi/services/rfb.servie
+&lt;?xml version="1.0" standalone='no'?&gt;
+&lt;!DOCTYPE service-group SYSTEM "avahi-service.dtd"&gt;
+&lt;service-group&gt;
+  &lt;name replace-wildcards="yes"&gt;%h&lt;/name&gt;
+  &lt;service&gt;
+    &lt;type&gt;_rfb._tcp&lt;/type&gt;&lt;port&gt;5901&lt;/port&gt;
+  &lt;/service&gt;
+&lt;/service-group&gt;</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
 </article>
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
@@ -192,8 +250,8 @@
   <p>Licensed under the terms of the AGPL-3.0.</p>
   <p><a href="https://docs.opennms.com/start-page/1.0.0/index.html" target="_blank">Legal Notice</a></p>
 </footer>
-<script src="../../../_/js/site.js"></script>
-<script async src="../../../_/js/vendor/highlight.js"></script>
+<script src="../../../../_/js/site.js"></script>
+<script async src="../../../../_/js/vendor/highlight.js"></script>
 <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-svg.js"></script>
 <script type="text/x-mathjax-config">

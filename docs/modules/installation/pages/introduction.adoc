@@ -2,15 +2,16 @@
 :imagesdir: ../assets/images
 :!sectids:
 
-OpenNMS Helm Charts is based and tested against the latest Horizon 29 and should work with Meridian 2021 and 2022.
-You will have to modify the logic of the Helm chart an initialization scripts [insert link] to use versions newer Horizon or Meridian versions.
+OpenNMS Helm Charts is based and tested against the latest Horizon.
+We do not yet support it for Meridian.
 
 [[requirements]]
 == Requirements
 
 Before you begin, ensure that you have a deep understanding of how Kubernetes and Helm work.
 
-The following tabs describe the requirements for your local machine, Kubernetes, and additional external dependencies.
+The following describes the requirements for your local machine, Kubernetes, and additional external dependencies.
+We do not yet support cloud deployments.
 
 === Local
 
@@ -27,35 +28,18 @@ When using cloud resources, make sure you have https://learn.microsoft.com/en-us
 === Kubernetes
 
 * Kubernetes version 1.20+.
-
-* All components on a single `namespace` represent a single OpenNMS environment or customer deployment or a single tenant.
-The name of the `namespace` will be used as:
-  * Customer/deployment identifier.
-  * The name of the deployed Helm application.
-  * A prefix for the OpenNMS and Grafana databases in PostgreSQL.
-  * A prefix for the index names in Elasticsearch when processing flows.
-  * A prefix for the topics in Kafka (requires configuring the OpenNMS instance ID on Minions).
-  * A prefix for the Consumer Group IDs in OpenNMS and Sentinel.
-  * Part of the subdomain used by the Ingress Controller to expose WebUIs.
-  It should not contain special characters and must follow FQDN restrictions.
-
+* A single `namespace`, which represents a single OpenNMS environment or customer deployment or a single tenant.
+It must not contain special characters and must follow FQDN restrictions.
 * A single instance of OpenNMS Core (backend) for centralized monitoring running ALEC in standalone mode (if enabled).
-** OpenNMS doesn't support distributed mode, meaning the `StatefulSet` cannot have more than one replica.
-
+** OpenNMS does not support distributed mode, meaning the `StatefulSet` cannot have more than one replica.
 * A shared volume for the RRD files, mounted as read-write on the Core instance, and as read-only on the UI instances if applicable.
-
 * A shared volume for the core configuration files, mounted as read-only on the UI instances if applicable.
 ** Allows for sharing configuration across all the OpenNMS instances (for example, `users.xml`, and `groups.xml`).
-
 * Multiple instances of Grafana (frontend), using PostgreSQL as the backend, pointing to the OpenNMS UI service when available.
 ** When UI instances are not present, the OpenNMS Helm Chart data sources point to the OpenNMS Core service.
-
 * `Secrets` to store the credentials, certificates, and truststores.
-
 * `ConfigMaps` to store initialization scripts and standard configuration settings.
-
 * An `Ingress` to control TLS termination and provide access to all the components (using Nginx).footnote:[You can manage certificates using Let's Encrypt via `cert-manager`, but we only require the name of a `ClusterIssuer`.]
-** To integrate with Google Cloud DNS managed zones or Azure DNS, we need a wild-card entry for the chosen domain against the IP of the Ingress Controller.
 
 For more information about Ingress, see the xref:reference:ingress.adoc[reference section].
 
@@ -68,14 +52,6 @@ For more information about Ingress, see the xref:reference:ingress.adoc[referenc
 
 * Multiple instances of Sentinel to handle Flows (requires Elasticsearch as an external dependency).
 ** When Sentinels are present, `Telemetryd` is disabled on the OpenNMS Core instance.
-
-* Custom `StorageClass` for shared content (Google Filestore or Azure Files) to use `ReadWriteMany`
-** Required only when having dedicated OpenNMS UI instances or when using the default RRD storage for time series data (not Cortex); otherwise, the default `StorageClass` is used (for example, for Google Cloud, it would be `standard` based on `kubernetes.io/gce-pd`.)
-** Use the same `UID` and `GID` as the OpenNMS image with proper file modes.
-** Due to how Google Filestore works, we need to specify `securityContext.fsGroup` (not required for Azure Files).
-Check https://github.com/kubernetes-sigs/gcp-filestore-csi-driver/blob/master/docs/kubernetes/fsgroup.md[CSI driver FsGroup User Guide] for more information.
-** Keep in mind that the minimum size of a Google Filestore instance is 1TB.
-** Keep in mind that a new PVC will be in place if the environment gets recreated, meaning new Filestore instances.
 
 IMPORTANT: Unless you build custom KAR images for OpenNMS, the latest available version of the ALEC and TSS Cortex KAR plugins (when enabled) will be downloaded directly from GitHub every time the OpenNMS Core container starts, as those binaries are not part of the current Docker image for OpenNMS.
 To get KAR plugins from Docker to avoid contacting GitHub, set `alecImage` and/or `cortexTssImage` values as appropriate.
@@ -95,24 +71,7 @@ Kafka, Elasticsearch, and PostgreSQL running externally (and maintained separate
 * Grafana Loki server for log aggregation.
 ** https://grafana.com/docs/loki/latest/getting-started/logcli/[logcli] helps extract OpenNMS logs from the command line for troubleshooting purposes.
 
-* https://cloud.google.com/filestore[Google Filestore] or https://azure.microsoft.com/en-us/services/storage/files/[Azure Files] for the OpenNMS configuration and RRD files (managed by provider)
-** The documentation recommends 1.21 or later for the CSI driver.
-** Only applicable when using dedicated OpenNMS UI instances.
-
-* Private container registry for custom Meridian images (if applicable), if OpenNMS Horizon is not an option.
-
 * https://cert-manager.readthedocs.io/en/latest/[cert-manager] to provide HTTPS/TLS support to the web-based services the ingress controller manages.
 ** A `ClusterIssuer` to use it across multiple independent OpenNMS installations.
 
 * Nginx Ingress Controller, as the solution has not been tested with other Ingress implementations.
-
-[[meridian-requirements]]
-== Additional Meridian requirements
-
-Keep in mind that you need a subscription to use Meridian.
-In this case, you would have to build the Docker images and place them on a private registry to use Meridian with this deployment.
-Doing that falls outside the scope of this documentation, but the main GitHub Repository for OpenNMS offers a guide that you could use as a reference.
-
-Due to how the current Docker Images were designed and implemented, the solution requires multiple specialized scripts to configure each application properly.
-You could build your images and move the logic from the scripts executed via initContainers to your custom entry point script and simplify the Helm Chart.
-
