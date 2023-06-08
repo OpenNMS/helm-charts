@@ -1,4 +1,4 @@
-opennmsVersion: 'bleeding' # Must match OpenNMS Core version
+opennmsVersion: '32.0.0' # Must match OpenNMS Core version
 
 minion:
  location: pod
