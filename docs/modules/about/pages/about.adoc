@@ -6,7 +6,7 @@
 OpenNMS Helm Charts makes it easier for users to run OpenNMS Horizon locally in a Kubernetes cluster.
 It is not yet available for a Cloud environment.
 
-Each deployment through OpenNMS Helm Charts has a single Core server, multiple read-only UI servers, Grafana and a custom Ingress that shares the RRD files and some configuration files, and Sentinels for flow processing.
+Each deployment through OpenNMS Helm Charts has a single Core server, Grafana, and a custom Ingress that shares the RRD files and some configuration files, and Sentinels for flow processing.
 
 _How many Sentinels?_
 
@@ -61,17 +61,6 @@ Each deployment would likely need additional configuration, which is the main re
 We must place the core configuration on a PVC configured as `ReadWriteMany` to allow the use of independent UI servers so that the Core can make changes and the UI instances can read from them.
 One advantage of configuring that volume is allowing backups and access to the files without accessing the OpenNMS instances running in Kubernetes.
 
-=== UI servers
-
-UI servers alleviate the Core server from REST and UI-only requests.
-Unfortunately, this makes the deployment more complex.
-It is a trade off you would have to evaluate.
-Field tests are required to decide whether this is needed and how many instances would be required.
-
-The UI servers need to access multiple files from the Core server to serve multiple requests (including the REST API).
-For this reason, a solution based on symlinks is in place via the initialization scripts.
-Also, to reduce the complexity, the UI servers are forced to be read-only, meaning even users with `ROLE_ADMIN` cannot make any changes (not even through REST).
-You should apply any configuration change via the Core Instance.
 
 === Time series databases
 
