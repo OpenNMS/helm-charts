@@ -1,0 +1,21 @@
+opennmsVersion: 'bleeding' # Must match OpenNMS Core version
+
+minion:
+ location: pod
+ name: myminion
+ kafkaBroker:
+   address: onms-kafka-bootstrap.shared.svc:9093
+   username: opennms # Set to '' if you are not using authentication
+   password: 0p3nNM5 # Set to '' if you are not using authentication
+ configuration:
+   storage:
+    dataFolder: 5Gi
+
+opennms:
+ instanceID: monms # Must match OpenNMS Core instance (namespace) 
+   
+# A common JKS to white-list all CA certificates .
+truststore:
+ content: '' # A base64 encoded content of the JKS Truststore file.
+ password: '0p3nNM5'
+
