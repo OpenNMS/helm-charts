@@ -37,6 +37,24 @@ RHEL::
 --
 include::os/RHEL.adoc[]
 --
+
+
+Minikube-Debian 11.6::
++
+--
+include::os/minikube-ubuntu.adoc[]
+--
+
+Minikube-RHEL 9.1::
++
+--
+include::os/minikube-RHEL-9-1.adoc
+--
+
+Minikube-RHEL 9.1::
++
+
+
 ====
 
 === Start the OpenNMS environment on your Kubernetes cluster
@@ -56,6 +74,11 @@ helm upgrade --install -f helm-cloud.yaml \
   --set dependencies.elasticsearch.hostname=onms-es-http.shared.svc \
   <namespace> ./opennms
 ----
+
+Keep in mind that is only an example.
+Treat the content of `helm-cloud.yaml` as a sample for testing.
+Make sure to tune it properly so that you avoid overriding settings via `--set`.
+
 
 === Check the output file
 
