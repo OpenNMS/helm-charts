@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Introduction</title>
+    <link rel="canonical" href="https://github.com/OpenNMS/helm-charts/opennmshelmcharts/1.0.0-SNAPSHOT/installation/introduction.html">
+    <meta name="generator" content="Antora 2.2.0">
+    <link rel="stylesheet" href="../../../_/css/site.css">
+    <link rel="stylesheet" href="../../../_/css/search.css">
+    <link rel="stylesheet" href="../../../_/css/admonition-labels.css">
+    <link rel="icon" href="../../../_/img/favicon.svg">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a href="https://www.opennms.com"><img class="navbar-logo" src="../../../_/img/logotype.svg"/></a>
+      <a class="navbar-site-title" href="https://github.com/OpenNMS/helm-charts">OpenNMS Helm Charts</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Videos</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item"
+               href="https://www.youtube.com/watch?v=GJzmkshdjiI&list=PLsXgBGH3nG7iZSlssmZB3xWsAJlst2j2z"
+               target="blank">OpenNMS 101 Training</a>
+            <a class="navbar-item"
+               href="https://www.youtube.com/watch?v=aoiSjNvDC7E&list=PLsXgBGH3nG7h6zy2hENGRJbs0BYQaqBu4"
+               target="blank">OpenNMS 102 Training</a>
+            <a class="navbar-item" href="https://www.youtube.com/opennms" target="blank">OpenNMS on YouTube</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Community Tools</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://www.opennms.com" target="blank">Project Website</a>
+            <a class="navbar-item" href="https://issues.opennms.org" target="blank">JIRA</a>
+            <a class="navbar-item" href="https://opennms.discourse.group" target="blank">Discourse</a>
+            <a class="navbar-item" href="https://chat.opennms.com" target="blank">Mattermost Chat</a>
+            <a class="navbar-item" href="https://toolbox.opennms.eu" target="blank">Toolbox</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">OpenNMS Group</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://www.opennms.com/training" target="blank">Training</a>
+            <a class="navbar-item" href="https://www.opennms.com/support" target="blank">Commercial Support</a>
+            <a class="navbar-item" href="https://www.opennms.com/sponsored-development" target="blank">Sponsored
+              Development</a>
+          </div>
+        </div>
+        <a class="navbar-item" href="https://vault.opennms.com/docs/">Archived Docs</a>
+      </div>
+      <div class="navbar-item">
+      <span class="control">
+        <a class="button is-primary" href="https://github.com/opennms" target="blank">GitHub</a>
+      </span>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<div class="body">
+<div class="nav-container" data-component="opennmshelmcharts" data-version="1.0.0-SNAPSHOT">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="../index.html">OpenNMS Helm Charts</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">About</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../about/about.html">about:about.adoc</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Installation</span>
+<ul class="nav-list">
+  <li class="nav-item is-current-page" data-depth="1">
+    <a class="nav-link" href="introduction.html">installation:introduction.adoc</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="installation.html">installation:installation.adoc</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="minion.html">installation:minion.adoc</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="sentinel.html">installation:sentinel.adoc</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Configuration</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../configuration/configuration.html">configuration:configuration.adoc</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Operation</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../operation/operation.html">operation:operation.adoc</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Troubleshooting</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../troubleshooting/debugging.html">troubleshooting:debugging.adoc</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Reference</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../reference/reference.html">reference:reference.adoc</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../reference/ingress.html">reference:ingress.adoc</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">OpenNMS Helm Charts</span>
+    <span class="version">1.0.0-SNAPSHOT</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <span class="title">OpenNMS Helm Charts</span>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="../index.html">1.0.0-SNAPSHOT</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../index.html">OpenNMS Helm Charts</a></li>
+    <li>Installation</li>
+    <li><a href="introduction.html">installation:introduction.adoc</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="file:///Users/bonrob/Documents/GitHub/helm-charts/docs/modules/installation/pages/introduction.adoc">Edit this Page</a></div>
+</div>
+  <div class="content">
+<article class="doc">
+<h1 class="page">Introduction</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>OpenNMS Helm Charts is based and tested against the latest Horizon.
+We do not yet support it for Meridian.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="requirements"><a class="anchor" href="#requirements"></a>Requirements</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Before you begin, ensure that you have a deep understanding of how Kubernetes and Helm work.</p>
+</div>
+<div class="paragraph">
+<p>The following describes the requirements for your local machine, Kubernetes, and additional external dependencies.
+We do not yet support cloud deployments.</p>
+</div>
+<div class="sect2">
+<h3>Local</h3>
+<div class="paragraph">
+<p>You must have the following installed on your machine:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://kubernetes.io/docs/reference/kubectl/">kubectl</a></p>
+</li>
+<li>
+<p><a href="https://helm.sh/docs/intro/install/">Helm</a> version 3</p>
+</li>
+<li>
+<p>(optional) <a href="https://minikube.sigs.k8s.io/docs/start/">minikube</a> for testing</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>When using cloud resources, make sure you have <a href="https://learn.microsoft.com/en-us/cli/azure/reference-index?view=azure-cli-latest">az</a> for Azure or <a href="https://cloud.google.com/sdk/gcloud">gcloud</a> for Google Cloud.</p>
+</div>
+</div>
+<div class="sect2">
+<h3>Kubernetes</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Kubernetes version 1.20+.</p>
+</li>
+<li>
+<p>A single <code>namespace</code>, which represents a single OpenNMS environment or customer deployment or a single tenant.
+It must not contain special characters and must follow FQDN restrictions.</p>
+</li>
+<li>
+<p>A single instance of OpenNMS Core (backend) for centralized monitoring running ALEC in standalone mode (if enabled).</p>
+<div class="ulist">
+<ul>
+<li>
+<p>OpenNMS does not support distributed mode, meaning the <code>StatefulSet</code> cannot have more than one replica.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>A shared volume for the RRD files, mounted as read-write on the Core instance, and as read-only on the UI instances if applicable.</p>
+</li>
+<li>
+<p>A shared volume for the core configuration files, mounted as read-only on the UI instances if applicable.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Allows for sharing configuration across all the OpenNMS instances (for example, <code>users.xml</code>, and <code>groups.xml</code>).</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Multiple instances of Grafana (frontend), using PostgreSQL as the backend, pointing to the OpenNMS UI service when available.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>When UI instances are not present, the OpenNMS Helm Chart data sources point to the OpenNMS Core service.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><code>Secrets</code> to store the credentials, certificates, and truststores.</p>
+</li>
+<li>
+<p><code>ConfigMaps</code> to store initialization scripts and standard configuration settings.</p>
+</li>
+<li>
+<p>An <code>Ingress</code> to control TLS termination and provide access to all the components (using Nginx).<sup class="footnote">[<a id="_footnoteref_1" class="footnote" href="#_footnotedef_1" title="View footnote.">1</a>]</sup></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>For more information about Ingress, see the <a href="../reference/ingress.html" class="page">reference section</a>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Optional requirements for additional implementation scenarios</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Multiple instances of read-only OpenNMS UI (frontend).</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Must be stateless (unconfigurable).</p>
+</li>
+<li>
+<p>The <code>Deployment</code> must work with multiple replicas.</p>
+</li>
+<li>
+<p>Any configuration change goes to the core server.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Multiple instances of Sentinel to handle Flows (requires Elasticsearch as an external dependency).</p>
+<div class="ulist">
+<ul>
+<li>
+<p>When Sentinels are present, <code>Telemetryd</code> is disabled on the OpenNMS Core instance.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Unless you build custom KAR images for OpenNMS, the latest available version of the ALEC and TSS Cortex KAR plugins (when enabled) will be downloaded directly from GitHub every time the OpenNMS Core container starts, as those binaries are not part of the current Docker image for OpenNMS.
+To get KAR plugins from Docker to avoid contacting GitHub, set <code>alecImage</code> and/or <code>cortexTssImage</code> values as appropriate.
+See <a href="https://github.com/opennms-forge/onms-k8s-poc/blob/main/kar-containers/README.md">kar-containers/README.md</a> for information on the Docker containers.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3>External dependencies</h3>
+<div class="paragraph">
+<p>Kafka, Elasticsearch, and PostgreSQL running externally (and maintained separately from the solution), all with SSL enabled.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>PostgreSQL server as the central database for OpenNMS and Grafana.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>For Google Cloud, the solution was tested using Google SQL for PostgreSQL with SSL and a private IP.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Kafka cluster for OpenNMS-to-Minion communication.</p>
+</li>
+<li>
+<p>Elasticsearch cluster for flow persistence.</p>
+</li>
+<li>
+<p>Grafana Loki server for log aggregation.</p>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://grafana.com/docs/loki/latest/getting-started/logcli/">logcli</a> helps extract OpenNMS logs from the command line for troubleshooting purposes.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><a href="https://cert-manager.readthedocs.io/en/latest/">cert-manager</a> to provide HTTPS/TLS support to the web-based services the ingress controller manages.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A <code>ClusterIssuer</code> to use it across multiple independent OpenNMS installations.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Nginx Ingress Controller, as the solution has not been tested with other Ingress implementations.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="footnotes">
+<hr>
+<div class="footnote" id="_footnotedef_1">
+<a href="#_footnoteref_1">1</a>. You can manage certificates using Let&#8217;s Encrypt via <code>cert-manager</code>, but we only require the name of a <code>ClusterIssuer</code>.
+</div>
+</div>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>Copyright (c)2002–{docyear} The OpenNMS Group, Inc.</p>
+  <p>Licensed under the terms of the AGPL-3.0.</p>
+  <p><a href="https://docs.opennms.com/start-page/1.0.0/index.html" target="_blank">Legal Notice</a></p>
+</footer>
+<script src="../../../_/js/site.js"></script>
+<script async src="../../../_/js/vendor/highlight.js"></script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-svg.js"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  messageStyle: "none",
+  tex2jax: {
+    inlineMath: [["\\(", "\\)"]],
+    displayMath: [["\\[", "\\]"]],
+    ignoreClass: "nostem|nolatexmath"
+  },
+  asciimath2jax: {
+    delimiters: [["\\$", "\\$"]],
+    ignoreClass: "nostem|noasciimath"
+  },
+  TeX: {
+      Macros: {
+      RR: "{\\mathbb R}",
+      NN: "{\\mathbb N}",
+      Nso: "{N_{\\mathrm{so}}}",
+      Nma: "{N_{\\mathrm{ma}}}",
+      Nno: "{N_{\\mathrm{no}}}",
+      Ne: "{N_{\\mathrm{e}}}",
+      Ilag: ["{\\mathcal{I}^{\\mathrm{lag}}_{#1}}",1],
+      calTh: "{\\mathcal{T}_h}",
+      Ck: ["{\\mathcal{C}^{#1}}",1],
+      Pk: ["{\\mathcal{P}^{#1}}",1],
+      Qk: ["{\\mathcal{Q}^{#1}}",1],
+      Pch: ["{P^{#1}_{c,h}}",1],
+      Pcho: ["{P^{#1}_{c,h,0}}",1],
+      Qch: ["{Q^{#1}_{c,h}}",1],
+      Ich: ["{\\mathcal{I}^{#1}_{c,h}#2}",2],
+      poly: ["{\\mathbb{#1}}",1],
+      nf: "{n_f}",
+      normal: "{\\mathbf{n}}",
+      ngeo: "{n_{\\mathrm{geo}}}",
+      geo: "{\\mathrm{geo}}",
+      card: ["{\\operatorname{card}(#1)}",1],
+      dim: ["{\\operatorname{dim}(#1)}",1],
+      opdim: "{\\operatorname{dim}}",
+      card: ["{\\operatorname{card}(#1)}",1],
+      poly: ["{\\mathbb{#1}}",1],
+      R: ["{\\mathbb{R}^{#1}}",1],
+      set: ["{\\left\\{#1\\right\\}}",1],
+      diam: "{\\operatorname{diam}}",
+      jump: ["{[\\![ #1 ]\\!]}",1],
+      Next: "{\\mathrm{n}}",
+      essinf: "{\\operatorname{ess}\\, \\operatorname{inf}}",
+      tr: "{\\operatorname{tr}}",
+      Id: "{\\mathcal{I}}",
+      disp: ["{\\mathbf{#1}}",1],
+      stresst: ["{\\mathbf{\\sigma(#1)}}",1],
+      deformt: ["{\\mathbf{\\varepsilon(#1)}}",1],
+      domain: "{\\Omega}",
+      prect: ["{\\left\\(#1\\right\\)}",1],
+      ds: "",
+      bold: ["{\\bf #1}",1]
+  },
+  extensions: ["mhchem.js"] }
+});
+</script>
+  </body>
+</html>

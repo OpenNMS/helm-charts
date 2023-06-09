@@ -1,0 +1,52 @@
+
+The following shows how to configure a UI for your Debian or Ubuntu VNC.
+
+. Type the following:
++
+
+`sudo apt install ubuntu-desktop-minimal`
+
+. Install `tigervnc` server and `avahi`.
++
+`sudo apt install tigervnc-standalone-server avahi-daemon`
+
+. Edit `vncserver` defaults file to specify resolution and any other settings.
++
+`sudo vi /etc/tigervnc/vncserver-config-defaults`
+
+. Edit `vncserver.users` to add user to VNC.
++
+`sudo vi /etc/tigervnc/vncserver.users`
+
+. Create VNC account password.
++
+`vncpasswd`
+
+. Enable both `vncserver` for the user specified and `avahi` daemon.
++
+
+[source, console]
+----
+sudo systemctl enable --now tigervncserver@:1.service
+sudo systemctl enable --now avahi-daemon
+----
+
+. Add information to the `avahi` daemon at `/etc/avahi/services.rfb.service`.
++
+
+Note that the port number must match user account :1 = 5901
++
+
+[source, console]
+----
+sudo vi /etc/avahi/services/rfb.servie
+<?xml version="1.0" standalone='no'?>
+<!DOCTYPE service-group SYSTEM "avahi-service.dtd">
+<service-group>
+  <name replace-wildcards="yes">%h</name>
+  <service>
+    <type>_rfb._tcp</type><port>5901</port>
+  </service>
+</service-group>
+----
+//In first line above, should "rfb.servie" be "rfb.service"?
