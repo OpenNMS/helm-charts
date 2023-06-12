@@ -27,37 +27,44 @@ In /etc/postgresql/##/main, reconfigure pg_hba.conf to allow external access to 
 Follow doc instructions to install database.
 Database name needs to be <instance name>_opennms and not just opennms where <instance name> is the name of the pod.
 
-Setting up and installing kubectl
+Set up and instal kubectl:
+
 sudo apt install -y ca-certificates
 sudo curl -fsSLo /etc/apt/trusted.gpg.d/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
 echo "deb [signed-by=/etc/apt/trusted.gpg.d/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
 sudo apt update
 sudo apt install -y kubectl
 
-Verifying virtualization features and installing virtualization engine
+Verify virtualization features and install virtualization engine:
+
 sudo apt install cpu-checker
 kvm-ok
 sudo apt-get install qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils virt-manager
 
-Install git
+Install git:
+
 sudo apt install git
 
-Download, install, configure brew and then install helm and k9s
+Download, install, and configure brew and then install helm and k9s:
+
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> /home/USERNAME/.profile
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 sudo apt-get install build-essential
 brew install gcc helm derailed/k9s/k9s
 
-Download and installing minikube
+Download and install minikube:
+
 curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube_latest_amd64.deb
 sudo dpkg -i minikube_latest_amd64.deb
 
-Add your user account to virtualization groups to be able to run virtualization commands without elevating permissions
+Add your user account to virtualization groups to be able to run virtualization commands without elevating permissions:
+
 sudo adduser `id -un` libvirt
 sudo adduser `id -un` kvm
 
-Edit the main configuration file for libvirtd
+Edit the main configuration file for libvirtd:
+
 sudo vi /etc/libvirt/libvirtd.conf
 
 Set the UNIX domain socket group ownership to libvirt by uncommenting the following line. In other words, remove the #.
@@ -68,17 +75,22 @@ unix_sock_rw_perms = "0770"
 
 sudo reboot
 
-Just to get the initial stuff downloaded for minikube
+Download the initial content for minikube:
+
 minikube start
 minikube stop
 minikube delete
 
-Cloning the /OpenNMS/helm-charts repository (make sure your ssh key is setup at GitHub)
+Clone the /OpenNMS/helm-charts repository (make sure your ssh key is setup at GitHub):
+
 git clone git@github.com:/OpenNMS/helm-charts.git
 
-Or download the zip at https://github.com//OpenNMS/helm-charts/archive/refs/heads/main.zip and unzip
+OR
 
-Navigating to the /OpenNMS/helm-charts directory, starting minikube with adequate resources, starting Horizon through Helm, and then enabling the ingress
+Download the zip at https://github.com//OpenNMS/helm-charts/archive/refs/heads/main.zip and unzip.
+
+Navigate to the /OpenNMS/helm-charts directory, start minikube with adequate resources, start Horizon through Helm, and then enable the ingress:
+
 cd /OpenNMS/helm-charts
 
 minikube start --memory 6144 --cpus 4
