@@ -22,20 +22,20 @@ data:
   plugins.helm.yaml: |
     apiVersion: 1
     apps:
-    - type: opennms-helm-app
+    - type: opennms-opennms-app
       disabled: false
   datasources.helm.yaml: |
     apiVersion: 1
     datasources:
     - name: OpenNMS-Performance
-      type: opennms-helm-performance-datasource
+      type: opennms-performance-datasource
       isDefault: true
       {{- include "opennms.grafanaDSOptions" . | nindent 6 }}
     - name: OpenNMS-Entity
-      type: opennms-helm-entity-datasource
+      type: opennms-entity-datasource
       {{- include "opennms.grafanaDSOptions" . | nindent 6 }}
     - name: OpenNMS-Flow
-      type: opennms-helm-flow-datasource
+      type: opennms-flow-datasource
       {{- include "opennms.grafanaDSOptions" . | nindent 6 }}
 
 {{- end }}

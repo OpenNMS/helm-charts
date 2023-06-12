@@ -158,14 +158,14 @@ sentinel:
     database:
       pool_size: 25
 
-# OpenNMS Helm
-# Do not use Grafana images, or you'd have to manually install the Helm Plugin from Github every time the container starts.
+# OpenNMS Plugin for Grafana
+# Do not use Grafana images, or you'd have to manually install the OpenNMS Plugin for Grafana from Github every time the container starts.
 grafana:
   replicaCount: 0
   image:
     repository: opennms/helm
     pullPolicy: IfNotPresent
-    tag: '7.2.0'
+    tag: '9.0.4'
   resources:
     limits:
       cpu: 200m
@@ -183,7 +183,7 @@ grafana:
       image: # For the initialization container to create the database
         repository: postgres
         pullPolicy: IfNotPresent
-        tag: '12'
+        tag: '13'
   imageRenderer: # Required to generate PDF reports from OpenNMS
     replicaCount: 2
     image:
