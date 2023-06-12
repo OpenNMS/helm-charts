@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Configuration</title>
+    <title>Manual Configuration Changes</title>
     <link rel="canonical" href="https://github.com/OpenNMS/helm-charts/opennmshelmcharts/1.0.0-SNAPSHOT/configuration/configuration.html">
     <meta name="generator" content="Antora 2.2.0">
     <link rel="stylesheet" href="../../../_/css/site.css">
@@ -178,8 +178,16 @@
 </div>
   <div class="content">
 <article class="doc">
-<h1 class="page">Configuration</h1>
-
+<h1 class="page">Manual Configuration Changes</h1>
+<div class="paragraph">
+<p>Either access the OpenNMS container via a remote shell through <code>kubectl</code>, and edit the file using vi (the only editor available within the OpenNMS container).</p>
+</div>
+<div class="paragraph">
+<p>Send the reload configuration event via <code>send-event.pl</code> or the Karaf Shell (not accessible within the container).</p>
+</div>
+<div class="paragraph">
+<p>In case OpenNMS has to be restarted, delete the Pod (not the StatefulSet), and the Kubernetes controller will recreate it again.</p>
+</div>
 </article>
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
