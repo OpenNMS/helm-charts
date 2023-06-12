@@ -194,29 +194,31 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>kubectl logs -n &lt;namespace&gt; -f -c onms pods/onms-core-0</pre>
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">kubectl logs -n &lt;namespace&gt; -f -c onms pods/onms-core-0</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>Get a shell:</p>
 </div>
-<hr>
-<div class="paragraph">
-<p>kubectl exec -it -n &lt;namespace&gt; pods/onms-core-0 -c onms&#8201;&#8212;&#8201;/bin/bash
----</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">kubectl exec -it -n &lt;namespace&gt; pods/onms-core-0 -c onms -- /bin/bash</code></pre>
+</div>
 </div>
 <div class="paragraph">
-<p>Restart OpenNMS:
----
-kubectl rollout restart -n &lt;namespace&gt; statefulset/onms-core
----</p>
+<p>Restart OpenNMS:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">kubectl rollout restart -n &lt;namespace&gt; statefulset/onms-core</code></pre>
+</div>
 </div>
 <div class="paragraph">
 <p>Stop OpenNMS:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code>kubectl scale -n &lt;namespace&gt; --replicas=0 statefulset/onms-core</code></pre>
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">kubectl scale -n &lt;namespace&gt; --replicas=0 statefulset/onms-core</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -224,7 +226,7 @@ kubectl rollout restart -n &lt;namespace&gt; statefulset/onms-core
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code>kubectl scale -n &lt;namespace&gt; --replicas=1 statefulset/onms-core</code></pre>
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">kubectl scale -n &lt;namespace&gt; --replicas=1 statefulset/onms-core</code></pre>
 </div>
 </div>
 </div>
@@ -233,14 +235,14 @@ kubectl rollout restart -n &lt;namespace&gt; statefulset/onms-core
 <h2 id="_inspector_pod"><a class="anchor" href="#_inspector_pod"></a>Inspector pod</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>This can be used to cleanly shutdown OpenNMS but have a way to edit configuration files, inspect files before a backup or after a restore, etc.</p>
+<p>You can use this to cleanly shut down OpenNMS but still have a way to edit configuration files, inspect files before a backup or after a restore, and so on.</p>
 </div>
 <div class="paragraph">
-<p>Enable Inspector pod (shutdown OpenNMS):</p>
+<p>Enable Inspector pod (shut down OpenNMS):</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code>helm upgrade --reuse-values --set opennms.inspector.enabled=true &lt;namespace&gt; ./opennms</code></pre>
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">helm upgrade --reuse-values --set opennms.inspector.enabled=true &lt;namespace&gt; ./opennms</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -248,7 +250,7 @@ kubectl rollout restart -n &lt;namespace&gt; statefulset/onms-core
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code>kubectl exec -it -n &lt;namespace&gt; pods/inspector -- /bin/bash</code></pre>
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">kubectl exec -it -n &lt;namespace&gt; pods/inspector -- /bin/bash</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -256,7 +258,7 @@ kubectl rollout restart -n &lt;namespace&gt; statefulset/onms-core
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code># Run configuration tester
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console"># Run configuration tester
 ./bin/config-tester -a
 
 # Forcing the installer to re-run
@@ -268,7 +270,7 @@ rm etc/configured</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code>helm upgrade --reuse-values --set opennms.inspector.enabled=false &lt;namespace&gt; ./opennms</code></pre>
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">helm upgrade --reuse-values --set opennms.inspector.enabled=false &lt;namespace&gt; ./opennms</code></pre>
 </div>
 </div>
 </div>

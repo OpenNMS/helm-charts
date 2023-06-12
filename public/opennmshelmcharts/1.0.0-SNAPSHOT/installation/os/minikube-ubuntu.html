@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Untitled</title>
+    <link rel="canonical" href="https://github.com/OpenNMS/helm-charts/opennmshelmcharts/1.0.0-SNAPSHOT/installation/os/minikube-ubuntu.html">
+    <meta name="generator" content="Antora 2.2.0">
+    <link rel="stylesheet" href="../../../../_/css/site.css">
+    <link rel="stylesheet" href="../../../../_/css/search.css">
+    <link rel="stylesheet" href="../../../../_/css/admonition-labels.css">
+    <link rel="icon" href="../../../../_/img/favicon.svg">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a href="https://www.opennms.com"><img class="navbar-logo" src="../../../../_/img/logotype.svg"/></a>
+      <a class="navbar-site-title" href="https://github.com/OpenNMS/helm-charts">OpenNMS Helm Charts</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Videos</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item"
+               href="https://www.youtube.com/watch?v=GJzmkshdjiI&list=PLsXgBGH3nG7iZSlssmZB3xWsAJlst2j2z"
+               target="blank">OpenNMS 101 Training</a>
+            <a class="navbar-item"
+               href="https://www.youtube.com/watch?v=aoiSjNvDC7E&list=PLsXgBGH3nG7h6zy2hENGRJbs0BYQaqBu4"
+               target="blank">OpenNMS 102 Training</a>
+            <a class="navbar-item" href="https://www.youtube.com/opennms" target="blank">OpenNMS on YouTube</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Community Tools</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://www.opennms.com" target="blank">Project Website</a>
+            <a class="navbar-item" href="https://issues.opennms.org" target="blank">JIRA</a>
+            <a class="navbar-item" href="https://opennms.discourse.group" target="blank">Discourse</a>
+            <a class="navbar-item" href="https://chat.opennms.com" target="blank">Mattermost Chat</a>
+            <a class="navbar-item" href="https://toolbox.opennms.eu" target="blank">Toolbox</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">OpenNMS Group</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://www.opennms.com/training" target="blank">Training</a>
+            <a class="navbar-item" href="https://www.opennms.com/support" target="blank">Commercial Support</a>
+            <a class="navbar-item" href="https://www.opennms.com/sponsored-development" target="blank">Sponsored
+              Development</a>
+          </div>
+        </div>
+        <a class="navbar-item" href="https://vault.opennms.com/docs/">Archived Docs</a>
+      </div>
+      <div class="navbar-item">
+      <span class="control">
+        <a class="button is-primary" href="https://github.com/opennms" target="blank">GitHub</a>
+      </span>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<div class="body">
+<div class="nav-container" data-component="opennmshelmcharts" data-version="1.0.0-SNAPSHOT">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="../../index.html">OpenNMS Helm Charts</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">About</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../about/about.html">about:about.adoc</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Installation</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../introduction.html">installation:introduction.adoc</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../installation.html">installation:installation.adoc</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../minion.html">installation:minion.adoc</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../sentinel.html">installation:sentinel.adoc</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Configuration</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../configuration/configuration.html">configuration:configuration.adoc</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Operation</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../operation/operation.html">operation:operation.adoc</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Troubleshooting</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../troubleshooting/debugging.html">troubleshooting:debugging.adoc</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Reference</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../reference/reference.html">reference:reference.adoc</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="../../reference/ingress.html">reference:ingress.adoc</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">OpenNMS Helm Charts</span>
+    <span class="version">1.0.0-SNAPSHOT</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <span class="title">OpenNMS Helm Charts</span>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="../../index.html">1.0.0-SNAPSHOT</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../../index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+</nav>
+  <div class="edit-this-page"><a href="file:///Users/bonrob/Documents/GitHub/helm-charts/docs/modules/installation/pages/os/minikube-ubuntu.adoc">Edit this Page</a></div>
+</div>
+  <div class="content">
+<article class="doc">
+<div class="paragraph">
+<p>This section describes how to install <code>kubectl/minikube/helm</code> on Debian 11.6.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>If virtualized, make sure virtual CPU extensions are passed through to <code>guest</code>/</p>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+With Debian, if your host system is configured for DHCP, be aware that an automatic entry in /etc/hosts with the hostname resolving to <code>127.0.1.1</code> is created.
+This might cause some things to fail if that IP address isn&#8217;t expected to resolve this hostname; for example, DHCP MAC address reservation to assign a specific IP address.
+For more information, see <a href="https://www.debian.org/doc/manuals/debian-reference/ch05.en.html#_the_hostname_resolution">the hostname resolution</a> in the Debian documentation.
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>Configure your user account to be a <code>sudoer</code>.</p>
+</li>
+<li>
+<p>Log on as root and run the following <code>usermod -aG sudo youraccount</code>.</p>
+</li>
+<li>
+<p>Logoff or reboot for the change to take effect.</p>
+</li>
+<li>
+<p>Install curl</p>
+<div class="paragraph">
+<p><code>sudo apt install curl</code></p>
+</div>
+</li>
+<li>
+<p>Install vim, unless you can only handle vi.</p>
+<div class="paragraph">
+<p><code>sudo apt install vim</code></p>
+</div>
+</li>
+<li>
+<p>Externally configure PostgreSQL, if not using containerized PostgreSQL.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" &gt; /etc/apt/sources.list.d/pgdg.list'
+curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/pgdg.gpg
+sudo apt update
+sudo apt install postgresql-15</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>In <code>/etc/postgresql/##/main</code>, reconfigure <code>pg_hba.conf</code> to allow external access to <code>192.168.0.0/24</code> and change <code>postgresql.conf</code> to listen on all interfaces.</p>
+</li>
+<li>
+<p>Follow doc instructions to install database.</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Database name needs to be <code>&lt;instance name&gt;_opennms</code> and not just <code>opennms</code>, where <code>&lt;instance name&gt;`</code> is the name of the pod.</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>Sett up and install <code>kubectl</code>:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">sudo apt install -y ca-certificates
+sudo curl -fsSLo /etc/apt/trusted.gpg.d/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
+echo "deb [signed-by=/etc/apt/trusted.gpg.d/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+sudo apt update
+sudo apt install -y kubectl</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Verify virtualization features and install virtualization engine:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">sudo apt install cpu-checker
+kvm-ok
+sudo apt-get install qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils virt-manager</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Install git: <code>sudo apt install git</code>.</p>
+</li>
+<li>
+<p>Download, install, and configure brew and then install helm and k9s:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+(echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') &gt;&gt; /home/USERNAME/.profile
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+sudo apt-get install build-essential
+brew install gcc helm derailed/k9s/k9s</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Download and install minikube:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube_latest_amd64.deb
+sudo dpkg -i minikube_latest_amd64.deb</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Add your user account to virtualization groups to be able to run virtualization commands without elevating permissions:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">sudo adduser `id -un` libvirt
+sudo adduser `id -un` kvm</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Edit the main configuration file for <code>libvirtd</code>:
+<code>sudo vi /etc/libvirt/libvirtd.conf</code>.</p>
+</li>
+<li>
+<p>Set the UNIX domain socket group ownership to <code>libvirt</code> by uncommenting the following line: <code>unix_sock_group = "libvirt"</code>.
+(In other words, remove the #.)</p>
+</li>
+<li>
+<p>Set the UNIX socket permissions for the R/W socket by uncommenting the following line and setting the correct permissions:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">unix_sock_rw_perms = "0770"
+sudo reboot</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>To get the initial content downloaded for minikube:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">minikube start
+minikube stop
+minikube delete</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Clone the <code>onms-k8s-poc repository</code>.
+(Make sure your ssh key is set up at GitHub.)</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">git clone git@github.com:opennms-forge/onms-k8s-poc.git</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>OR</p>
+</div>
+<div class="paragraph">
+<p>Download the zip at <a href="https://github.com/opennms-forge/onms-k8s-poc/archive/refs/heads/main.zip" class="bare">https://github.com/opennms-forge/onms-k8s-poc/archive/refs/heads/main.zip</a> and unzip.</p>
+</div>
+</li>
+<li>
+<p>Navigate to the <code>onms-k8s-poc</code> directory, start minikube with adequate resources, start Horizon through Helm, and then enable the ingress: <code>cd onms-k8s-poc/</code>.</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>You will see the following text:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">minikube start --memory 6144 --cpus 4
+😄  minikube v1.29.0 on Debian 11.6 (kvm/amd64)
+✨  Automatically selected the kvm2 driver. Other choices: qemu2, ssh
+👍  Starting control plane node minikube in cluster minikube
+🔥  Creating kvm2 VM (CPUs=4, Memory=6144MB, Disk=20000MB) ...
+🐳  Preparing Kubernetes v1.26.1 on Docker 20.10.23 ...
+    ▪ Generating certificates and keys ...
+    ▪ Booting up control plane ...
+    ▪ Configuring RBAC rules ...
+🔗  Configuring bridge CNI (Container Networking Interface) ...
+    ▪ Using image gcr.io/k8s-minikube/storage-provisioner:v5
+🔎  Verifying Kubernetes components...
+🌟  Enabled addons: storage-provisioner, default-storageclass
+🏄  Done! kubectl is now configured to use "minikube" cluster and "default" namespace by default
+
+helm upgrade --install -f minimal-resources.yaml -f kill-it-with-fire.yaml -f minikube-host-postgresql.yaml -f bare-bones.yaml --set domain=domain.com donms ./opennms
+Release "donms" does not exist. Installing it now.
+NAME: donms
+LAST DEPLOYED: Wed Mar 29 15:23:14 2023
+NAMESPACE: default
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+NOTES:
+Thank you for installing OpenNMS 31.0.5.</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><strong>Notes</strong></p>
+</div>
+<div class="paragraph">
+<p>Your release name <code>donms</code> is used for the following:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Customer/deployment identifier.</p>
+</li>
+<li>
+<p>The namespace for all the resources.</p>
+</li>
+<li>
+<p>The subdomain for the ingress controller.</p>
+</li>
+<li>
+<p>The OpenNMS instance ID for your Minions (prefix for Kafka topics).</p>
+</li>
+<li>
+<p>Prefix for Elasticsearch indices.</p>
+</li>
+<li>
+<p>Prefix for PostgreSQL database names.</p>
+</li>
+<li>
+<p>Prefix for Kafka consumer groups.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Resources URLs:
+OpenNMS Core: <a href="https://onms-core.donms.domain.com/opennms/login.jsp" class="bare">https://onms-core.donms.domain.com/opennms/login.jsp</a></p>
+</div>
+<div class="paragraph">
+<p>To learn more about the release, try the following:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ helm status donms
+$ helm get all donms
+$ kubectl get all -n donms</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You will see something similar to the following:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">minikube addons enable ingress
+💡  ingress is an addon maintained by Kubernetes. For any concerns contact minikube on GitHub.
+You can view the list of minikube maintainers at: https://github.com/kubernetes/minikube/blob/master/OWNERS
+    ▪ Using image registry.k8s.io/ingress-nginx/kube-webhook-certgen:v20220916-gd32f8c343
+    ▪ Using image registry.k8s.io/ingress-nginx/controller:v1.5.1
+    ▪ Using image registry.k8s.io/ingress-nginx/kube-webhook-certgen:v20220916-gd32f8c343
+🔎  Verifying ingress addon...
+🌟  The 'ingress' addon is enabled</code></pre>
+</div>
+</div>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>Copyright (c)2002–{docyear} The OpenNMS Group, Inc.</p>
+  <p>Licensed under the terms of the AGPL-3.0.</p>
+  <p><a href="https://docs.opennms.com/start-page/1.0.0/index.html" target="_blank">Legal Notice</a></p>
+</footer>
+<script src="../../../../_/js/site.js"></script>
+<script async src="../../../../_/js/vendor/highlight.js"></script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-svg.js"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  messageStyle: "none",
+  tex2jax: {
+    inlineMath: [["\\(", "\\)"]],
+    displayMath: [["\\[", "\\]"]],
+    ignoreClass: "nostem|nolatexmath"
+  },
+  asciimath2jax: {
+    delimiters: [["\\$", "\\$"]],
+    ignoreClass: "nostem|noasciimath"
+  },
+  TeX: {
+      Macros: {
+      RR: "{\\mathbb R}",
+      NN: "{\\mathbb N}",
+      Nso: "{N_{\\mathrm{so}}}",
+      Nma: "{N_{\\mathrm{ma}}}",
+      Nno: "{N_{\\mathrm{no}}}",
+      Ne: "{N_{\\mathrm{e}}}",
+      Ilag: ["{\\mathcal{I}^{\\mathrm{lag}}_{#1}}",1],
+      calTh: "{\\mathcal{T}_h}",
+      Ck: ["{\\mathcal{C}^{#1}}",1],
+      Pk: ["{\\mathcal{P}^{#1}}",1],
+      Qk: ["{\\mathcal{Q}^{#1}}",1],
+      Pch: ["{P^{#1}_{c,h}}",1],
+      Pcho: ["{P^{#1}_{c,h,0}}",1],
+      Qch: ["{Q^{#1}_{c,h}}",1],
+      Ich: ["{\\mathcal{I}^{#1}_{c,h}#2}",2],
+      poly: ["{\\mathbb{#1}}",1],
+      nf: "{n_f}",
+      normal: "{\\mathbf{n}}",
+      ngeo: "{n_{\\mathrm{geo}}}",
+      geo: "{\\mathrm{geo}}",
+      card: ["{\\operatorname{card}(#1)}",1],
+      dim: ["{\\operatorname{dim}(#1)}",1],
+      opdim: "{\\operatorname{dim}}",
+      card: ["{\\operatorname{card}(#1)}",1],
+      poly: ["{\\mathbb{#1}}",1],
+      R: ["{\\mathbb{R}^{#1}}",1],
+      set: ["{\\left\\{#1\\right\\}}",1],
+      diam: "{\\operatorname{diam}}",
+      jump: ["{[\\![ #1 ]\\!]}",1],
+      Next: "{\\mathrm{n}}",
+      essinf: "{\\operatorname{ess}\\, \\operatorname{inf}}",
+      tr: "{\\operatorname{tr}}",
+      Id: "{\\mathcal{I}}",
+      disp: ["{\\mathbf{#1}}",1],
+      stresst: ["{\\mathbf{\\sigma(#1)}}",1],
+      deformt: ["{\\mathbf{\\varepsilon(#1)}}",1],
+      domain: "{\\Omega}",
+      prect: ["{\\left\\(#1\\right\\)}",1],
+      ds: "",
+      bold: ["{\\bf #1}",1]
+  },
+  extensions: ["mhchem.js"] }
+});
+</script>
+  </body>
+</html>

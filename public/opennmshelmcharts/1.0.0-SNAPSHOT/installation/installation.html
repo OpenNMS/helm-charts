@@ -372,6 +372,40 @@ sudo systemctl enable --now avahi-daemon</code></pre>
 </div>
 </div>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+For information on how to set up with minikube, see the following on GitHub:
+</td>
+</tr>
+</table>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://github.com/OpenNMS/helm-charts/tree/main/docs/modules/os-text-files/minikube_ALMA9.1_notes.txt">minikube Alma 9.1</a></p>
+</li>
+<li>
+<p><a href="https://github.com/OpenNMS/helm-charts/tree/main/docs/modules/os-text-files/minikube_RHEL9.1.txt">minikube RHEL 9.1</a></p>
+</li>
+<li>
+<p><a href="https://github.com/OpenNMS/helm-charts/tree/main/docs/modules/os-text-files/minikube_ROCKY9.1.txt">minikube Rocky 9.1</a></p>
+</li>
+<li>
+<p><a href="https://github.com/OpenNMS/helm-charts/tree/main/docs/modules/os-text-files/minikube_Debian.txt">minkube Debian</a></p>
+</li>
+<li>
+<p><a href="https://github.com/OpenNMS/helm-charts/tree/main/docs/modules/os-text-files/minikube_Ubuntu.txt">minikube Ubuntu</a></p>
+</li>
+<li>
+<p><a href="https://github.com/OpenNMS/helm-charts/tree/main/docs/modules/os-text-files/minikube_IP_bridge.txt">minikube IP Bridge</a></p>
+</li>
+</ul>
+</div>
 <div class="sect2">
 <h3>Start the OpenNMS environment on your Kubernetes cluster</h3>
 <div class="admonitionblock note">
@@ -399,6 +433,11 @@ Locally you should run only one set.
   --set dependencies.elasticsearch.hostname=onms-es-http.shared.svc \
   &lt;namespace&gt; ./opennms</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>Keep in mind that is only an example.
+Treat the content of <code>helm-cloud.yaml</code> as a sample for testing.
+Make sure to tune it properly so that you avoid overriding settings via <code>--set</code>.</p>
 </div>
 </div>
 <div class="sect2">
