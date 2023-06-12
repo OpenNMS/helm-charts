@@ -55,7 +55,7 @@ For more information about Ingress, see the xref:reference:ingress.adoc[referenc
 
 IMPORTANT: Unless you build custom KAR images for OpenNMS, the latest available version of the ALEC and TSS Cortex KAR plugins (when enabled) will be downloaded directly from GitHub every time the OpenNMS Core container starts, as those binaries are not part of the current Docker image for OpenNMS.
 To get KAR plugins from Docker to avoid contacting GitHub, set `alecImage` and/or `cortexTssImage` values as appropriate.
-See https://github.com/opennms-forge/onms-k8s-poc/blob/main/kar-containers/README.md[kar-containers/README.md] for information on the Docker containers.
+See https://github.com/opennms-forge/onms-k8s-poc/blob/main/kar-container/README.md[kar-container/README.md] for information on the Docker containers.
 
 === External dependencies
 
