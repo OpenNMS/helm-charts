@@ -115,13 +115,11 @@ OR
 +
 Download the zip at https://github.com/opennms-forge/onms-k8s-poc/archive/refs/heads/main.zip and unzip.
 
-. Navigate to the `onms-k8s-poc` directory, start minikube with adequate resources, start Horizon through Helm, and then enable the ingress:
+. Navigate to the `onms-k8s-poc` directory, start minikube with adequate resources, start Horizon through Helm, and then enable the ingress: `cd onms-k8s-poc/`.
+.. You will see the following text:
 +
 [source, console]
 ----
-
-cd onms-k8s-poc/
-
 minikube start --memory 6144 --cpus 4
 😄  minikube v1.29.0 on Debian 11.6 (kvm/amd64)
 ✨  Automatically selected the kvm2 driver. Other choices: qemu2, ssh
@@ -164,7 +162,7 @@ Your release name `donms` is used for the following:
 Resources URLs:
 OpenNMS Core: https://onms-core.donms.domain.com/opennms/login.jsp
 
-To learn more about the release, try:
+To learn more about the release, try the following:
 
 [source, console]
 ----
@@ -173,13 +171,16 @@ $ helm get all donms
 $ kubectl get all -n donms
 ----
 
-== minikube addons enable ingress
-💡  ingress is an addon maintained by Kubernetes.
-For any concerns, contact minikube on GitHub.
+You will see something similar to the following:
 
+[source, console]
+----
+minikube addons enable ingress
+💡  ingress is an addon maintained by Kubernetes. For any concerns contact minikube on GitHub.
 You can view the list of minikube maintainers at: https://github.com/kubernetes/minikube/blob/master/OWNERS
-    ▪ Using image registry.k8s.io/ingress-nginx/controller:v1.5.1
     ▪ Using image registry.k8s.io/ingress-nginx/kube-webhook-certgen:v20220916-gd32f8c343
+    ▪ Using image registry.k8s.io/ingress-nginx/controller:v1.5.1
     ▪ Using image registry.k8s.io/ingress-nginx/kube-webhook-certgen:v20220916-gd32f8c343
 🔎  Verifying ingress addon...
 🌟  The 'ingress' addon is enabled
+----

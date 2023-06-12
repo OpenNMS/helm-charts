@@ -37,25 +37,16 @@ RHEL::
 --
 include::os/RHEL.adoc[]
 --
-
-
-Minikube-Debian 11.6::
-+
---
-include::os/minikube-ubuntu.adoc[]
---
-
-Minikube-RHEL 9.1::
-+
---
-include::os/minikube-RHEL-9-1.adoc
---
-
-Minikube-RHEL 9.1::
-+
-
-
 ====
+
+NOTE: For information on how to set up with minikube, see the following on GitHub:
+
+* https://github.com/OpenNMS/helm-charts/tree/main/docs/modules/os-text-files/minikube_ALMA9.1_notes.txt[minikube Alma 9.1]
+* https://github.com/OpenNMS/helm-charts/tree/main/docs/modules/os-text-files/minikube_RHEL9.1.txt[minikube RHEL 9.1]
+* https://github.com/OpenNMS/helm-charts/tree/main/docs/modules/os-text-files/minikube_ROCKY9.1.txt[minikube Rocky 9.1]
+* https://github.com/OpenNMS/helm-charts/tree/main/docs/modules/os-text-files/minikube_Debian.txt[minkube Debian]
+* https://github.com/OpenNMS/helm-charts/tree/main/docs/modules/os-text-files/minikube_Ubuntu.txt[minikube Ubuntu]
+* https://github.com/OpenNMS/helm-charts/tree/main/docs/modules/os-text-files/minikube_IP_bridge.txt[minikube IP Bridge]
 
 === Start the OpenNMS environment on your Kubernetes cluster
 

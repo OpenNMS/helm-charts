@@ -16,7 +16,7 @@ set SELINUX to disabled in /etc/selinux/config
 
 . Externally configure PostgreSQL, if not using containerized PostgreSQL:
 
-..Install the repository RPM:
+.. Install the repository RPM:
 `sudo dnf install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-9-x86_64/pgdg-redhat-repo-latest.noarch.rpm`.
 
 .. Disable the built-in PostgreSQL module:
@@ -24,18 +24,29 @@ set SELINUX to disabled in /etc/selinux/config
 
 .. Install PostgreSQL: `sudo dnf install -y postgresql15-server`.
 
-# Optionally initialize the database and enable automatic start:
+. Optionally initialize the database and enable automatic start:
++
+[source,console]
+----
 sudo /usr/pgsql-15/bin/postgresql-15-setup initdb
 sudo systemctl enable postgresql-15
 sudo systemctl start postgresql-15
+----
 
-In /var/lib/pgsql/##/main, reconfigure pg_hba.conf to allow external access to 192.168.0.0/24 and change postgresql.conf to listen on all interfaces.
-Follow doc instructions to install opennms database
-Database name needs to be <instance name>_opennms and not just opennms where <instance name> is the name of the pod.
+. In `/var/lib/pgsql/##/main`, reconfigure `pg_hba.conf`` to allow external access to `192.168.0.0/24` and change `postgresql.conf` to listen on all interfaces.
++
 
-Pulled from https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/#install-using-native-package-management
-sudo cat <<EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
-[kubernetes]
+. Follow doc instructions to install opennms database.
+.. Database name needs to be `<instance name>_opennms` and not just `opennms`, where `<instance name>` is the name of the pod.
+
+// this seems wrong: I'm not sure what the intent here is.
+
+. Pulled from https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/#install-using-native-package-management:
+
+`sudo cat <<EOF | sudo tee /etc/yum.repos.d/kubernetes.repo`
+
+[source, kubernetes]
+----
 name=Kubernetes
 baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-\$basearch
 enabled=1
@@ -43,50 +54,74 @@ gpgcheck=1
 gpgkey=https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
 EOF
 sudo yum install -y kubectl
+----
 
-Download, install, configure brew and then install helm and k9s
+. Download, install, and configure brew and then install `helm` and `k9s`:
++
+[source, brew]
+----
 sudo dnf groupinstall 'Development Tools'
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> /home/USERNAME/.bash_profile
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 brew install gcc helm derailed/k9s/k9s
+----
 
-Install qemu-kvm as the virtual engine
+. Install `qemu-kvm` as the virtual engine:
++
+[source, console]
+----
 sudo dnf install qemu-kvm libvirt virt-manager virt-install
+----
 
-Downloading and install minikube
+. Download and install minikube:
++
+[source, console]
+----
 curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-latest.x86_64.rpm
 sudo rpm -Uvh minikube-latest.x86_64.rpm
+----
 
-Just to get the initial stuff downloaded for minikube
+. To get the initial content downloaded for minikube:
++
+[source, console]
+----
 minikube start
 minikube stop
 minikube delete
+----
 
-Add your unprivliged user to be able to run most of the virtual commands without sudo since they are part of the libvirt group:
-Add your user to the libvirt group.
-sudo usermod -a -G libvirt $(whoami)
+. Add your unprivileged user to be able to run most of the virtual commands without sudo since they are part of the `libvirt` group:
 
-Edit the main configuration file
-sudo vi /etc/libvirt/libvirtd.conf
+.. Add your user to the libvirt group: `sudo usermod -a -G libvirt $(whoami)`.
+.. Edit the main configuration file:
+`sudo vi /etc/libvirt/libvirtd.conf`.
 
-Set the UNIX domain socket group ownership to libvirt by uncommenting the following line. In other words, remove the #.
-unix_sock_group = "libvirt"
+. Set the UNIX domain socket group ownership to `libvirt` by uncommenting the following line: `unix_sock_group = "libvirt"`.
+(In other words, remove the #.)
 
-Set the UNIX socket permissions for the R/W socket by uncommenting the following line and setting the correct permissions.
-unix_sock_rw_perms = "0770"
+. Set the UNIX socket permissions for the R/W socket by uncommenting the following line and setting the correct permissions:
+`unix_sock_rw_perms = "0770"`.
 
-Cloning the onms-k8s-poc repository [make sure your ssh key is setup at GitHub]
+. Clone the `onms-k8s-poc` repository (make sure your ssh key is setup at GitHub).
++
+[source,console]
+----
 git clone git@github.com:opennms-forge/onms-k8s-poc.git
 cd onms-k8s-poc/
+----
++
+OR
++
+Download the zip at https://github.com/opennms-forge/onms-k8s-poc/archive/refs/heads/main.zip and unzip.
 
-Or download the zip at https://github.com/opennms-forge/onms-k8s-poc/archive/refs/heads/main.zip and unzip
+. Make any changes to root-level yaml files as well as tweak `opennms/Chart.yaml` and `opennms/values.yaml` to get Horizon 31.0.5 instead of 31.0.2 and change any password information.
 
-Make any changes to root level yaml files as well tweak opennms/Chart.yaml and opennms/values.yaml to get Horizon 31.0.5 instead of 31.0.2 and change any password information.
-
-Navigating to the onms-k8s-poc directory, starting minikube with adequate resources, starting Horizon through Helm, and then enabling the ingress
-cd onms-k8s-poc/
-
+. Navigate to the `onms-k8s-poc` directory, start minikube with adequate resources, start Horizon through Helm Charts, and then enabling the ingress: `cd onms-k8s-poc/`.
+.. You will see the following text:
++
+[source, console]
+----
 minikube start --memory 6144 --cpus 2
 😄  minikube v1.30.1 on Almalinux 9.1 (kvm/amd64)
 ✨  Automatically selected the kvm2 driver. Other choices: none, ssh
@@ -115,25 +150,36 @@ REVISION: 1
 TEST SUITE: None
 NOTES:
 Thank you for installing OpenNMS 31.0.5.
+----
 
-Your release is named "aonms", used for:
-- Customer/Deployment identifier.
-- The namespace for all the resources.
-- The sub-domain for the ingress controller.
-- The OpenNMS instance ID for your Minions (prefix for Kafka topics).
-- Prefix for Elasticsearch indices.
-- Prefix for PostgreSQL database names.
-- Prefix for Kafka consumer groups.
+**Notes**
+
+Your release is named `aonms`, is used for the following:
+
+* Customer/Deployment identifier.
+* The namespace for all the resources.
+* The subdomain for the ingress controller.
+* The OpenNMS instance ID for your Minions (prefix for Kafka topics).
+* Prefix for Elasticsearch indices.
+* Prefix for PostgreSQL database names.
+* Prefix for Kafka consumer groups.
 
 Resources URLs:
+
 OpenNMS Core: https://onms-core.aonms.domain.com/opennms/login.jsp
 
-To learn more about the release, try:
+To learn more about the release, try the following:
 
+[source, console]
+----
 $ helm status aonms
 $ helm get all aonms
 $ kubectl get all -n aonms
+----
 
+You will see something similar to the following:
+[source, console]
+----
 minikube addons enable ingress
 💡  ingress is an addon maintained by Kubernetes. For any concerns contact minikube on GitHub.
 You can view the list of minikube maintainers at: https://github.com/kubernetes/minikube/blob/master/OWNERS
@@ -142,3 +188,4 @@ You can view the list of minikube maintainers at: https://github.com/kubernetes/
     ▪ Using image registry.k8s.io/ingress-nginx/kube-webhook-certgen:v20220916-gd32f8c343
 🔎  Verifying ingress addon...
 🌟  The 'ingress' addon is enabled
+----
