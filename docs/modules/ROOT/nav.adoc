@@ -1,15 +1,21 @@
 .About
-* xref:about:index.adoc[Page1]
+* xref:about:about.adoc[]
 
 .Installation
-* xref:installation:index.adoc[Page1]
-* xref:installation:Ubuntu.adoc[Ubuntu]
+* xref:installation:introduction.adoc[]
+* xref:installation:installation.adoc[]
+* xref:installation:minion.adoc[]
+* xref:installation:sentinel.adoc[]
 
 .Configuration
-* xref:configuration:index.adoc[Page1]
+* xref:configuration:configuration.adoc[]
 
 .Operation
-* xref:operation:index.adoc[Page1]
+* xref:operation:operation.adoc[]
+
+.Troubleshooting
+* xref:troubleshooting:debugging.adoc[]
 
 .Reference
-* xref:reference:index.adoc[Page1]
+* xref:reference:reference.adoc[]
+* xref:reference:ingress.adoc[]

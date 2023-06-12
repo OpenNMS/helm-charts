@@ -38,7 +38,7 @@ dependencies:
   # The chosen broker technology for the Minion-to-OpenNMS communication (this is mandatory).
   # For TLS with private CA, use the common Truststore.
   kafka:
-    hostname: onms-kafka-bootstrap.shared.svc # IP or FQDN of the external Kafka server
+    hostname: '' # IP or FQDN of the external Kafka server (Example: onms-kafka-bootstrap.shared.svc)
     port: 9093
     username: opennms # Pass empty username when using sasl_mechanism=PLAIN
     password: 0p3nNM5 # Pass empty password when using sasl_mechanism=PLAIN
@@ -49,7 +49,7 @@ dependencies:
   # Persisting flows requires Elasticsearch
   # For TLS with private CA, use the common Truststore.
   elasticsearch:
-    hostname: onms-es-http.shared.svc # IP or FQDN of the external Elasticsearch server
+    hostname: '' # IP or FQDN of the external Elasticsearch server (Example: onms-es-http.shared.svc)
     port: 9200
     username: elastic
     password: 31@st1c
@@ -61,7 +61,7 @@ dependencies:
 
   # The chosen solution for log aggregation (OpenNMS and Sentinel will forward logs to it via Promtail)
   loki:
-    hostname: loki.shared.svc # IP or FQDN of the external Loki server; '' to disable
+    hostname: '' # IP or FQDN of the external Loki server (Example: loki.shared.svc); '' to disable
     username: ''
     password: ''
     ca_cert: '' # A base64 encoded content of the CA Certificate (assumes HTTPS for Loki's URL)
@@ -105,7 +105,7 @@ opennms:
       memory: 4Gi
   configuration:
     alwaysRollDeployment: true
-    enable_alec: true    # See alecImage below for how the KAR is retrieved
+    enable_alec: false    # See alecImage below for how the KAR is retrieved
     enable_cortex: false # See cortexTssImage below for how the KAR is retrieved
     enable_tss_dual_write: false
     enable_acls: false
@@ -161,7 +161,7 @@ sentinel:
 # OpenNMS Helm
 # Do not use Grafana images, or you'd have to manually install the Helm Plugin from Github every time the container starts.
 grafana:
-  replicaCount: 2
+  replicaCount: 0
   image:
     repository: opennms/helm
     pullPolicy: IfNotPresent
