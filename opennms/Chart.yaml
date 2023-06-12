@@ -2,7 +2,7 @@ apiVersion: v2
 name: horizon
 description: A Helm chart for running OpenNMS Horizon in Kubernetes
 home: https://github.com/opennms-forge/onms-k8s-poc
-icon: https://www.opennms.com/favicon.ico
+icon: https://www.opennms.com/wp-content/uploads/2021/04/OpenNMS_Favicon_36px.png
 
 # A chart can be either an 'application' or a 'library' chart.
 #
