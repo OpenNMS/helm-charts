@@ -4,7 +4,6 @@
 
 timezone: America/New_York
 domain: example.com # The common domain for the Ingress resource.
-storageClass: onms-share # The name of the StorageClass that allows ReadWriteMany for RRDs and Core configuration (when using dedicated UI instances).
 opennmsVersion: '31.0.8'
 
 # Optionally specify an array of imagePullSecrets.
@@ -88,7 +87,7 @@ ingress:
   certManager:
     clusterIssuer: opennms-issuer
 
-# OpenNMS Core and UI Instances.
+# OpenNMS Core Instance.
 opennms:
   inspector: 
     enabled: false
@@ -139,21 +138,6 @@ opennms:
       rest_password: 0p3nNM5
       admin_password: 0p3nNM5 # Password for the default admin account
     etcUpdatePolicy: newer # Experimental: options: never (don't update any files), newer (only newer timestamps), new (only brand new files)
-  uiServers: # Optional
-    replicaCount: 0 # Disabled by default. Requires using ReadWriteMany volumes
-    terminationGracePeriodSeconds: 120
-    configuration:
-      database:
-        pool_size: 25
-    resources:
-      limits:
-        cpu: '2'
-        memory: 8Gi
-      requests:
-        cpu: '2'
-        memory: 4Gi
-  postConfigJob:
-    ttlSecondsAfterFinished: 300
 
 # OpenNMS Sentinel for flow processing (Optional)
 sentinel:

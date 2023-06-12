@@ -78,7 +78,6 @@ which keytool
 Run Scripts: 
 ```
 ./start-dependencies.sh 
-./create-storageclass.sh aks onms-share 
 ```
 
 ## Step 4 - Change yaml Configs before Deploying OpenNMS
@@ -91,9 +90,6 @@ In opennms/values.yaml
   * This aligns with the version in minion.yaml.
 
 In helm-cloud.yaml
-* opennms.uiServers.replicaCount: 1
-  * This gives us a UI.
-
 In dependencies/kafka.yaml, change the following:
 * host: kafka.sud_domain1.domain1
 
@@ -103,7 +99,6 @@ Run:
 ```
 helm install -f helm-cloud.yaml \
   --set domain=$DOMAIN \
-  --set storageClass=onms-share \
   --set ingress.certManager.clusterIssuer=opennms-issuer \
   --set dependencies.truststore.content=$(cat jks/truststore.jks | base64) \
   --set dependencies.postgresql.ca_cert=$(cat jks/postgresql-ca.crt | base64) \

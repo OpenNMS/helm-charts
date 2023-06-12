@@ -1,8 +1,5 @@
 {{- define "opennms.grafanaDSOptions" -}}
 {{- $srv := "onms-core" -}}
-{{- if gt (((.Values.opennms).uiServers).replicaCount|int) 0 }}
-{{- $srv = "onms-ui" -}}
-{{- end -}}
 editable: true
 access: proxy
 url: {{ printf "http://%s.%s.svc:8980/opennms" $srv .Release.Name }}
