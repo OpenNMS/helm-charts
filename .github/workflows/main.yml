@@ -2,8 +2,7 @@ name: Release Helm Charts
 
 on:
   release:
-    branches:
-      - main
+   types: [published]
 
 jobs:
   release:
