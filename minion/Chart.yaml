@@ -2,7 +2,7 @@ apiVersion: v2
 name: minion
 description: A Helm chart for running OpenNMS in Kubernetes
 home: https://github.com/OpenNMS/helm-charts
-icon: https://www.opennms.com/favicon.ico
+icon: https://www.opennms.com/wp-content/uploads/2021/04/OpenNMS_Favicon_36px.png
 
 # A chart can be either an 'application' or a 'library' chart.
 #
