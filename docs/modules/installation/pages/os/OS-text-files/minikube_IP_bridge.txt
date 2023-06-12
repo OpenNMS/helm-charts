@@ -1,23 +1,29 @@
-# Make sure minikube is stopped
+
+Make sure minikube is stopped:
+
 minikube stop
 
-# Debian - Network Manager - Must specify mac address for bridge if you don't want a random mac address, duplicating the mac address for the interface being used as the bridge is fine
-# enp1s0 is the main network interface that will be used to make a bridge interface, change to whatever the main interface is for the system
+== Debian NetworkManager
+Must specify MAC address for bridge if you do not want a random MAC address, duplicating the MAC address for the interface being used as the bridge is fine.
+# enp1s0 is the main network interface that will be used to make a bridge interface, change to whatever the main interface is for the system:
+
 sudo nmcli connection add type bridge con-name bridge0 ifname bridge0 bridge.mac-addres a1:b2:c3:d4:e5:f6
 sudo nmcli connection add type ethernet slave-type bridge con-name bridge0-port1 ifname enp1s0 master bridge0
 nmcli con del Wired\ connection\ 1;nmcli con reload bridge0&
 
-Ubuntu/Netplan - /etc/netplan/00-installer-config.yaml
-Before
-# This is the network config written by 'subiquity'
+== Ubuntu/Netplan - /etc/netplan/00-installer-config.yaml
+*Before*
+This is the network config written by 'subiquity'
 network:
   ethernets:
     enp1s0:
       dhcp4: true
   version: 2
 
-After - Must specify mac address for bridge if you don't want a random mac address, duplicating the mac address for the interface being used as the bridge is fine 
-# This is the network config written by 'subiquity'
+*After*
+Must specify MAC address for bridge if you do not want a random MAC address, duplicating the MAC address for the interface being used as the bridge is fine.
+
+This is the network config written by 'subiquity'
 network:
   ethernets:
     enp1s0:
@@ -29,26 +35,37 @@ network:
           interfaces: [enp1s0]
   version: 2
 
-# RHEL9/Rocky9/Alma9 - Network Manager - No need to specify mac address for the bridge since the bridge will duplicate the mac address of the interface being used
-# enp1s0 is the main network interface that will be used to make a bridge interface, change to whatever the main interface is for the system
+= RHEL9/Rocky9/Alma9 - Network Manager
+No need to specify MAC address for the bridge since the bridge will duplicate the MAC address of the interface being used.
+
+# enp1s0 is the main network interface that will be used to make a bridge interface, change to whatever the main interface is for the system:
+
 sudo nmcli connection add type bridge con-name bridge0 ifname bridge0
 sudo nmcli connection add type ethernet slave-type bridge con-name bridge0-port1 ifname enp1s0 master bridge0
 sudo nmcli con del enp1s0;sudo nmcli con reload bridge0&
 
-# Add the bridge interface to the minikube vm, take note of the mac address that is created
+Add the bridge interface to the minikube vm.
+Take note of the MAC address that is created:
+
 sudo virt-xml minikube --add-device --network bridge,model=virtio
 
-# Re-Add the bridge interface to the minikube vm after doing a minikube upgrade which resets the bridge network interface. If the same mac address is needed again, it can be specified.
+Re-add the bridge interface to the minikube vm after doing a minikube upgrade which resets the bridge network interface.
+If the same MAC address is needed again, it can be specified:
+
 sudo virt-xml minikube --add-device --network bridge,model=virtio,mac=a1:b2:c3:d4:e5:f6
 
-# Maybe don't remove secondary network interface even though the bridge replaces it?
-# sudo virt-xml minikube --remove-device --network 2
+Maybe don't remove secondary network interface even though the bridge replaces it?
 
-# Start the minikube instance with whatever ram and # of cpus
+sudo virt-xml minikube --remove-device --network 2
+
+Start the minikube instance with whatever RAM and # of CPUs:
+
 minikube start --memory=#### --cpus=#
 
-# Verify IP addresses with minikube ssh [eth2 is the bridged interface]
+Verify IP addresses with minikube ssh (eth2 is the bridged interface):
+
 minikube ssh ip a
+
 1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
     inet 127.0.0.1/8 scope host lo
