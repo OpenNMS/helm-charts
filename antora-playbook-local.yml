@@ -1,5 +1,5 @@
 site:
-  title: OpenNMS Helm Charts
+  title: Helm Charts (Kubernetes)
   url: https://github.com/OpenNMS/helm-charts
   start_page: opennmshelmcharts::index.adoc
 content:
