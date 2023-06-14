@@ -4,7 +4,6 @@
 
 timezone: America/New_York
 domain: example.com # The common domain for the Ingress resource.
-storageClass: onms-share # The name of the StorageClass that allows ReadWriteMany for RRDs and Core configuration (when using dedicated UI instances).
 opennmsVersion: '31.0.8'
 
 # Optionally specify an array of imagePullSecrets.
@@ -39,7 +38,7 @@ dependencies:
   # The chosen broker technology for the Minion-to-OpenNMS communication (this is mandatory).
   # For TLS with private CA, use the common Truststore.
   kafka:
-    hostname: onms-kafka-bootstrap.shared.svc # IP or FQDN of the external Kafka server
+    hostname: '' # IP or FQDN of the external Kafka server (Example: onms-kafka-bootstrap.shared.svc)
     port: 9093
     username: opennms # Pass empty username when using sasl_mechanism=PLAIN
     password: 0p3nNM5 # Pass empty password when using sasl_mechanism=PLAIN
@@ -50,7 +49,7 @@ dependencies:
   # Persisting flows requires Elasticsearch
   # For TLS with private CA, use the common Truststore.
   elasticsearch:
-    hostname: onms-es-http.shared.svc # IP or FQDN of the external Elasticsearch server
+    hostname: '' # IP or FQDN of the external Elasticsearch server (Example: onms-es-http.shared.svc)
     port: 9200
     username: elastic
     password: 31@st1c
@@ -62,7 +61,7 @@ dependencies:
 
   # The chosen solution for log aggregation (OpenNMS and Sentinel will forward logs to it via Promtail)
   loki:
-    hostname: loki.shared.svc # IP or FQDN of the external Loki server; '' to disable
+    hostname: '' # IP or FQDN of the external Loki server (Example: loki.shared.svc); '' to disable
     username: ''
     password: ''
     ca_cert: '' # A base64 encoded content of the CA Certificate (assumes HTTPS for Loki's URL)
@@ -88,7 +87,7 @@ ingress:
   certManager:
     clusterIssuer: opennms-issuer
 
-# OpenNMS Core and UI Instances.
+# OpenNMS Core Instance.
 opennms:
   inspector: 
     enabled: false
@@ -106,7 +105,7 @@ opennms:
       memory: 4Gi
   configuration:
     alwaysRollDeployment: true
-    enable_alec: true    # See alecImage below for how the KAR is retrieved
+    enable_alec: false    # See alecImage below for how the KAR is retrieved
     enable_cortex: false # See cortexTssImage below for how the KAR is retrieved
     enable_tss_dual_write: false
     enable_acls: false
@@ -139,21 +138,6 @@ opennms:
       rest_password: 0p3nNM5
       admin_password: 0p3nNM5 # Password for the default admin account
     etcUpdatePolicy: newer # Experimental: options: never (don't update any files), newer (only newer timestamps), new (only brand new files)
-  uiServers: # Optional
-    replicaCount: 0 # Disabled by default. Requires using ReadWriteMany volumes
-    terminationGracePeriodSeconds: 120
-    configuration:
-      database:
-        pool_size: 25
-    resources:
-      limits:
-        cpu: '2'
-        memory: 8Gi
-      requests:
-        cpu: '2'
-        memory: 4Gi
-  postConfigJob:
-    ttlSecondsAfterFinished: 300
 
 # OpenNMS Sentinel for flow processing (Optional)
 sentinel:
@@ -174,14 +158,14 @@ sentinel:
     database:
       pool_size: 25
 
-# OpenNMS Helm
-# Do not use Grafana images, or you'd have to manually install the Helm Plugin from Github every time the container starts.
+# OpenNMS Plugin for Grafana
+# Do not use Grafana images, or you'd have to manually install the OpenNMS Plugin for Grafana from Github every time the container starts.
 grafana:
-  replicaCount: 2
+  replicaCount: 0
   image:
     repository: opennms/helm
     pullPolicy: IfNotPresent
-    tag: '7.2.0'
+    tag: '9.0.4'
   resources:
     limits:
       cpu: 200m
@@ -199,7 +183,7 @@ grafana:
       image: # For the initialization container to create the database
         repository: postgres
         pullPolicy: IfNotPresent
-        tag: '12'
+        tag: '13'
   imageRenderer: # Required to generate PDF reports from OpenNMS
     replicaCount: 2
     image:

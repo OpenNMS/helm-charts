@@ -1,0 +1,6 @@
+= Operation
+:imagesdir: ../assets/images
+:!sectids:
+
+
+

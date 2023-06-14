@@ -1,5 +1,5 @@
 name: opennmshelmcharts
 version: '1.0.0-SNAPSHOT'
-title: OpenNMS Helm Charts
+title: Helm Charts (Kubernetes)
 nav:
   - modules/ROOT/nav.adoc

@@ -1,0 +1,6 @@
+= Configuration
+:imagesdir: ../assets/images
+:!sectids:
+
+
+

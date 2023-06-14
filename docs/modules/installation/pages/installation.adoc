@@ -1,0 +1,89 @@
+= Basic Installation
+:imagesdir: ../assets/images
+:!sectids:
+
+Before installing OpenNMS Helm Charts, make sure your environment meets the xref:installation:introduction.adoc#requirements[minimum requirements].
+
+This section describes a basic local installation on different operating systems with a Horizon Core.
+For information on other installation options, see the following:
+
+* xref:installation:minion.adoc[OpenNMS Minion for extended reach]
+* xref:installation:sentinel.adoc[OpenNMS Sentinel for scalability]
+
+== Installation and configuration
+
+To install and configure OpenNMS Helm Charts, follow these steps:
+
+. Create a basic .yaml file.
++
+The install script requires a `.yaml` file that contains at least the domain name that you are using.
+You may also want to specify the password for the OpenNMS instance.
++
+On GitHub, see https://github.com/OpenNMS/helm-charts/blob/main/opennms/values.yaml[`values.yaml`] for additional configuration parameters you can specify.
+See https://github.com/OpenNMS/helm-charts/blob/65afc1f06b986884d61205462f2de6c69b6ebdb8/examples/helm-cloud.yaml#L4[`helm-cloud.yaml`] for a sample file for testing purposes.
+
+. Configure your VNC with a UI.
+
+[{tabs}]
+====
+Debian/Ubuntu::
++
+--
+include::os/ubuntu.adoc[]
+--
+
+RHEL::
++
+--
+include::os/RHEL.adoc[]
+--
+====
+
+NOTE: For information on how to set up with minikube, see the following on GitHub:
+
+* https://github.com/OpenNMS/helm-charts/tree/main/docs/modules/os/os-text-files/minikube_ALMA9.1_notes.txt[minikube Alma 9.1]
+* https://github.com/OpenNMS/helm-charts/tree/main/docs/modules/os/os-text-files/minikube_RHEL9.1.txt[minikube RHEL 9.1]
+* https://github.com/OpenNMS/helm-charts/tree/main/docs/modules/os/os-text-files/minikube_ROCKY9.1.txt[minikube Rocky 9.1]
+* https://github.com/OpenNMS/helm-charts/tree/main/docs/modules/os/os-text-files/minikube_Debian.txt[minkube Debian]
+* https://github.com/OpenNMS/helm-charts/tree/main/docs/modules/os/os-text-files/minikube_Ubuntu.txt[minikube Ubuntu]
+* https://github.com/OpenNMS/helm-charts/tree/main/docs/modules/os/os-text-files/minikube_IP_bridge.txt[minikube IP Bridge]
+
+=== Start the OpenNMS environment on your Kubernetes cluster
+
+NOTE: Locally you should run only one set.
+
+[source,bash]
+----
+helm upgrade --install -f helm-cloud.yaml \
+  --set domain=k8s.<your-domain-name>.net \
+  --set storageClass=onms-share \
+  --set ingress.certManager.clusterIssuer=opennms-issuer \
+  --set-file dependencies.truststore.content=jks/truststore.jks \
+  --set-file dependencies.postgresql.ca_cert=jks/postgresql-ca.crt \
+  --set dependencies.postgresql.hostname=onms-db.shared.svc \
+  --set dependencies.kafka.hostname=onms-kafka-bootstrap.shared.svc \
+  --set dependencies.elasticsearch.hostname=onms-es-http.shared.svc \
+  <namespace> ./opennms
+----
+
+Keep in mind that is only an example.
+Treat the content of `helm-cloud.yaml` as a sample for testing.
+Make sure to tune it properly so that you avoid overriding settings via `--set`.
+
+
+=== Check the output file
+
+When the update completes, check the output file to determine if you need to make changes.
+The https://github.com/OpenNMS/helm-charts/blob/65afc1f06b986884d61205462f2de6c69b6ebdb8/opennms/templates/NOTES.txt[`notes.txt`] file illustrates sample output.
+The file also includes links to login to the Horizon Core and a Grafana URL.
+
+=== Log in to the Horizon UI
+Click on the link in the output file to log in.
+
+== Post-installation tasks
+
+If you have any issues, refer to the xref:troubleshooting:debugging.adoc[troubleshooting section] or the xref:reference:reference.adoc[reference section] for additional information.
+
+
+
+

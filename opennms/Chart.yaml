@@ -1,8 +1,8 @@
 apiVersion: v2
-name: opennms
-description: A Helm chart for running OpenNMS in Kubernetes
+name: horizon
+description: A Helm chart for running OpenNMS Horizon in Kubernetes
 home: https://github.com/opennms-forge/onms-k8s-poc
-icon: https://www.opennms.com/favicon.ico
+icon: https://www.opennms.com/wp-content/uploads/2021/04/OpenNMS_Favicon_36px.png
 
 # A chart can be either an 'application' or a 'library' chart.
 #
@@ -17,7 +17,7 @@ type: application
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 0.0.1
+version: 0.0.2
 
 # This is the version number of the application being deployed. This version number should be
 # incremented each time you make changes to the application. Versions are not expected to

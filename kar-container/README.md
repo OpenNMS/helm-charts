@@ -1,26 +1,13 @@
 # KAR Docker Images
 
-To avoid reaching GitHub every time the OpenNMS Core container starts to install ALEC, the Cortex TSS plugin or other plugins,the idea is to create a place-holder container, meaning a container that has no functionality but contains the appropriate KAR file.
-
 The idea is to use this container within the `initContainers` section of the OpenNMS `StatefulSet` to copy the KAR file to the `$OPENNMS_HOME/deploy` directory at runtime.
 
-## Compilation
+## Building and Publishing
+* Create a `build` folder
+* Download the KAR file(s) into the `build` folder
+* Run Docker build command
+* Push the newly created image to a repository which can be accessed by the Helm Charts.
 
-```bash
-cd alec
-make
-```
-
-If you want to build for a specific version, provide a GitHub release reference on the command-line, like:
-```bash
-make RELEASE=tags/v2.0.1
-```
-
-## Publishing
-
-```bash
-make RELEASE=tags/v2.0.1 push
-```
 
 ## Usage
 

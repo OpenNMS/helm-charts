@@ -1,4 +1,3 @@
-# @author Alejandro Galue <agalue@opennms.com>
 # Example content for the Helm Chart values with modest resources for a Cloud Deployment
 
 dependencies:
@@ -35,8 +34,6 @@ opennms:
     storage:
       etc: 1Gi
       rrd: 100Gi
-  uiServers:
-    replicaCount: 0
 
 #sentinel:
 #  replicaCount: 1

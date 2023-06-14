@@ -1,3 +1,8 @@
 /jks
 NOTES.md
 log.txt
+.DS_Store
+
+# Antora artifacts
+/build/
+/public/

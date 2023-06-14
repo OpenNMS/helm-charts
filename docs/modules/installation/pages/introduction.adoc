@@ -1,0 +1,77 @@
+= Introduction
+:imagesdir: ../assets/images
+:!sectids:
+
+OpenNMS Helm Charts is based and tested against the latest Horizon.
+We do not yet support it for Meridian.
+
+[[requirements]]
+== Requirements
+
+Before you begin, ensure that you have a deep understanding of how Kubernetes and Helm work.
+
+The following describes the requirements for your local machine, Kubernetes, and additional external dependencies.
+We do not yet support cloud deployments.
+
+=== Local
+
+You must have the following installed on your machine:
+
+* https://kubernetes.io/docs/reference/kubectl/[kubectl]
+* https://helm.sh/docs/intro/install/[Helm] version 3
+* (optional) https://minikube.sigs.k8s.io/docs/start/[minikube] for testing
+
+//Do we need to include minimum OS requirements?
+
+When using cloud resources, make sure you have https://learn.microsoft.com/en-us/cli/azure/reference-index?view=azure-cli-latest[az] for Azure or https://cloud.google.com/sdk/gcloud[gcloud] for Google Cloud.
+
+=== Kubernetes
+
+* Kubernetes version 1.20+.
+* A single `namespace`, which represents a single OpenNMS environment or customer deployment or a single tenant.
+It must not contain special characters and must follow FQDN restrictions.
+* A single instance of OpenNMS Core (backend) for centralized monitoring running ALEC in standalone mode (if enabled).
+** OpenNMS does not support distributed mode, meaning the `StatefulSet` cannot have more than one replica.
+* A shared volume for the RRD files, mounted as read-write on the Core instance, and as read-only on the UI instances if applicable.
+* A shared volume for the core configuration files, mounted as read-only on the UI instances if applicable.
+** Allows for sharing configuration across all the OpenNMS instances (for example, `users.xml`, and `groups.xml`).
+* Multiple instances of Grafana (frontend), using PostgreSQL as the backend, pointing to the OpenNMS UI service when available.
+** When UI instances are not present, the OpenNMS Helm Chart data sources point to the OpenNMS Core service.
+* `Secrets` to store the credentials, certificates, and truststores.
+* `ConfigMaps` to store initialization scripts and standard configuration settings.
+* An `Ingress` to control TLS termination and provide access to all the components (using Nginx).footnote:[You can manage certificates using Let's Encrypt via `cert-manager`, but we only require the name of a `ClusterIssuer`.]
+
+For more information about Ingress, see the xref:reference:ingress.adoc[reference section].
+
+*Optional requirements for additional implementation scenarios*
+
+* Multiple instances of read-only OpenNMS UI (frontend).
+** Must be stateless (unconfigurable).
+** The `Deployment` must work with multiple replicas.
+** Any configuration change goes to the core server.
+
+* Multiple instances of Sentinel to handle Flows (requires Elasticsearch as an external dependency).
+** When Sentinels are present, `Telemetryd` is disabled on the OpenNMS Core instance.
+
+IMPORTANT: Unless you build custom KAR images for OpenNMS, the latest available version of the ALEC and TSS Cortex KAR plugins (when enabled) will be downloaded directly from GitHub every time the OpenNMS Core container starts, as those binaries are not part of the current Docker image for OpenNMS.
+To get KAR plugins from Docker to avoid contacting GitHub, set `alecImage` and/or `cortexTssImage` values as appropriate.
+See https://github.com/opennms-forge/onms-k8s-poc/blob/main/kar-container/README.md[kar-container/README.md] for information on the Docker containers.
+
+=== External dependencies
+
+Kafka, Elasticsearch, and PostgreSQL running externally (and maintained separately from the solution), all with SSL enabled.
+
+* PostgreSQL server as the central database for OpenNMS and Grafana.
+** For Google Cloud, the solution was tested using Google SQL for PostgreSQL with SSL and a private IP.
+
+* Kafka cluster for OpenNMS-to-Minion communication.
+
+* Elasticsearch cluster for flow persistence.
+
+* Grafana Loki server for log aggregation.
+** https://grafana.com/docs/loki/latest/getting-started/logcli/[logcli] helps extract OpenNMS logs from the command line for troubleshooting purposes.
+
+* https://cert-manager.readthedocs.io/en/latest/[cert-manager] to provide HTTPS/TLS support to the web-based services the ingress controller manages.
+** A `ClusterIssuer` to use it across multiple independent OpenNMS installations.
+
+* Nginx Ingress Controller, as the solution has not been tested with other Ingress implementations.
