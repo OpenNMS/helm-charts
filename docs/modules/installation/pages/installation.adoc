@@ -54,22 +54,14 @@ NOTE: Locally you should run only one set.
 
 [source,bash]
 ----
-helm upgrade --install -f helm-cloud.yaml \
+helm upgrade --install -f example/minimal-resources.yaml \
   --set domain=k8s.<your-domain-name>.net \
-  --set storageClass=onms-share \
-  --set ingress.certManager.clusterIssuer=opennms-issuer \
-  --set-file dependencies.truststore.content=jks/truststore.jks \
-  --set-file dependencies.postgresql.ca_cert=jks/postgresql-ca.crt \
-  --set dependencies.postgresql.hostname=onms-db.shared.svc \
-  --set dependencies.kafka.hostname=onms-kafka-bootstrap.shared.svc \
-  --set dependencies.elasticsearch.hostname=onms-es-http.shared.svc \
   <namespace> ./opennms
 ----
 
 Keep in mind that is only an example.
 Treat the content of `helm-cloud.yaml` as a sample for testing.
 Make sure to tune it properly so that you avoid overriding settings via `--set`.
-
 
 === Check the output file
 
