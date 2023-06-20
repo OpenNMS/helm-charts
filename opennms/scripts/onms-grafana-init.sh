@@ -62,9 +62,16 @@ else
   echo "Configuring Grafana Box for $(hostname)"
   cat <<EOF > ${CONFIG_DIR_OVERLAY}/opennms.properties.d/grafana.properties
 org.opennms.grafanaBox.show=true
-org.opennms.grafanaBox.hostname=${GF_SERVER_DOMAIN}
-org.opennms.grafanaBox.port=443
+org.opennms.grafanaBox.hostname=${GRAFANA_SERVER}
+org.opennms.grafanaBox.port=3000
 org.opennms.grafanaBox.basePath=/
 org.opennms.grafanaBox.apiKey=${GRAFANA_KEY}
+
+# Settings used to build links url in the grafana box in opennms
+org.opennms.grafanaBox.link.protocol=https
+org.opennms.grafanaBox.link.hostname=${GF_SERVER_DOMAIN}
+org.opennms.grafanaBox.link.port=443
+org.opennms.grafanaBox.link.basePath=/
+
 EOF
 fi
