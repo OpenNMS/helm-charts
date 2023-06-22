@@ -9,6 +9,6 @@ dependencies:
     username: ''
     password: ''
     configuration:
-      saslMechanism: PLAIN
-      securityProtocol: PLAINTEXT
+      sasl_mechanism: PLAIN
+      security_protocol: PLAINTEXT
 

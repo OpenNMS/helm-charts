@@ -4,9 +4,9 @@ editable: true
 access: proxy
 url: {{ printf "http://%s.%s.svc:8980/opennms" $srv .Release.Name }}
 basicAuth: true
-basicAuthUser: {{ .Values.opennms.configuration.http.restUsername }}
+basicAuthUser: {{ .Values.opennms.configuration.http.rest_username }}
 secureJsonData:
-  basicAuthPassword: {{ .Values.opennms.configuration.http.restPassword }}
+  basicAuthPassword: {{ .Values.opennms.configuration.http.rest_password }}
 {{- end }}
 
 {{- if gt ((.Values.grafana).replicaCount|int) 0 }}
