@@ -8,16 +8,16 @@ dependencies:
     hostname: onms-kafka-bootstrap.shared.svc # Please change it
     port: 9093
     configuration:
-      sasl_mechanism: SCRAM-SHA-512
-      security_protocol: SASL_SSL
+      saslMechanism: SCRAM-SHA-512
+      securityProtocol: SASL_SSL
   elasticsearch:
     hostname: onms-es-http.shared.svc # Please change it
     port: 9200
     configuration:
       flows:
-        index_strategy: daily
-        replication_factor: 0
-        num_shards: 1
+        indexStrategy: daily
+        replicationFactor: 0
+        numShards: 1
   postgresql:
     hostname: onms-db.shared.svc # Please change it
     port: 5432
