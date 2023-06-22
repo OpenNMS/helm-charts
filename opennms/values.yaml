@@ -138,6 +138,11 @@ opennms:
       restPassword: 0p3nNM5
       adminPassword: 0p3nNM5 # Password for the default admin account
     etcUpdatePolicy: newer # Experimental: options: never (don't update any files), newer (only newer timestamps), new (only brand new files)
+    nodeSelector: null
+    affinity: null
+    tolerations: null
+  postConfigJob:
+    ttlSecondsAfterFinished: 300
 
 # OpenNMS Sentinel for flow processing (Optional)
 sentinel:

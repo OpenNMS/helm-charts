@@ -15,6 +15,12 @@ spec:
   {{- else }}
   replicas: 1 # DO NOT CHANGE. The solution only allows 1 instance
   {{- end }}
+  nodeSelector:
+    {{- toYaml .Values.opennms.configuration.nodeSelector | nindent 8 }}
+  affinity:
+    {{- toYaml .Values.opennms.configuration.affinity | nindent 8 }}
+  tolerations:
+    {{- toYaml .Values.opennms.configuration.tolerations | nindent 8 }}
   selector:
     matchLabels:
       app: onms-core
