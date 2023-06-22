@@ -304,12 +304,6 @@ EOF
 
 # Configure Timeseries for Cortex if enabled
 if [[ ${ENABLE_CORTEX} == "true" ]]; then
-  if [[ ! -e /opt/opennms/deploy/opennms-cortex-tss-plugin.kar ]]; then
-    KAR_VER=$(curl -sSf https://api.github.com/repos/OpenNMS/opennms-cortex-tss-plugin/releases/latest | grep tag_name | cut -d '"' -f 4)
-    KAR_URL="https://github.com/OpenNMS/opennms-cortex-tss-plugin/releases/download/${KAR_VER}/opennms-cortex-tss-plugin.kar"
-    curl -sSf -LJ -o ${DEPLOY_DIR}/opennms-cortex-tss-plugin.kar ${KAR_URL}
-  fi
-
   if [[ ${ENABLE_TSS_DUAL_WRITE} == "true" ]]; then
     # Do *not* set org.opennms.timeseries.strategy=integration but do make sure the file exists and is empty for later
     echo -n > ${CONFIG_DIR_OVERLAY}/opennms.properties.d/timeseries.properties
@@ -388,13 +382,6 @@ EOF
 
 # Enable ALEC standalone
 if [[ ${ENABLE_ALEC} == "true" ]]; then
-  if [[ ! -e /opt/opennms/deploy/opennms-alec-plugin.kar ]] && [[ ! -e ${DEPLOY_DIR}/opennms-alec-plugin.kar ]]; then
-    KAR_VER=$(curl -sSf https://api.github.com/repos/OpenNMS/alec/releases/latest | grep tag_name | cut -d '"' -f 4)
-    KAR_URL="https://github.com/OpenNMS/alec/releases/download/${KAR_VER}/opennms-alec-plugin.kar"
-    echo "Downloading ALEC $KAR_VER from GitHub..."
-    curl -sSf -LJ -o ${DEPLOY_DIR}/opennms-alec-plugin.kar ${KAR_URL}
-  fi
-
   cat <<EOF > ${CONFIG_DIR_OVERLAY}/featuresBoot.d/alec.boot
 alec-opennms-standalone wait-for-kar=opennms-alec-plugin
 EOF
