@@ -63,7 +63,7 @@ helm upgrade --install -f helm-cloud.yaml \
   --set dependencies.postgresql.hostname=onms-db.shared.svc \
   --set dependencies.kafka.hostname=onms-kafka-bootstrap.shared.svc \
   --set dependencies.elasticsearch.hostname=onms-es-http.shared.svc \
-  <namespace> ./opennms
+  <namespace> ./horizon
 ----
 
 Keep in mind that is only an example.
