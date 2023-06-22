@@ -96,14 +96,3 @@ For information on requirements, installation, manual configuration, and trouble
 == Problems/Limitations
 
 When using Newts, the resource cache will not exist on the UI servers (maintained by Collectd), meaning all requests will hit Cassandra, slowing down the graph generation.
-The same applies when using Grafana via the UI servers.
-
-
-> *This is one way to approach the solution, without saying this is the only one or the best one. You should carefully study the content of this Helm Chart and tune it for your needs*.
-
-## Version compatability
-
-Note: The Helm chart version is independent of the Horizon/Meridian version.
-
-| Helm chart version | Horizon version(s) | Meridian version(s) |
-| ----------- | ----------- | ----------- |
