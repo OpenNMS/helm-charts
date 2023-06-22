@@ -1,0 +1,20 @@
+opennmsVersion: '32.0.0-SNAPSHOT' # Must match OpenNMS Core version
+
+minion:
+ location: pod
+ name: myminion
+ kafkaBroker:
+  address: onms-kafka-bootstrap.shared.svc:9093
+  username: ''
+  password: ''
+ configuration:
+  storage:
+   dataFolder: 5Gi
+
+opennms:
+ instanceID: monms # Must match OpenNMS Core instance (namespace) 
+   
+# A common JKS to white-list all CA certificates .
+truststore:
+ content: '' # A base64 encoded content of the JKS Truststore file.
+ password: ''

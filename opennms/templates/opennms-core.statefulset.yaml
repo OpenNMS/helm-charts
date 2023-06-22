@@ -28,9 +28,10 @@ spec:
       {{- if .Values.opennms.configuration.alwaysRollDeployment }}
         rollme: {{ randAlphaNum 5 | quote }}
       {{- end }}
+      kubectl.kubernetes.io/default-container: "onms"
     spec:
       securityContext:
-        fsGroup: 10001 # Required for Google Fileshare (might impact performance)
+        fsGroup: 10001
       terminationGracePeriodSeconds: {{ .Values.opennms.terminationGracePeriodSeconds | default 120 }}
       {{- if .Values.imagePullSecrets }}
       imagePullSecrets:
