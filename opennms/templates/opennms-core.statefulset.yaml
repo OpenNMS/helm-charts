@@ -40,7 +40,7 @@ spec:
         {{- end }}
       {{- end }}
       initContainers:
-      {{- if and (.Values.opennms.configuration.enable_alec) (.Values.opennms.configuration.alecImage) }}
+      {{- if and (.Values.opennms.configuration.enableAlec) (.Values.opennms.configuration.alecImage) }}
       - name: alec-kar
         image: {{ .Values.opennms.configuration.alecImage.repository }}:{{ .Values.opennms.configuration.alecImage.tag }}
         imagePullPolicy: {{ .Values.opennms.configuration.alecImage.imagePullPolicy }}
@@ -52,7 +52,7 @@ spec:
         - name: deploy
           mountPath: /opennms-deploy # Required by the init script - DEPLOY_DIR
       {{- end }}
-      {{- if and (.Values.opennms.configuration.enable_cortex) (.Values.opennms.configuration.cortexTssImage) }}
+      {{- if and (.Values.opennms.configuration.enableCortex) (.Values.opennms.configuration.cortexTssImage) }}
       - name: cortex-tss-kar
         image: {{ .Values.opennms.configuration.cortexTssImage.repository }}:{{ .Values.opennms.configuration.cortexTssImage.tag }}
         imagePullPolicy: {{ .Values.opennms.configuration.cortexTssImage.imagePullPolicy }}
@@ -77,7 +77,7 @@ spec:
             name: app-credentials
         env:
         - name: OPENNMS_DATABASE_CONNECTION_MAXPOOL
-          value: {{ .Values.opennms.configuration.database.pool_size | default "50" | quote }}
+          value: {{ .Values.opennms.configuration.database.poolSize | default "50" | quote }}
         volumeMounts:
         - name: etc
           mountPath: /opennms-etc # Required by the script - CONFIG_DIR
