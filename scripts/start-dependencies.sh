@@ -62,7 +62,7 @@ if [ "$INSTALL_LOKI" == "true" ]; then
     --set "loki.storage.type=filesystem" \
     --set "loki.rulerConfig.storage.type=local" \
     --set "loki.auth_enabled=false" \
-    --set "loki.commonConfig.replicationFactor=1" \
+    --set "loki.commonConfig.replication_factor=1" \
     --set "loki.commonConfig.ring.instance_addr=127.0.0.1" \
     --set "loki.commonConfig.ring.kvstore.store=inmemory" \
     --set "test.enabled=false" \

@@ -37,7 +37,7 @@ mimir:
       ring:
         num_tokens: 512
         unregister_on_shutdown: false
-        replicationFactor: 1
+        replication_factor: 1
     frontend:
       log_queries_longer_than: 1m
       split_queries_by_interval: 1h # For testing purposes
