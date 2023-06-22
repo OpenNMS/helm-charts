@@ -81,9 +81,6 @@ Keep in mind that your custom images should be based on those currently in use.
 
 === Plugins
 
-If you plan to use the TSS Cortex plugin, the current solution will download the KAR file from GitHub every time the containers start.
-If your cluster doesn't have internet access, you must build custom images with the KAR file.
-
 For the ALEC KAR plugin, the latest release will be fetched from GitHub like the TSS Cortex Plugin above unless `alecImage` is set, in which case it will be loaded from the specified Docker image.
 
 === External dependencies
@@ -110,4 +107,3 @@ Note: The Helm chart version is independent of the Horizon/Meridian version.
 
 | Helm chart version | Horizon version(s) | Meridian version(s) |
 | ----------- | ----------- | ----------- |
-| 1.x | Horizon 32.x | Meridian 2023.x |
