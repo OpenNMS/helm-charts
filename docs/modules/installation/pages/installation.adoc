@@ -41,12 +41,12 @@ include::os/RHEL.adoc[]
 
 NOTE: For information on how to set up with minikube, see the following on GitHub:
 
-* https://github.com/OpenNMS/helm-charts/tree/main/docs/modules/os-text-files/minikube_ALMA9.1_notes.txt[minikube Alma 9.1]
-* https://github.com/OpenNMS/helm-charts/tree/main/docs/modules/os-text-files/minikube_RHEL9.1.txt[minikube RHEL 9.1]
-* https://github.com/OpenNMS/helm-charts/tree/main/docs/modules/os-text-files/minikube_ROCKY9.1.txt[minikube Rocky 9.1]
-* https://github.com/OpenNMS/helm-charts/tree/main/docs/modules/os-text-files/minikube_Debian.txt[minkube Debian]
-* https://github.com/OpenNMS/helm-charts/tree/main/docs/modules/os-text-files/minikube_Ubuntu.txt[minikube Ubuntu]
-* https://github.com/OpenNMS/helm-charts/tree/main/docs/modules/os-text-files/minikube_IP_bridge.txt[minikube IP Bridge]
+* https://github.com/OpenNMS/helm-charts/tree/main/docs/modules/os/os-text-files/minikube_ALMA9.1_notes.txt[minikube Alma 9.1]
+* https://github.com/OpenNMS/helm-charts/tree/main/docs/modules/os/os-text-files/minikube_RHEL9.1.txt[minikube RHEL 9.1]
+* https://github.com/OpenNMS/helm-charts/tree/main/docs/modules/os/os-text-files/minikube_ROCKY9.1.txt[minikube Rocky 9.1]
+* https://github.com/OpenNMS/helm-charts/tree/main/docs/modules/os/os-text-files/minikube_Debian.txt[minkube Debian]
+* https://github.com/OpenNMS/helm-charts/tree/main/docs/modules/os/os-text-files/minikube_Ubuntu.txt[minikube Ubuntu]
+* https://github.com/OpenNMS/helm-charts/tree/main/docs/modules/os/os-text-files/minikube_IP_bridge.txt[minikube IP Bridge]
 
 === Start the OpenNMS environment on your Kubernetes cluster
 
@@ -63,7 +63,7 @@ helm upgrade --install -f helm-cloud.yaml \
   --set dependencies.postgresql.hostname=onms-db.shared.svc \
   --set dependencies.kafka.hostname=onms-kafka-bootstrap.shared.svc \
   --set dependencies.elasticsearch.hostname=onms-es-http.shared.svc \
-  <namespace> ./opennms
+  <namespace> ./horizon
 ----
 
 Keep in mind that is only an example.

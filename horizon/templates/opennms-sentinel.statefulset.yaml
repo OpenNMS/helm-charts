@@ -1,0 +1,165 @@
+{{- /*
+Sentinel is required only for Processing Flows and Telemetry Data.
+Use a StatefulSet for Sentinels to have a unique and immutable SENTINEL_ID.
+*/}}
+
+{{- if gt ((.Values.sentinel).replicaCount|int) 0 }}
+{{- $image := printf "%s:%s" .Values.sentinel.image.repository (.Values.opennms.image.tag | default .Values.opennmsVersion) -}}
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: onms-sentinel
+  namespace: {{ .Release.Name }}
+  labels:
+    app: onms-sentinel
+    {{- include "opennms.labels" . | nindent 4 }}
+spec:
+  serviceName: sentinel
+  replicas: {{ .Values.sentinel.replicaCount }}
+  podManagementPolicy: Parallel
+  selector:
+    matchLabels:
+      app: onms-sentinel
+      {{- include "opennms.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: onms-sentinel
+        {{- include "opennms.selectorLabels" . | nindent 8 }}
+    spec:
+      terminationGracePeriodSeconds: {{ .Values.sentinel.terminationGracePeriodSeconds | default 60 }}
+      {{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- range $k, $r := .Values.imagePullSecrets }}
+        - name: {{ $r.name }}
+        {{- end }}
+      {{- end }}
+      initContainers:
+      - name: init
+        image: {{ $image }}
+        imagePullPolicy: {{ .Values.sentinel.image.imagePullPolicy }}
+        command: [ bash, /init.sh ]
+        envFrom:
+        - configMapRef:
+            name: app-settings
+        - secretRef:
+            name: app-credentials
+        env:
+        - name: OPENNMS_DATABASE_CONNECTION_MAXPOOL
+          value: {{ .Values.sentinel.configuration.database.poolSize | default "50" | quote }}
+        volumeMounts:
+        - name: etc-overlay
+          mountPath: /opt/sentinel-etc-overlay # Required by the script - OVERLAY_DIR
+        - name: scripts
+          mountPath: /init.sh
+          subPath: onms-sentinel-init.sh
+      containers:
+      - name: sentinel
+        image: {{ $image }}
+        imagePullPolicy: {{ .Values.sentinel.image.imagePullPolicy }}
+        args:
+        - -c
+        ports:
+        - containerPort: 8181
+          name: http
+        - containerPort: 8301
+          name: karaf
+        envFrom:
+        - configMapRef:
+            name: app-settings
+        - secretRef:
+            name: app-credentials
+        env:
+        - name: OPENNMS_HTTP_URL
+          value: http://$(OPENNMS_SERVER):8980/opennms
+        - name: SENTINEL_ID # Required when using tracing through Jaeger
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: SENTINEL_LOCATION # Required when using tracing through Jaeger
+          value: {{ .Release.Name }}
+        - name: MAX_FD # Maximum File Descriptors
+          value: '65536'
+        {{- $opt :=  include "opennms.jvmOptions" . }}
+        {{- if (((.Values.sentinel.resources).requests).memory) }}
+        - name: MEM_TOTAL_MB
+          valueFrom:
+            resourceFieldRef:
+              resource: requests.memory
+              divisor: 1Mi
+        - name: JAVA_OPTS
+          value: -Xms$(MEM_TOTAL_MB)m -Xmx$(MEM_TOTAL_MB)m {{ $opt }}
+        {{- else }}
+        - name: JAVA_OPTS
+          value: {{ $opt }}
+        {{- end }}
+        volumeMounts:
+        - name: etc-overlay
+          mountPath: /opt/sentinel-etc-overlay
+        - name: logs
+          mountPath: /opt/sentinel/data/log
+        - name: jks
+          mountPath: /etc/java/jks
+        - name: jks
+          mountPath: /opt/sentinel/.postgresql/root.crt
+          subPath: postgresql-ca.crt
+        {{- with .Values.sentinel.resources }}
+        resources:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        startupProbe:
+          exec:
+            command:
+            - /health.sh
+          failureThreshold: 30
+          periodSeconds: 60
+          timeoutSeconds: 5
+        readinessProbe:
+          exec:
+            command:
+            - /health.sh
+          periodSeconds: 15
+          timeoutSeconds: 5
+        livenessProbe: # WARNING: The health-check checks dependencies, which is not suitable for liveness probes
+          exec:
+            command:
+            - /health.sh
+          periodSeconds: 60
+          timeoutSeconds: 5
+      {{- if ((.Values.dependencies).loki).hostname }}
+      - name: promtail
+        image: {{ printf "%s:%s" .Values.promtail.image.repository (.Values.promtail.image.tag | default "latest") }}
+        imagePullPolicy: {{ .Values.promtail.image.pullPolicy }}
+        args:
+        - -config.file=/etc/promtail/promtail.yaml
+        volumeMounts:
+        - name: logs
+          mountPath: /opt/sentinel/data/log
+        - name: jks
+          mountPath: /etc/jks
+        - name: promtail
+          mountPath: /etc/promtail/promtail.yaml
+          subPath: promtail.sentinel.config.yaml
+        {{- with .Values.promtail.resources }}
+        resources:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+      {{- end }}
+      volumes:
+      - name: etc-overlay
+        emptyDir: {}
+      - name: logs
+        emptyDir: {}
+      {{- if ((.Values.dependencies).loki).hostname }}
+      - name: promtail
+        configMap:
+          name: promtail-config
+      {{- end }}
+      - name: scripts
+        configMap:
+          name: app-scripts
+      - name: jks
+        secret:
+          secretName: app-jks
+{{- end }}

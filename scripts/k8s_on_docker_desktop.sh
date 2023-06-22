@@ -1,5 +1,9 @@
 #!/bin/bash
 
+#
+# This script helps with bringing up the Helm Charts in a development environment
+#
+
 promptAndConfirm(){
     read -r -p "$1 " response
     case "$response" in

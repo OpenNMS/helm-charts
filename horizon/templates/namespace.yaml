@@ -1,0 +1,9 @@
+{{- if not (eq .Release.Name "default") }}
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ .Release.Name }}
+  labels:
+    {{- include "opennms.labels" . | nindent 4 }}
+{{- end }}

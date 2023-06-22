@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: minion
+  labels:
+    app: minion
+  namespace: {{ .Release.Name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: minion
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: minion
+    spec:
+      containers:
+        - args:
+            - -f
+          env:
+            - name: JAVA_MAX_MEM
+              value: 2048M
+            - name: JAVA_MIN_MEM
+              value: 512M
+            {{- if .Values.truststore.content }}
+            - name: JAVA_OPTS
+              value: -Djavax.net.ssl.trustStore=/etc/java/jks/truststore.jks -Djavax.net.ssl.trustStorePassword={{ .Values.truststore.password }}
+            {{- end }}
+            - name: TZ
+              value: America/New_York
+          image: opennms/minion:{{ .Values.opennmsVersion }}
+          livenessProbe:
+            exec:
+              command:
+                - /health.sh
+            failureThreshold: 3
+            periodSeconds: 30
+            timeoutSeconds: 20
+          name: minion
+          ports:
+            - containerPort: 8201
+            - containerPort: 1162
+              protocol: UDP
+            - containerPort: 1514
+              protocol: UDP
+          resources: {}
+          volumeMounts:
+            - mountPath: /opt/minion/minion-config.yaml
+              name: minion-settings
+              subPath: minion-config.yaml
+            {{- if .Values.truststore.content }}
+            - mountPath: /etc/java/jks
+              name: jks
+            {{- end }}
+            - mountPath: /opt/minion/data
+              name: minion-data-folder
+      hostname: minion
+      restartPolicy: Always
+      volumes:
+        - name: minion-data-folder
+          persistentVolumeClaim:
+            claimName: minion-data-folder
+        - name: minion-settings
+          configMap:
+            name: minion-settings
+        {{- if .Values.truststore.content }}
+        - name: jks
+          secret:
+            defaultMode: 420
+            secretName: minion-app-jks
+        {{- end }}
+status: {}
