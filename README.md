@@ -96,3 +96,9 @@ For information on requirements, installation, manual configuration, and trouble
 == Problems/Limitations
 
 When using Newts, the resource cache will not exist on the UI servers (maintained by Collectd), meaning all requests will hit Cassandra, slowing down the graph generation.
+
+== Version compatibility
+
+| Helm chart version | Horizon version(s) | Meridian version(s) |
+| ----------- | ----------- | ----------- |
+| 1.x | Horizon 32.x | Meridian 2023.x |
