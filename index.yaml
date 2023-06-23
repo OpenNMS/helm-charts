@@ -1,0 +1,16 @@
+apiVersion: v1
+entries:
+  horizon:
+  - apiVersion: v2
+    appVersion: 32.0.0-SNAPSHOT
+    created: "2023-06-23T18:14:35.578044174Z"
+    description: A Helm chart for running OpenNMS Horizon in Kubernetes
+    digest: 5fffab2f729b29b481424b82fb2ccc4da097dbc7d7368ca641f53a67e7f9cc7a
+    home: https://github.com/OpenNMS/helm-charts
+    icon: https://www.opennms.com/wp-content/uploads/2021/04/OpenNMS_Favicon_36px.png
+    name: horizon
+    type: application
+    urls:
+    - https://github.com/OpenNMS/helm-charts/releases/download/horizon-0.0.7/horizon-0.0.7.tgz
+    version: 0.0.7
+generated: "2023-06-23T18:14:35.578074274Z"
