@@ -12,7 +12,7 @@ We recommend that you study the content of the Helm chart and tune it for your n
 
 The following illustrates the general architecture for the OpenNMS Helm Charts solution, with a Kubernetes container environment, ingress controller, and three unique namespaces.
 It also displays external dependencies: Loki, PostgreSQL, Elasticsearch, Kafka, and Cortex.
-For more detailed information on Kubernetes and containerized environments, see the https://kubernetes.io/docs/home/[Kubernetes documentation].
+For more detailed information on Kubernetes and containerized environments, see the [Kubernetes documentation](https://kubernetes.io/docs/home/).
 
 ### General architecture
 
@@ -69,9 +69,9 @@ To have multiple Sentinels, make sure you have enough partitions for the flow to
 ### Log files and Grafana Loki
 
 The current OpenNMS instances are not friendly when accessing log files.
-The Helm Chart allows you to configure https://grafana.com/oss/loki/[Grafana Loki] to centralize all the log messages.
+The Helm Chart allows you to configure [Grafana Loki](https://grafana.com/oss/loki/) to centralize all the log messages.
 When the Loki server is configured, the Core instance, the UI instances, and the Sentinel instances will forward logs to Loki.
-The current solution employs the sidecar pattern using https://grafana.com/docs/loki/latest/clients/promtail/[Grafana Promtail] to deliver the logs.
+The current solution employs the sidecar pattern using [Grafana Promtail](https://grafana.com/docs/loki/latest/clients/promtail/) to deliver the logs.
 
 ### Docker images
 
