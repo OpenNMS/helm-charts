@@ -13,3 +13,4 @@
 
 .Reference
 * xref:reference:ingress.adoc[]
+* xref:reference:tools.adoc[]

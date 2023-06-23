@@ -3,7 +3,20 @@
 :!sectids:
 
 OpenNMS Helm Charts is based and tested against the latest Horizon.
-We do not yet support it for Meridian.
+See the following for version compatibilty:
+
+[options="header"]
+[cols="1,1,1"]
+|===
+
+| Helm chart version
+| Horizon version
+| Meridian version
+
+| 1.x
+| Horizon 32.x
+| Meridian 2023.x
+|===
 
 [[requirements]]
 == Requirements
@@ -63,8 +76,6 @@ Kafka, Elasticsearch, and PostgreSQL running externally (and maintained separate
 
 * PostgreSQL server as the central database for OpenNMS and Grafana.
 ** For Google Cloud, the solution was tested using Google SQL for PostgreSQL with SSL and a private IP.
-
-* Kafka cluster for OpenNMS-to-Minion communication.
 
 * Elasticsearch cluster for flow persistence.
 

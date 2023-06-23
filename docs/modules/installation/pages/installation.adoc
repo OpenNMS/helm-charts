@@ -5,10 +5,6 @@
 Before installing OpenNMS Helm Charts, make sure your environment meets the xref:installation:introduction.adoc#requirements[minimum requirements].
 
 This section describes a basic local installation on different operating systems with a Horizon Core.
-For information on other installation options, see the following:
-
-* xref:installation:minion.adoc[OpenNMS Minion for extended reach]
-* xref:installation:sentinel.adoc[OpenNMS Sentinel for scalability]
 
 == Installation and configuration
 
@@ -38,15 +34,6 @@ RHEL::
 include::os/RHEL.adoc[]
 --
 ====
-
-NOTE: For information on how to set up with minikube, see the following on GitHub:
-
-* https://github.com/OpenNMS/helm-charts/tree/main/docs/modules/os/os-text-files/minikube_ALMA9.1_notes.txt[minikube Alma 9.1]
-* https://github.com/OpenNMS/helm-charts/tree/main/docs/modules/os/os-text-files/minikube_RHEL9.1.txt[minikube RHEL 9.1]
-* https://github.com/OpenNMS/helm-charts/tree/main/docs/modules/os/os-text-files/minikube_ROCKY9.1.txt[minikube Rocky 9.1]
-* https://github.com/OpenNMS/helm-charts/tree/main/docs/modules/os/os-text-files/minikube_Debian.txt[minkube Debian]
-* https://github.com/OpenNMS/helm-charts/tree/main/docs/modules/os/os-text-files/minikube_Ubuntu.txt[minikube Ubuntu]
-* https://github.com/OpenNMS/helm-charts/tree/main/docs/modules/os/os-text-files/minikube_IP_bridge.txt[minikube IP Bridge]
 
 === Start the OpenNMS environment on your Kubernetes cluster
 
