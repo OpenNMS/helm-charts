@@ -17,8 +17,6 @@ The following illustrates the general architecture for the OpenNMS Helm Charts s
 It also displays external dependencies: Loki, PostgreSQL, Elasticsearch, Kafka, and Cortex.
 For more detailed information on Kubernetes and containerized environments, see the https://kubernetes.io/docs/home/[Kubernetes documentation].
 
-_Still requires editing_
-
 //needs to be revised
 
 .General architecture
@@ -37,8 +35,8 @@ The name of the `namespace` is used as follows:
 * The name of the deployed Helm application.
 * A prefix for the OpenNMS and Grafana databases in PostgreSQL.
 * A prefix for the index names in Elasticsearch when processing flows.
-* A prefix for the topics in Kafka (requires configuring the OpenNMS instance ID on Minions).
-* A prefix for the Consumer Group IDs in OpenNMS and Sentinel.
+* A prefix for the topics in Kafka.
+* A prefix for the Consumer Group IDs in OpenNMS.
 * Part of the subdomain used by the Ingress Controller to expose Web UIs.
 
 //removed shared volumes, as it included `storageClass` which is going away, and also Cloud options which we aren't documenting for 32.
