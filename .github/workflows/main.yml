@@ -1,8 +1,9 @@
 name: Release Helm Charts
 
 on:
-  release:
-   types: [published]
+ push:
+  branches:
+     - main
 
 jobs:
   release:
@@ -21,6 +22,6 @@ jobs:
       - name: Run chart-releaser
         uses: helm/chart-releaser-action@v1.5.0
         with:
-          charts_dir: opennms
+          charts_dir: horizon
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
