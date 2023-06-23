@@ -19,7 +19,7 @@ fi
 INSTALL_ELASTIC=${INSTALL_ELASTIC:-false} # needed for Flow processing
 INSTALL_KAFKA=${INSTALL_KAFKA:-false} # needed for Sentinel and Minion support
 INSTALL_MIMIR=${INSTALL_MIMIR:-false} # needed for Cortex testing
-INSTALL_LOKI=${INSTALL_LOKI:-true} # needed for log aggregation together with promtail in containers; make sure dependencies.loki.hostname='' for the helm chart if this is disabled
+INSTALL_LOKI=${INSTALL_LOKI:-false} # needed for log aggregation together with promtail in containers; make sure dependencies.loki.hostname='' for the helm chart if this is disabled
 
 # Required dependencies (if you don't install them here, they need to be running somewhere else)
 INSTALL_POSTGRESQL=${INSTALL_POSTGRESQL:-true}
