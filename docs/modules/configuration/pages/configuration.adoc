@@ -1,6 +1,14 @@
-= Configuration
+
 :imagesdir: ../assets/images
 :!sectids:
+
+= Manual Configuration Changes
+
+Either access the OpenNMS container via a remote shell through `kubectl`, and edit the file using vi (the only editor available within the OpenNMS container).
+
+Send the reload configuration event via `send-event.pl` or the Karaf Shell (not accessible within the container).
+
+In case OpenNMS has to be restarted, delete the Pod (not the StatefulSet), and the Kubernetes controller will recreate it again.
 
 
 

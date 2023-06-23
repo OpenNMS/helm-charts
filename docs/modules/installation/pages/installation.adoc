@@ -82,7 +82,11 @@ Click on the link in the output file to log in.
 
 == Post-installation tasks
 
-If you have any issues, refer to the xref:troubleshooting:debugging.adoc[troubleshooting section] or the xref:reference:reference.adoc[reference section] for additional information.
+See the following topics might be useful after installation:
+
+* xref:configuration:configuration.adoc[Manual configuration changes]
+* xref:troubleshooting:debugging.adoc[Troubleshooting]
+* xref:reference:reference.adoc[Useful tools and commands] 
 
 
 
