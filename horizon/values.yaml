@@ -3,7 +3,7 @@
 # Declare variables to be passed into your templates.
 
 timezone: America/New_York
-domain: example.com # The common domain for the Ingress resource.
+domain: example.com  # The common domain for the Ingress resource.
 opennmsVersion: '32.0.0-SNAPSHOT'
 
 # Optionally specify an array of imagePullSecrets.
@@ -22,26 +22,26 @@ dependencies:
 
   # A common JKS to white-list all CA certificates for all the dependencies OpenNMS or Sentinel uses.
   truststore:
-    content: '' # A base64 encoded content of the JKS Truststore file.
+    content: ''  # A base64 encoded content of the JKS Truststore file.
     password: '0p3nNM5'
 
   # The main OpenNMS database requires PostgreSQL (this is mandatory).
   postgresql:
-    hostname: onms-db.shared.svc # IP or FQDN of the external PostgreSQL server
+    hostname: onms-db.shared.svc    # IP or FQDN of the external PostgreSQL server
     port: 5432
     username: postgres
     password: P0stgr3s
-    sslmode: require # disable, allow, prefer, require, verify-ca, verify-full
+    sslmode: require  # disable, allow, prefer, require, verify-ca, verify-full
     sslfactory: org.postgresql.ssl.LibPQFactory # LibPQFactory, DefaultJavaSSLFactory, NonValidatingFactory
-    caCert: '' # A base64 encoded content of the CA Certificate
+    caCert: ''    # A base64 encoded content of the CA Certificate
 
   # The chosen broker technology for the Minion-to-OpenNMS communication (this is mandatory).
   # For TLS with private CA, use the common Truststore.
   kafka:
     hostname: '' # IP or FQDN of the external Kafka server (Example: onms-kafka-bootstrap.shared.svc)
     port: 9093
-    username: opennms # Pass empty username when using saslMechanism=PLAIN
-    password: 0p3nNM5 # Pass empty password when using saslMechanism=PLAIN
+    username: opennms    # Pass empty username when using saslMechanism=PLAIN
+    password: 0p3nNM5    # Pass empty password when using saslMechanism=PLAIN
     configuration:
       saslMechanism: SCRAM-SHA-512 # PLAIN, SCRAM-SHA-512
       securityProtocol: SASL_SSL # PLAINTEXT, SSL, SASL_PLAINTEXT, SASL_SSL
@@ -49,7 +49,7 @@ dependencies:
   # Persisting flows requires Elasticsearch
   # For TLS with private CA, use the common Truststore.
   elasticsearch:
-    hostname: '' # IP or FQDN of the external Elasticsearch server (Example: onms-es-http.shared.svc)
+    hostname: ''    # IP or FQDN of the external Elasticsearch server (Example: onms-es-http.shared.svc)
     port: 9200
     username: elastic
     password: 31@st1c
@@ -61,10 +61,10 @@ dependencies:
 
   # The chosen solution for log aggregation (OpenNMS and Sentinel will forward logs to it via Promtail)
   loki:
-    hostname: '' # IP or FQDN of the external Loki server (Example: loki.shared.svc); '' to disable
+    hostname: ''    # IP or FQDN of the external Loki server (Example: loki.shared.svc); '' to disable
     username: ''
     password: ''
-    caCert: '' # A base64 encoded content of the CA Certificate (assumes HTTPS for Loki's URL)
+    caCert: ''    # A base64 encoded content of the CA Certificate (assumes HTTPS for Loki's URL)
     port: 3100
 
   # The metrics persistence layer as an alternative to RRDtool.
@@ -89,13 +89,13 @@ ingress:
 
 # OpenNMS Core Instance.
 opennms:
-  inspector: 
+  inspector:
     enabled: false
   terminationGracePeriodSeconds: 120
   image:
     repository: opennms/horizon
     pullPolicy: IfNotPresent
-    tag: '' # Defaults to opennmsVersion
+    tag: ''    # Defaults to opennmsVersion
   resources:
     limits:
       cpu: '2'
@@ -106,7 +106,7 @@ opennms:
   configuration:
     alwaysRollDeployment: true
     enableAlec: false    # See alecImage below for how the KAR is retrieved
-    enableCortex: false # See cortexTssImage below for how the KAR is retrieved
+    enableCortex: false    # See cortexTssImage below for how the KAR is retrieved
     enableTssDualWrite: false
     enableAcls: false
     rras: # To optionally replace the RRDtool aggregations (pass [] to keep defaults). Affects Pollerd and Collectd
