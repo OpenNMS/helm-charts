@@ -1,6 +1,8 @@
 
 = Debugging
 
+Be aware that all logs go to the root folder.
+
 `Error: UPGRADE FAILED: cannot patch "onms-post-config" with kind Job`
 
 If you get the message above with a huge long error message, it's because you are trying to upgrade a Helm release that still has the onms-post-config job around.
