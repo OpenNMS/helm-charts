@@ -91,7 +91,7 @@ Those are Loki, PostgreSQL, Elasticsearch, Kafka, and Cortex (when applied).
 The solution provides a script to start up a set of dependencies for testing as a part of the same cluster but **this is not intended for production use.**
 
 ## Product documentation
-For information on requirements, installation, manual configuration, and troubleshooting tips, see the [product documentation](https://docs.opennms.com/helm-charts/opennmshelmcharts/latest/installation/introduction.html#requirements).
+For information on requirements, installation, manual configuration, and troubleshooting tips, see the [product documentation](https://docs.opennms.com/opennmshelmcharts/latest/installation/introduction.html#requirements).
 
 ## Problems/Limitations
 
