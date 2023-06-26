@@ -16,11 +16,11 @@ spec:
   replicas: 1 # DO NOT CHANGE. The solution only allows 1 instance
   {{- end }}
   nodeSelector:
-    {{- toYaml .Values.opennms.configuration.nodeSelector | nindent 8 }}
+    {{- toYaml .Values.opennms.configuration.nodeSelector | nindent 4 }}
   affinity:
-    {{- toYaml .Values.opennms.configuration.affinity | nindent 8 }}
+    {{- toYaml .Values.opennms.configuration.affinity | nindent 4 }}
   tolerations:
-    {{- toYaml .Values.opennms.configuration.tolerations | nindent 8 }}
+    {{- toYaml .Values.opennms.configuration.tolerations | nindent 4 }}
   selector:
     matchLabels:
       app: onms-core
