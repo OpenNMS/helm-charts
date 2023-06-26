@@ -15,12 +15,6 @@ spec:
   {{- else }}
   replicas: 1 # DO NOT CHANGE. The solution only allows 1 instance
   {{- end }}
-  nodeSelector:
-    {{- toYaml .Values.core.configuration.nodeSelector | nindent 4 }}
-  affinity:
-    {{- toYaml .Values.core.configuration.affinity | nindent 4 }}
-  tolerations:
-    {{- toYaml .Values.core.configuration.tolerations | nindent 4 }}
   selector:
     matchLabels:
       app: onms-core
@@ -34,7 +28,7 @@ spec:
       {{- if .Values.core.configuration.alwaysRollDeployment }}
         rollme: {{ randAlphaNum 5 | quote }}
       {{- end }}
-      kubectl.kubernetes.io/default-container: "onms"
+        kubectl.kubernetes.io/default-container: "onms"
     spec:
       securityContext:
         fsGroup: 10001
@@ -97,6 +91,12 @@ spec:
       - name: onms
         image: {{ $image }}
         imagePullPolicy: {{ .Values.core.image.imagePullPolicy }}
+        nodeSelector:
+          {{- toYaml .Values.core.configuration.nodeSelector | nindent 10 }}
+        affinity:
+          {{- toYaml .Values.core.configuration.affinity | nindent 10 }}
+        tolerations:
+          {{- toYaml .Values.core.configuration.tolerations | nindent 10 }}
         args:
         - -s
         ports:
