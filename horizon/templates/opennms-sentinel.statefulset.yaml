@@ -4,7 +4,7 @@ Use a StatefulSet for Sentinels to have a unique and immutable SENTINEL_ID.
 */}}
 
 {{- if gt ((.Values.sentinel).replicaCount|int) 0 }}
-{{- $image := printf "%s:%s" .Values.sentinel.image.repository (.Values.opennms.image.tag | default .Values.opennmsVersion) -}}
+{{- $image := printf "%s:%s" .Values.sentinel.image.repository (.Values.core.image.tag | default .Values.opennmsVersion) -}}
 ---
 apiVersion: apps/v1
 kind: StatefulSet
@@ -13,7 +13,7 @@ metadata:
   namespace: {{ .Release.Name }}
   labels:
     app: onms-sentinel
-    {{- include "opennms.labels" . | nindent 4 }}
+    {{- include "core.labels" . | nindent 4 }}
 spec:
   serviceName: sentinel
   replicas: {{ .Values.sentinel.replicaCount }}
@@ -21,12 +21,12 @@ spec:
   selector:
     matchLabels:
       app: onms-sentinel
-      {{- include "opennms.selectorLabels" . | nindent 6 }}
+      {{- include "core.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
         app: onms-sentinel
-        {{- include "opennms.selectorLabels" . | nindent 8 }}
+        {{- include "core.selectorLabels" . | nindent 8 }}
     spec:
       terminationGracePeriodSeconds: {{ .Values.sentinel.terminationGracePeriodSeconds | default 60 }}
       {{- if .Values.imagePullSecrets }}
@@ -81,7 +81,7 @@ spec:
           value: {{ .Release.Name }}
         - name: MAX_FD # Maximum File Descriptors
           value: '65536'
-        {{- $opt :=  include "opennms.jvmOptions" . }}
+        {{- $opt :=  include "core.jvmOptions" . }}
         {{- if (((.Values.sentinel.resources).requests).memory) }}
         - name: MEM_TOTAL_MB
           valueFrom:

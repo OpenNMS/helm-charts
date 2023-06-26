@@ -7,10 +7,10 @@ metadata:
   labels:
     app: onms-core
     tier: storage
-    {{- include "opennms.labels" . | nindent 4 }}
+    {{- include "core.labels" . | nindent 4 }}
 spec:
   accessModes: # Assumes default StorageClass
   - ReadWriteOnce
   resources:
     requests:
-      storage: {{ .Values.opennms.configuration.storage.etc | default "1Gi" }}
+      storage: {{ .Values.core.configuration.storage.etc | default "1Gi" }}

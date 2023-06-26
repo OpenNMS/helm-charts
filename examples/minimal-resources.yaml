@@ -1,6 +1,6 @@
 # Default values for minimal resource consumption, e.g.: minikube (for testing purposes only)
 
-opennms:
+core:
   resources: null
   configuration:
     storage:

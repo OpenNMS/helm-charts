@@ -5,6 +5,6 @@ metadata:
   name: app-scripts
   namespace: {{ .Release.Name }}
   labels:
-    {{- include "opennms.labels" . | nindent 4 }}
+    {{- include "core.labels" . | nindent 4 }}
 data:
   {{- (.Files.Glob "scripts/**").AsConfig | nindent 2 }}

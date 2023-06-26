@@ -5,10 +5,10 @@ metadata:
   name: app-settings
   namespace: {{ .Release.Name }}
   labels:
-    {{- include "opennms.labels" . | nindent 4 }}
+    {{- include "core.labels" . | nindent 4 }}
 data:
   TZ: {{ .Values.timezone | quote }}
-  DOMAIN: {{ include "opennms.domain" . | quote }}
+  DOMAIN: {{ include "core.domain" . | quote }}
   POSTGRES_HOST: {{ .Values.dependencies.postgresql.hostname | quote }}
   POSTGRES_PORT: {{ .Values.dependencies.postgresql.port | quote }}
   POSTGRES_SSL_MODE: {{ .Values.dependencies.postgresql.sslmode | quote }}
@@ -23,9 +23,9 @@ data:
   OPENNMS_SERVER: {{ printf "onms-core.%s.svc" .Release.Name | quote }}
   OPENNMS_DBNAME: {{ printf "%s_opennms" .Release.Name | quote }}
   {{- if ((.Values.opennms).configuration).rras }}
-  OPENNMS_RRAS: {{ join ";" .Values.opennms.configuration.rras }}
+  OPENNMS_RRAS: {{ join ";" .Values.core.configuration.rras }}
   {{- end }}
-  OPENNMS_ETC_UPDATE_POLICY: {{ .Values.opennms.configuration.etcUpdatePolicy }}
+  OPENNMS_ETC_UPDATE_POLICY: {{ .Values.core.configuration.etcUpdatePolicy }}
   {{- if ((.Values.opennms).configuration).enableCortex }}
   CORTEX_WRITE_URL: {{ .Values.dependencies.cortex.writeUrl | quote }}
   CORTEX_READ_URL: {{ .Values.dependencies.cortex.readUrl | quote }}
@@ -48,7 +48,7 @@ data:
   KAFKA_SECURITY_PROTOCOL: {{ .Values.dependencies.kafka.configuration.securityProtocol | quote }}
   {{- end }}
   GRAFANA_SERVER: {{ printf "grafana.%s.svc" .Release.Name | quote }}
-  GF_SERVER_DOMAIN: {{ printf "grafana.%s" (include "opennms.domain" .) | quote }} # Should match FQDN on the Ingress
+  GF_SERVER_DOMAIN: {{ printf "grafana.%s" (include "core.domain" .) | quote }} # Should match FQDN on the Ingress
   GF_SERVER_ROOT_URL: "/"
   GF_DATABASE_TYPE: "postgres"
   GF_DATABASE_NAME: {{ printf "%s_grafana" .Release.Name | quote }}

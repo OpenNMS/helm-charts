@@ -1,4 +1,4 @@
-{{- $image := printf "%s:%s" .Values.opennms.image.repository (.Values.opennms.image.tag | default .Values.opennmsVersion) -}}
+{{- $image := printf "%s:%s" .Values.core.image.repository (.Values.core.image.tag | default .Values.opennmsVersion) -}}
 ---
 apiVersion: apps/v1
 kind: StatefulSet
@@ -7,38 +7,38 @@ metadata:
   namespace: {{ .Release.Name }}
   labels:
     app: onms-core
-    {{- include "opennms.labels" . | nindent 4 }}
+    {{- include "core.labels" . | nindent 4 }}
 spec:
   serviceName: onms-core
-  {{- if .Values.opennms.inspector.enabled }}
+  {{- if .Values.core.inspector.enabled }}
   replicas: 0
   {{- else }}
   replicas: 1 # DO NOT CHANGE. The solution only allows 1 instance
   {{- end }}
   nodeSelector:
-    {{- toYaml .Values.opennms.configuration.nodeSelector | nindent 4 }}
+    {{- toYaml .Values.core.configuration.nodeSelector | nindent 4 }}
   affinity:
-    {{- toYaml .Values.opennms.configuration.affinity | nindent 4 }}
+    {{- toYaml .Values.core.configuration.affinity | nindent 4 }}
   tolerations:
-    {{- toYaml .Values.opennms.configuration.tolerations | nindent 4 }}
+    {{- toYaml .Values.core.configuration.tolerations | nindent 4 }}
   selector:
     matchLabels:
       app: onms-core
-      {{- include "opennms.selectorLabels" . | nindent 6 }}
+      {{- include "core.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
         app: onms-core
-        {{- include "opennms.selectorLabels" . | nindent 8 }}
+        {{- include "core.selectorLabels" . | nindent 8 }}
       annotations:
-      {{- if .Values.opennms.configuration.alwaysRollDeployment }}
+      {{- if .Values.core.configuration.alwaysRollDeployment }}
         rollme: {{ randAlphaNum 5 | quote }}
       {{- end }}
       kubectl.kubernetes.io/default-container: "onms"
     spec:
       securityContext:
         fsGroup: 10001
-      terminationGracePeriodSeconds: {{ .Values.opennms.terminationGracePeriodSeconds | default 120 }}
+      terminationGracePeriodSeconds: {{ .Values.core.terminationGracePeriodSeconds | default 120 }}
       {{- if .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- range $k, $r := .Values.imagePullSecrets }}
@@ -46,10 +46,10 @@ spec:
         {{- end }}
       {{- end }}
       initContainers:
-      {{- if and (.Values.opennms.configuration.enableAlec) (.Values.opennms.configuration.alecImage) }}
+      {{- if and (.Values.core.configuration.enableAlec) (.Values.core.configuration.alecImage) }}
       - name: alec-kar
-        image: {{ .Values.opennms.configuration.alecImage.repository }}:{{ .Values.opennms.configuration.alecImage.tag }}
-        imagePullPolicy: {{ .Values.opennms.configuration.alecImage.imagePullPolicy }}
+        image: {{ .Values.core.configuration.alecImage.repository }}:{{ .Values.core.configuration.alecImage.tag }}
+        imagePullPolicy: {{ .Values.core.configuration.alecImage.imagePullPolicy }}
         command: [ cp, /plugins/opennms-alec-plugin.kar, /opennms-deploy ]
         securityContext: # To guarantee ownership of the KAR file so that OpenNMS won't complain.
           runAsUser: 10001
@@ -58,10 +58,10 @@ spec:
         - name: deploy
           mountPath: /opennms-deploy # Required by the init script - DEPLOY_DIR
       {{- end }}
-      {{- if and (.Values.opennms.configuration.enableCortex) (.Values.opennms.configuration.cortexTssImage) }}
+      {{- if and (.Values.core.configuration.enableCortex) (.Values.core.configuration.cortexTssImage) }}
       - name: cortex-tss-kar
-        image: {{ .Values.opennms.configuration.cortexTssImage.repository }}:{{ .Values.opennms.configuration.cortexTssImage.tag }}
-        imagePullPolicy: {{ .Values.opennms.configuration.cortexTssImage.imagePullPolicy }}
+        image: {{ .Values.core.configuration.cortexTssImage.repository }}:{{ .Values.core.configuration.cortexTssImage.tag }}
+        imagePullPolicy: {{ .Values.core.configuration.cortexTssImage.imagePullPolicy }}
         command: [ cp, /plugins/opennms-cortex-tss-plugin.kar, /opennms-deploy ]
         securityContext: # To guarantee ownership of the KAR file so that OpenNMS won't complain.
           runAsUser: 10001
@@ -74,7 +74,7 @@ spec:
       # Requires the same image/version used at runtime
       - name: init
         image: {{ $image }}
-        imagePullPolicy: {{ .Values.opennms.image.imagePullPolicy }}
+        imagePullPolicy: {{ .Values.core.image.imagePullPolicy }}
         command: [ bash, /scripts/onms-core-init.sh ]
         envFrom:
         - configMapRef:
@@ -83,7 +83,7 @@ spec:
             name: app-credentials
         env:
         - name: OPENNMS_DATABASE_CONNECTION_MAXPOOL
-          value: {{ .Values.opennms.configuration.database.poolSize | default "50" | quote }}
+          value: {{ .Values.core.configuration.database.poolSize | default "50" | quote }}
         volumeMounts:
         - name: etc
           mountPath: /opennms-etc # Required by the script - CONFIG_DIR
@@ -96,7 +96,7 @@ spec:
       containers:
       - name: onms
         image: {{ $image }}
-        imagePullPolicy: {{ .Values.opennms.image.imagePullPolicy }}
+        imagePullPolicy: {{ .Values.core.image.imagePullPolicy }}
         args:
         - -s
         ports:
@@ -110,11 +110,11 @@ spec:
         - secretRef:
             name: app-credentials
         volumeMounts:
-        {{- if (include "opennms.enable_tss_rrd" .) }}
+        {{- if (include "core.enable_tss_rrd" .) }}
         - name: rrd
           mountPath: /opennms-data/rrd
         {{- end }}
-        {{- if .Values.opennms.configuration.storage.mibs }}
+        {{- if .Values.core.configuration.storage.mibs }}
         - name: mibs
           mountPath: /opt/opennms/share/mibs
         {{- end }}
@@ -132,9 +132,9 @@ spec:
           mountPath: /opt/opennms/.postgresql/root.crt
           subPath: postgresql-ca.crt
         env:
-        {{- $opt :=  include "opennms.jvmOptions" . }}
-        {{- if .Values.opennms.resources }}
-        {{- with .Values.opennms.resources }}
+        {{- $opt :=  include "core.jvmOptions" . }}
+        {{- if .Values.core.resources }}
+        {{- with .Values.core.resources }}
         {{- if ((.requests).memory) }}
         - name: MEM_TOTAL_MB
           valueFrom:
@@ -211,13 +211,13 @@ spec:
         persistentVolumeClaim:
           claimName: onms-etc-pvc
           readOnly: false
-      {{- if (include "opennms.enable_tss_rrd" .) }}
+      {{- if (include "core.enable_tss_rrd" .) }}
       - name: rrd
         persistentVolumeClaim:
           claimName: onms-rrd-pvc
           readOnly: false
       {{- end }}
-      {{- if .Values.opennms.configuration.storage.mibs }}
+      {{- if .Values.core.configuration.storage.mibs }}
       - name: mibs
         persistentVolumeClaim:
           claimName: onms-mibs-pvc

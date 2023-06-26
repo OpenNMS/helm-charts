@@ -1,7 +1,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "opennms.name" -}}
+{{- define "core.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
@@ -10,7 +10,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "opennms.fullname" -}}
+{{- define "core.fullname" -}}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -26,16 +26,16 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "opennms.chart" -}}
+{{- define "core.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
-{{- define "opennms.labels" -}}
-helm.sh/chart: {{ include "opennms.chart" . }}
-{{ include "opennms.selectorLabels" . }}
+{{- define "core.labels" -}}
+helm.sh/chart: {{ include "core.chart" . }}
+{{ include "core.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -45,17 +45,17 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "opennms.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "opennms.name" . }}
+{{- define "core.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "core.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "opennms.serviceAccountName" -}}
+{{- define "core.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create }}
-{{- default (include "opennms.fullname" .) .Values.serviceAccount.name }}
+{{- default (include "core.fullname" .) .Values.serviceAccount.name }}
 {{- else }}
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
@@ -64,7 +64,7 @@ Create the name of the service account to use
 {{/*
 Define custom content for JVM_OPTS to conditionally handle Truststores
 */}}
-{{- define "opennms.jvmOptions" -}}
+{{- define "core.jvmOptions" -}}
   {{- $common := "-XX:+AlwaysPreTouch -XX:+UseG1GC -XX:+UseStringDeduplication" }}
   {{- if and .Values.dependencies.truststore .Values.dependencies.truststore.content }}
     {{- $truststore := "-Djavax.net.ssl.trustStore=/etc/java/jks/truststore.jks" }}
@@ -81,14 +81,14 @@ Define custom content for JVM_OPTS to conditionally handle Truststores
 {{/*
 Define whether RRD is enabled
 */}}
-{{- define "opennms.enable_tss_rrd" -}}
-  {{ or (not .Values.opennms.configuration.enable_cortex) .Values.opennms.configuration.enable_tss_dual_write -}}
+{{- define "core.enable_tss_rrd" -}}
+  {{ or (not .Values.core.configuration.enable_cortex) .Values.core.configuration.enable_tss_dual_write -}}
 {{- end }}
 
 {{/*
 Define common content for Grafana Promtail
 */}}
-{{- define "opennms.promtailBaseConfig" -}}
+{{- define "core.promtailBaseConfig" -}}
 {{- $scheme := "http" -}}
 {{- if ((.Values.dependencies).loki).ca_cert -}}
   {{- $scheme := "https" -}}
@@ -124,6 +124,6 @@ scrape_configs:
 {{/*
 Define Customer/Environment Domain
 */}}
-{{- define "opennms.domain" -}}
+{{- define "core.domain" -}}
 {{- printf "%s.%s" .Release.Name .Values.domain -}}
 {{- end }}
