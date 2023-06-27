@@ -54,16 +54,15 @@ You could build your images and move the logic from the scripts executed via `in
 The scripts configure only a certain number of things.
 Each deployment would likely need additional configuration, which is the main reason for using a Persistent Volume Claim (PVC) for the configuration directory of the Core OpenNMS instance.
 
-We must place the core configuration on a PVC configured as `ReadWriteMany` to allow the use of independent UI servers so that the Core can make changes and the UI instances can read from them.
+We must place the core configuration on a PVC configured as `ReadWriteMany` to allow the use of independent UI servers so that the Core can make changes.
 One advantage of configuring that volume is allowing backups and access to the files without accessing the OpenNMS instances running in Kubernetes.
-
 
 === Time series databases
 
 Similarly, when using RRDtool instead of Newts/Cassandra or Cortex, a shared volume with `ReadWriteMany` is required for the same reasons (the Core would be writing to it, and the UI servers would be reading from it).
 Additionally, when switching strategies and migration are required, you could work outside Kubernetes.
 
-Note that the volumes would still be configured that way even if you decide not to use UI instances, unless you modify the logic of the Helm Chart.
+Note that the volumes would still be configured that way unless you modify the logic of the Helm Chart.
 
 === Scaling
 
@@ -78,7 +77,7 @@ To have multiple Sentinels, make sure you have enough partitions for the flow to
 
 The current OpenNMS instances are not friendly when accessing log files.
 The Helm Chart allows you to configure https://grafana.com/oss/loki/[Grafana Loki] to centralize all the log messages.
-When the Loki server is configured, the Core instance, the UI instances, and the Sentinel instances will forward logs to Loki.
+When the Loki server is configured, the Core instance and the Sentinel instances will forward logs to Loki.
 The current solution employs the sidecar pattern using https://grafana.com/docs/loki/latest/clients/promtail/[Grafana Promtail] to deliver the logs.
 
 === Docker images
@@ -89,10 +88,8 @@ Keep in mind that your custom images should be based on those currently in use.
 
 === Plugins
 
-If you plan to use the TSS Cortex plugin, the current solution will download the KAR file from GitHub every time the containers start.
-If your cluster doesn't have internet access, you must build custom images with the KAR file.
-
-For the ALEC KAR plugin, the latest release will be fetched from GitHub like the TSS Cortex Plugin above unless `alecImage` is set, in which case it will be loaded from the specified Docker image.
+Containers are bundled with default plugins.
+You can add additional plugins by building your own container image (see https://github.com/OpenNMS/helm-charts/blob/main/kar-container/README.md[kar-container] for an example).
 
 === External dependencies
 
