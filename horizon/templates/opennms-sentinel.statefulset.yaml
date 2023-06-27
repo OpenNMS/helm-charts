@@ -38,7 +38,7 @@ spec:
       initContainers:
       - name: init
         image: {{ $image }}
-        imagePullPolicy: {{ .Values.sentinel.image.imagePullPolicy }}
+        imagePullPolicy: {{ .Values.sentinel.image.pullPolicy }}
         command: [ bash, /init.sh ]
         envFrom:
         - configMapRef:
@@ -57,7 +57,7 @@ spec:
       containers:
       - name: sentinel
         image: {{ $image }}
-        imagePullPolicy: {{ .Values.sentinel.image.imagePullPolicy }}
+        imagePullPolicy: {{ .Values.sentinel.image.pullPolicy }}
         args:
         - -c
         ports:

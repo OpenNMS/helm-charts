@@ -54,7 +54,7 @@ spec:
       containers:
       - name: grafana-helm
         image: {{ printf "%s:%s" .Values.grafana.image.repository .Values.grafana.image.tag }}
-        imagePullPolicy: {{ .Values.grafana.image.imagePullPolicy }}
+        imagePullPolicy: {{ .Values.grafana.image.pullPolicy }}
         ports:
         - containerPort: 3000
           name: http
