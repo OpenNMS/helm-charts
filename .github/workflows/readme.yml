@@ -5,6 +5,8 @@ on:
         - main
      paths:
         - 'README.md'
+        - 'minion/README.md'
+        - 'horizon/README.md'
 jobs:
     build:
      permissions:
