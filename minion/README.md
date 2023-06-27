@@ -1,4 +1,4 @@
-# OpenNMS Helm Charts  -- Minion
+# OpenNMS Helm Charts -- Minion
 
 This template can be used to bring up a minion and connect it to a OpenNMS core.
 
