@@ -10,7 +10,7 @@ We recommend that you study the content of the Helm chart and tune it for your n
 
 ## Quick Start
 
-You can bring up an instance of OpenNMS quickly using the following commands:
+You can bring up an instance of OpenNMS for testing using the following commands:
 
 ```
 helm upgrade --install ingress-nginx ingress-nginx \
