@@ -10,4 +10,4 @@ We recommend that you study the content of the Helm chart and tune it for your n
 
 ## Charts
 * [Horizon](horizon/README.md)
-* [Minion](minion/README.md) ; This is an experimental chart.
+* [Minion](minion/README.md); This is an experimental chart.
