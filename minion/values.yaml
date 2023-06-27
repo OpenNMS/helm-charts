@@ -8,6 +8,11 @@ minion:
  configuration:
   storage:
    dataFolder: 5Gi
+ image:
+  repository: opennms/minion
+  pullPolicy: IfNotPresent
+  tag: '' # Defaults to the chart appVersion
+
 
 core:
  instanceID: monms # Must match OpenNMS Core instance (namespace) 
