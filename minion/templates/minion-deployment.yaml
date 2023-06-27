@@ -31,7 +31,7 @@ spec:
             {{- end }}
             - name: TZ
               value: America/New_York
-          image: opennms/minion:{{ .Values.opennmsVersion }}
+          image: opennms/minion:{{ .Chart.AppVersion }}
           livenessProbe:
             exec:
               command:

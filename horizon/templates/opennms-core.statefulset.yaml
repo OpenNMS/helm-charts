@@ -1,4 +1,4 @@
-{{- $image := printf "%s:%s" .Values.core.image.repository (.Values.core.image.tag | default .Values.opennmsVersion) -}}
+{{- $image := printf "%s:%s" .Values.core.image.repository (.Values.core.image.tag | default .Chart.AppVersion) -}}
 ---
 apiVersion: apps/v1
 kind: StatefulSet

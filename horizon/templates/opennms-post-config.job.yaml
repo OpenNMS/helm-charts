@@ -15,7 +15,7 @@ spec:
       restartPolicy: Never
       containers:
       - name: init
-        image: {{ printf "%s:%s" .Values.core.image.repository (.Values.core.image.tag | default .Values.opennmsVersion) }}
+        image: {{ printf "%s:%s" .Values.core.image.repository (.Values.core.image.tag | default .Chart.AppVersion) }}
         imagePullPolicy: IfNotPresent
         command: [ bash, /scripts/onms-post-init.sh ]
         envFrom:

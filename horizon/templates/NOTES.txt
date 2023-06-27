@@ -1,4 +1,4 @@
-Thank you for installing OpenNMS {{ .Values.core.image.tag | default .Values.opennmsVersion }}.
+Thank you for installing OpenNMS {{ .Values.core.image.tag | default .Chart.AppVersion }}.
 
 Your release is named "{{ .Release.Name }}", used for:
 - Customer/Deployment identifier.

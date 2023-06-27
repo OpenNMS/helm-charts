@@ -4,7 +4,7 @@ Use a StatefulSet for Sentinels to have a unique and immutable SENTINEL_ID.
 */}}
 
 {{- if gt ((.Values.sentinel).replicaCount|int) 0 }}
-{{- $image := printf "%s:%s" .Values.sentinel.image.repository (.Values.core.image.tag | default .Values.opennmsVersion) -}}
+{{- $image := printf "%s:%s" .Values.sentinel.image.repository (.Values.core.image.tag | default .Chart.AppVersion) -}}
 ---
 apiVersion: apps/v1
 kind: StatefulSet
