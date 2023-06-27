@@ -1,4 +1,4 @@
-{{- if not (eq .Release.Name "default") }}
+{{- if and .Values.createNamespace (not (eq .Release.Name "default")) }}
 ---
 apiVersion: v1
 kind: Namespace
