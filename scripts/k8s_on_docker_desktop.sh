@@ -60,8 +60,8 @@ echo "Date: $(date)" | tee -a $log_file
 echo "Domain: $our_domain" | tee -a $log_file
 echo "Kafka Domain: $our_kafka_domain" | tee -a $log_file
 echo "Namespace: $our_namespace" | tee -a $log_file
-echo $(grep "appVersion: \?" ${root_path}opennms/Chart.yaml)
-echo $(grep "opennmsVersion: \?" ${root_path}opennms/values.yaml)
+echo $(grep "appVersion: \?" ${root_path}horizon/Chart.yaml)
+echo $(grep "opennmsVersion: \?" ${root_path}horizon/values.yaml)
 echo ""
 
 # Maybe switch this check to \(onms-core\|*\).$our_namespace.$our_domain
@@ -101,7 +101,7 @@ checkRC
 echo ""
 
 printf "\033[36m%s\033[0m:\033[0m\033[33m %s\n\033[0m" "Step 4" "Installing OpenNMS"
-helm upgrade --install $additional_helm_charts --set domain=$our_domain $our_namespace ${root_path}opennms >> $log_file 2>&1
+helm upgrade --install $additional_helm_charts --set domain=$our_domain $our_namespace ${root_path}horizon >> $log_file 2>&1
 checkRC
 echo ""
 

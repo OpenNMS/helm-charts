@@ -1,4 +1,4 @@
-opennms:
+core:
   terminationGracePeriodSeconds: 5
   postConfigJob:
     ttlSecondsAfterFinished: 5

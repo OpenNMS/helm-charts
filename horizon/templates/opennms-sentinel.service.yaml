@@ -7,7 +7,7 @@ metadata:
   namespace: {{ .Release.Name }}
   labels:
     app: onms-sentinel
-    {{- include "opennms.labels" . | nindent 4 }}
+    {{- include "core.labels" . | nindent 4 }}
 spec:
   clusterIP: None
   ports:

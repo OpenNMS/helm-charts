@@ -5,7 +5,7 @@ metadata:
   name: onms-ingress
   namespace: {{ .Release.Name }}
   labels:
-    {{- include "opennms.labels" . | nindent 4 }}
+    {{- include "core.labels" . | nindent 4 }}
   annotations:
     ingress.kubernetes.io/affinity: cookie
     ingress.kubernetes.io/session-cookie-name: route
@@ -22,12 +22,12 @@ spec:
   tls:
     - secretName: onms-ingress-cert
       hosts:
-        - onms-core.{{ include "opennms.domain" . }}
+        - onms-core.{{ include "core.domain" . }}
         {{- if gt ((.Values.grafana).replicaCount|int) 0 }}
-        - grafana.{{ include "opennms.domain" . }}
+        - grafana.{{ include "core.domain" . }}
         {{- end }}
   rules:
-    - host: onms-core.{{ include "opennms.domain" . }}
+    - host: onms-core.{{ include "core.domain" . }}
       http:
         paths:
           - path: /
@@ -38,7 +38,7 @@ spec:
                 port:
                   number: 8980
     {{- if gt ((.Values.grafana).replicaCount|int) 0 }}
-    - host: grafana.{{ include "opennms.domain" . }}
+    - host: grafana.{{ include "core.domain" . }}
       http:
         paths:
           - path: /

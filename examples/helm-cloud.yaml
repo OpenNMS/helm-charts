@@ -22,7 +22,7 @@ dependencies:
     hostname: onms-db.shared.svc # Please change it
     port: 5432
 
-opennms:
+core:
   resources:
     limits:
       cpu: '2'

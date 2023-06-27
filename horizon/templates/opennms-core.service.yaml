@@ -6,7 +6,7 @@ metadata:
   namespace: {{ .Release.Name }}
   labels:
     app: onms-core
-    {{- include "opennms.labels" . | nindent 4 }}
+    {{- include "core.labels" . | nindent 4 }}
 spec:
   clusterIP: None
   ports:
@@ -16,4 +16,4 @@ spec:
     name: karaf
   selector:
     app: onms-core
-    {{- include "opennms.selectorLabels" . | nindent 4 }}
+    {{- include "core.selectorLabels" . | nindent 4 }}

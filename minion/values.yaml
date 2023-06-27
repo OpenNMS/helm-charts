@@ -11,7 +11,7 @@ minion:
   storage:
    dataFolder: 5Gi
 
-opennms:
+core:
  instanceID: monms # Must match OpenNMS Core instance (namespace) 
    
 # A common JKS to white-list all CA certificates .
