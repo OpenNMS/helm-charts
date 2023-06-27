@@ -1,5 +1,3 @@
-opennmsVersion: '32.0.0-SNAPSHOT' # Must match OpenNMS Core version
-
 minion:
  location: pod
  name: myminion
@@ -10,11 +8,16 @@ minion:
  configuration:
   storage:
    dataFolder: 5Gi
+ image:
+  repository: opennms/minion
+  pullPolicy: IfNotPresent
+  tag: ''  # Defaults to the chart appVersion
+
 
 core:
- instanceID: monms # Must match OpenNMS Core instance (namespace) 
-   
+ instanceID: monms  # Must match OpenNMS Core instance (namespace)
+
 # A common JKS to white-list all CA certificates .
 truststore:
- content: '' # A base64 encoded content of the JKS Truststore file.
+ content: ''  # A base64 encoded content of the JKS Truststore file.
  password: ''

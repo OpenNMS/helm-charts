@@ -1,4 +1,4 @@
-{{- $image := printf "%s:%s" .Values.core.image.repository (.Values.core.image.tag | default .Values.opennmsVersion) -}}
+{{- $image := printf "%s:%s" .Values.core.image.repository (.Values.core.image.tag | default .Chart.AppVersion) -}}
 ---
 apiVersion: apps/v1
 kind: StatefulSet
@@ -43,7 +43,7 @@ spec:
       {{- if and (.Values.core.configuration.enableAlec) (.Values.core.configuration.alecImage) }}
       - name: alec-kar
         image: {{ .Values.core.configuration.alecImage.repository }}:{{ .Values.core.configuration.alecImage.tag }}
-        imagePullPolicy: {{ .Values.core.configuration.alecImage.imagePullPolicy }}
+        imagePullPolicy: {{ .Values.core.configuration.alecImage.pullPolicy }}
         command: [ cp, /plugins/opennms-alec-plugin.kar, /opennms-deploy ]
         securityContext: # To guarantee ownership of the KAR file so that OpenNMS won't complain.
           runAsUser: 10001
@@ -55,7 +55,7 @@ spec:
       {{- if and (.Values.core.configuration.enableCortex) (.Values.core.configuration.cortexTssImage) }}
       - name: cortex-tss-kar
         image: {{ .Values.core.configuration.cortexTssImage.repository }}:{{ .Values.core.configuration.cortexTssImage.tag }}
-        imagePullPolicy: {{ .Values.core.configuration.cortexTssImage.imagePullPolicy }}
+        imagePullPolicy: {{ .Values.core.configuration.cortexTssImage.pullPolicy }}
         command: [ cp, /plugins/opennms-cortex-tss-plugin.kar, /opennms-deploy ]
         securityContext: # To guarantee ownership of the KAR file so that OpenNMS won't complain.
           runAsUser: 10001
@@ -68,7 +68,7 @@ spec:
       # Requires the same image/version used at runtime
       - name: init
         image: {{ $image }}
-        imagePullPolicy: {{ .Values.core.image.imagePullPolicy }}
+        imagePullPolicy: {{ .Values.core.image.pullPolicy }}
         command: [ bash, /scripts/onms-core-init.sh ]
         envFrom:
         - configMapRef:
@@ -90,7 +90,7 @@ spec:
       containers:
       - name: onms
         image: {{ $image }}
-        imagePullPolicy: {{ .Values.core.image.imagePullPolicy }}
+        imagePullPolicy: {{ .Values.core.image.pullPolicy }}
         nodeSelector:
           {{- toYaml .Values.core.configuration.nodeSelector | nindent 10 }}
         affinity:

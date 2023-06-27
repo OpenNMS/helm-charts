@@ -61,7 +61,6 @@ echo "Domain: $our_domain" | tee -a $log_file
 echo "Kafka Domain: $our_kafka_domain" | tee -a $log_file
 echo "Namespace: $our_namespace" | tee -a $log_file
 echo $(grep "appVersion: \?" ${root_path}horizon/Chart.yaml)
-echo $(grep "opennmsVersion: \?" ${root_path}horizon/values.yaml)
 echo ""
 
 # Maybe switch this check to \(onms-core\|*\).$our_namespace.$our_domain
