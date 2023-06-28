@@ -93,7 +93,6 @@ spec:
         {{- toYaml .Values.core.configuration.affinity | nindent 8 }}
       tolerations:
         {{- toYaml .Values.core.configuration.tolerations | nindent 8 }}
-
       containers:
       - name: onms
         image: {{ $image }}
