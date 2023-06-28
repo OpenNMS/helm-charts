@@ -1,12 +1,12 @@
-{{- define "opennms.grafanaDSOptions" -}}
+{{- define "core.grafanaDSOptions" -}}
 {{- $srv := "onms-core" -}}
 editable: true
 access: proxy
 url: {{ printf "http://%s.%s.svc:8980/opennms" $srv .Release.Name }}
 basicAuth: true
-basicAuthUser: {{ .Values.opennms.configuration.http.restUsername }}
+basicAuthUser: {{ .Values.core.configuration.http.restUsername }}
 secureJsonData:
-  basicAuthPassword: {{ .Values.opennms.configuration.http.restPassword }}
+  basicAuthPassword: {{ .Values.core.configuration.http.restPassword }}
 {{- end }}
 
 {{- if gt ((.Values.grafana).replicaCount|int) 0 }}
@@ -17,7 +17,7 @@ metadata:
   name: helm-config
   namespace: {{ .Release.Name }}
   labels:
-    {{- include "opennms.labels" . | nindent 4 }}
+    {{- include "core.labels" . | nindent 4 }}
 data:
   plugins.helm.yaml: |
     apiVersion: 1
@@ -30,12 +30,12 @@ data:
     - name: OpenNMS-Performance
       type: opennms-performance-datasource
       isDefault: true
-      {{- include "opennms.grafanaDSOptions" . | nindent 6 }}
+      {{- include "core.grafanaDSOptions" . | nindent 6 }}
     - name: OpenNMS-Entity
       type: opennms-entity-datasource
-      {{- include "opennms.grafanaDSOptions" . | nindent 6 }}
+      {{- include "core.grafanaDSOptions" . | nindent 6 }}
     - name: OpenNMS-Flow
       type: opennms-flow-datasource
-      {{- include "opennms.grafanaDSOptions" . | nindent 6 }}
+      {{- include "core.grafanaDSOptions" . | nindent 6 }}
 
 {{- end }}

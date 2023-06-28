@@ -1,14 +1,7 @@
-# Default values for minimal resource consumption, e.g.: minikube (for testing purposes only)
+# Default values for basic core with minimal resource consumption, e.g.: minikube (for testing purposes only)
 
-opennms:
+core:
   resources: null
   configuration:
     storage:
       rrd: 100Gi
-
-grafana:
-  replicaCount: 1
-  resources: null
-  imageRenderer:
-    replicaCount: 1
-    resources: null

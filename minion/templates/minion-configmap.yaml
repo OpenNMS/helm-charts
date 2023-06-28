@@ -11,7 +11,7 @@ data:
 
     system:
      properties:
-      org.opennms.instance.id: {{ .Values.opennms.instanceID }}
+      org.opennms.instance.id: {{ .Values.core.instanceID }}
     ipc:
      kafka:
       bootstrap.servers: {{ .Values.minion.kafkaBroker.address }}

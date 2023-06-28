@@ -1,5 +1,5 @@
-{{- if .Values.opennms.inspector.enabled }}
-{{- $image := printf "%s:%s" .Values.opennms.image.repository (.Values.opennms.image.tag | default .Values.opennmsVersion) -}}
+{{- if .Values.core.inspector.enabled }}
+{{- $image := printf "%s:%s" .Values.core.image.repository (.Values.core.image.tag | default .Chart.AppVersion) -}}
 ---
 apiVersion: v1
 kind: Pod
@@ -8,7 +8,7 @@ metadata:
   namespace: {{ .Release.Name }}
   labels:
     app: onms-inspector
-    {{- include "opennms.labels" . | nindent 4 }}  
+    {{- include "core.labels" . | nindent 4 }}  
 spec:
   containers:
   - name: inspector
@@ -17,11 +17,11 @@ spec:
     volumeMounts:
     - name: etc
       mountPath: /opt/opennms/etc
-    {{- if (include "opennms.enable_tss_rrd" .) }}
+    {{- if (include "core.enable_tss_rrd" .) }}
     - name: rrd
       mountPath: /opennms-data/rrd
     {{- end }}      
-    {{- if .Values.opennms.configuration.storage.mibs }}
+    {{- if .Values.core.configuration.storage.mibs }}
     - name: mibs
       mountPath: /opt/opennms/share/mibs
     {{- end }}
@@ -30,13 +30,13 @@ spec:
   - name: etc
     persistentVolumeClaim:
       claimName: onms-etc-pvc
-  {{- if (include "opennms.enable_tss_rrd" .) }}
+  {{- if (include "core.enable_tss_rrd" .) }}
   - name: rrd
     persistentVolumeClaim:
       claimName: onms-rrd-pvc
       readOnly: false
   {{- end }}
-  {{- if .Values.opennms.configuration.storage.mibs }}
+  {{- if .Values.core.configuration.storage.mibs }}
   - name: mibs
     persistentVolumeClaim:
       claimName: onms-mibs-pvc

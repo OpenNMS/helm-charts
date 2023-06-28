@@ -7,18 +7,18 @@ metadata:
   namespace: {{ .Release.Name }}
   labels:
     app: grafana-renderer
-    {{- include "opennms.labels" . | nindent 4 }}
+    {{- include "core.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.grafana.imageRenderer.replicaCount }} 
   selector:
     matchLabels:
       app: grafana-renderer
-      {{- include "opennms.selectorLabels" . | nindent 6 }}
+      {{- include "core.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
         app: grafana-renderer
-        {{- include "opennms.selectorLabels" . | nindent 8 }}
+        {{- include "core.selectorLabels" . | nindent 8 }}
     spec:
       {{- if .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -29,7 +29,7 @@ spec:
       containers:
       - name: grafana-renderer
         image: {{ printf "%s:%s" .Values.grafana.imageRenderer.image.repository .Values.grafana.imageRenderer.image.tag }}
-        imagePullPolicy: {{ .Values.grafana.imageRenderer.image.imagePullPolicy }}
+        imagePullPolicy: {{ .Values.grafana.imageRenderer.image.pullPolicy }}
         ports:
         - containerPort: 8081
           name: http

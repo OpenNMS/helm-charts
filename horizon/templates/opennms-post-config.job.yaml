@@ -7,15 +7,15 @@ metadata:
   namespace: {{ .Release.Name }}
   labels:
     app: onms-core
-    {{- include "opennms.labels" . | nindent 4 }}
+    {{- include "core.labels" . | nindent 4 }}
 spec:
-  ttlSecondsAfterFinished: {{ (.Values.opennms.postConfigJob.ttlSecondsAfterFinished | default "300") }}
+  ttlSecondsAfterFinished: {{ (.Values.core.postConfigJob.ttlSecondsAfterFinished | default "300") }}
   template:
     spec:
       restartPolicy: Never
       containers:
       - name: init
-        image: {{ printf "%s:%s" .Values.opennms.image.repository (.Values.opennms.image.tag | default .Values.opennmsVersion) }}
+        image: {{ printf "%s:%s" .Values.core.image.repository (.Values.core.image.tag | default .Chart.AppVersion) }}
         imagePullPolicy: IfNotPresent
         command: [ bash, /scripts/onms-post-init.sh ]
         envFrom:

@@ -5,5 +5,5 @@ kind: Namespace
 metadata:
   name: {{ .Release.Name }}
   labels:
-    {{- include "opennms.labels" . | nindent 4 }}
+    {{- include "core.labels" . | nindent 4 }}
 {{- end }}

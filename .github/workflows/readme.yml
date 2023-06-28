@@ -1,0 +1,32 @@
+name: Sync README file
+on:
+    push:
+     branches:
+        - main
+     paths:
+        - 'README.md'
+        - 'minion/README.md'
+        - 'horizon/README.md'
+jobs:
+    build:
+     permissions:
+       contents: write
+     runs-on: ubuntu-latest
+     steps:
+       - uses: actions/checkout@v2
+       - run: |
+           cp -f README.md ${{ runner.temp }}/README.md
+           cp -f minion/README.md ${{ runner.temp }}/minion/README.md
+           cp -f horizon/README.md ${{ runner.temp }}/horizon/README.md
+       - uses: actions/checkout@v2
+         with:
+           ref: gh-pages
+       - run: |
+           cp -f ${{ runner.temp }}/README.md .
+           cp -f ${{ runner.temp }}/minion/README.md ./minion/README.md
+           cp -f ${{ runner.temp }}/horizon/README.md ./horizon/README.md
+           git config user.name "$GITHUB_ACTOR"
+           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+           git add README.md
+           git commit -m "Sync README from main"
+           git push

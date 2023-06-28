@@ -1,4 +1,4 @@
-{{- if .Values.opennms.configuration.storage.mibs }}
+{{- if .Values.core.configuration.storage.mibs }}
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -8,11 +8,11 @@ metadata:
   labels:
     app: onms-core
     tier: storage
-    {{- include "opennms.labels" . | nindent 4 }}
+    {{- include "core.labels" . | nindent 4 }}
 spec:
   accessModes: # Assumes default StorageClass
   - ReadWriteOnce
   resources:
     requests:
-      storage: {{ .Values.opennms.configuration.storage.mibs }}
+      storage: {{ .Values.core.configuration.storage.mibs }}
 {{- end }}

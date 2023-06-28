@@ -1,3 +1,4 @@
+{{- $image := printf "%s:%s" .Values.minion.image.repository (.Values.minion.image.tag | default .Chart.AppVersion) -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -31,7 +32,8 @@ spec:
             {{- end }}
             - name: TZ
               value: America/New_York
-          image: opennms/minion:{{ .Values.opennmsVersion }}
+          image: {{ $image }}
+          imagePullPolicy: {{ .Values.minion.image.pullPolicy }}
           livenessProbe:
             exec:
               command:

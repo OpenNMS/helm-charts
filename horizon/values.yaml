@@ -4,8 +4,7 @@
 
 timezone: America/New_York
 domain: example.com  # The common domain for the Ingress resource.
-opennmsVersion: '32.0.0-SNAPSHOT'
-createNamespace: true
+createNamespace: true  # Whether to create the namespace for this deployment
 
 # Optionally specify an array of imagePullSecrets.
 # Secrets must be manually created in the namespace.
@@ -89,14 +88,14 @@ ingress:
     clusterIssuer: opennms-issuer
 
 # OpenNMS Core Instance.
-opennms:
+core:
   inspector:
     enabled: false
   terminationGracePeriodSeconds: 120
   image:
     repository: opennms/horizon
     pullPolicy: IfNotPresent
-    tag: ''  # Defaults to opennmsVersion
+    tag: ''  # Defaults to the chart appVersion
   resources:
     limits:
       cpu: '2'
@@ -152,7 +151,7 @@ sentinel:
   image:
     repository: opennms/sentinel
     pullPolicy: IfNotPresent
-    tag: ''  # Defaults to opennmsVersion
+    tag: ''  # Defaults to the chart appVersion
   resources:
     limits:
       cpu: '2'
