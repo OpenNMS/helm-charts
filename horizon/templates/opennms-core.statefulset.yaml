@@ -87,16 +87,16 @@ spec:
           mountPath: /opt/opennms-overlay # Required by the script - OVERLAY_DIR
         - name: scripts
           mountPath: /scripts # Required by the script
+      nodeSelector:
+        {{- toYaml .Values.core.configuration.nodeSelector | nindent 8 }}
+      affinity:
+        {{- toYaml .Values.core.configuration.affinity | nindent 8 }}
+      tolerations:
+        {{- toYaml .Values.core.configuration.tolerations | nindent 8 }}
       containers:
       - name: onms
         image: {{ $image }}
         imagePullPolicy: {{ .Values.core.image.pullPolicy }}
-        nodeSelector:
-          {{- toYaml .Values.core.configuration.nodeSelector | nindent 10 }}
-        affinity:
-          {{- toYaml .Values.core.configuration.affinity | nindent 10 }}
-        tolerations:
-          {{- toYaml .Values.core.configuration.tolerations | nindent 10 }}
         args:
         - -s
         ports:
