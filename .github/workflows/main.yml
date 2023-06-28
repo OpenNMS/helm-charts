@@ -3,7 +3,7 @@ name: Release Helm Charts
 on:
  push:
   branches:
-     - release-1.x
+     - main
 
 jobs:
   release:
