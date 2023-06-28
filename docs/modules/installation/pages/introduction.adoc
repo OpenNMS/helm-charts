@@ -40,31 +40,7 @@ When using cloud resources, make sure you have https://learn.microsoft.com/en-us
 
 === Kubernetes
 
-* Kubernetes version 1.20+.
-* A single `namespace`, which represents a single OpenNMS environment or customer deployment or a single tenant.
-It must not contain special characters and must follow FQDN restrictions.
-* A single instance of OpenNMS Core (backend) for centralized monitoring running ALEC in standalone mode (if enabled).
-** OpenNMS does not support distributed mode, meaning the `StatefulSet` cannot have more than one replica.
-* A shared volume for the RRD files, mounted as read-write on the Core instance.
-* A shared volume for the core configuration files.
-** Allows for sharing configuration across all the OpenNMS instances (for example, `users.xml`, and `groups.xml`).
-* Multiple instances of Grafana (frontend), using PostgreSQL as the backend, pointing to the OpenNMS UI.
-** The OpenNMS Helm Chart data sources point to the OpenNMS Core service.
-* `Secrets` to store the credentials, certificates, and truststores.
-* `ConfigMaps` to store initialization scripts and standard configuration settings.
-* An `Ingress` to control TLS termination and provide access to all the components (using Nginx).footnote:[You can manage certificates using Let's Encrypt via `cert-manager`, but we only require the name of a `ClusterIssuer`.]
-
-For more information about Ingress, see the xref:reference:ingress.adoc[reference section].
-
-*Optional requirements for additional implementation scenarios*
-
-* Multiple instances of read-only OpenNMS UI (frontend).
-** Must be stateless (unconfigurable).
-** The `Deployment` must work with multiple replicas.
-** Any configuration change goes to the core server.
-
-* Multiple instances of Sentinel to handle Flows (requires Elasticsearch as an external dependency).
-** When Sentinels are present, `Telemetryd` is disabled on the OpenNMS Core instance.
+* A Kubernetes environment running version 1.20 or later (cloud providers, kind, minikube, Docker Desktop, and so on.)
 
 IMPORTANT: Containers are bundled with default plugins.
 You can add additional plugins by building your own container image (see https://github.com/OpenNMS/helm-charts/blob/main/kar-container/README.md[kar-container] for an example).
