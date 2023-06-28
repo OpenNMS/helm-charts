@@ -58,7 +58,8 @@ One advantage of configuring that volume is allowing backups and access to the f
 
 === Time series databases
 
-Additionally, when switching strategies and migration are required, you could work outside Kubernetes.
+Multiple time series strategies are supported and you can switch from one to another as needed. 
+Note that when switching strategies existing data is not migrated.
 
 Note that the volumes would still be configured that way unless you modify the logic of the Helm Chart.
 
