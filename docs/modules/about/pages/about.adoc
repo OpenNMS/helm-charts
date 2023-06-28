@@ -58,8 +58,6 @@ One advantage of configuring that volume is allowing backups and access to the f
 
 === Time series databases
 
-Similarly, when using RRDtool instead of Newts/Cassandra or Cortex, a shared volume with `ReadWriteMany` is required for the same reasons (the Core would be writing to it).
-
 Multiple time series strategies are supported and you can switch from one to another as needed.
 Note that when switching strategies existing data is not migrated.
 
