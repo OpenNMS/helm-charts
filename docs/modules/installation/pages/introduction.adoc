@@ -48,7 +48,7 @@ It must not contain special characters and must follow FQDN restrictions.
 * A shared volume for the RRD files, mounted as read-write on the Core instance.
 * A shared volume for the core configuration files.
 ** Allows for sharing configuration across all the OpenNMS instances (for example, `users.xml`, and `groups.xml`).
-* Multiple instances of Grafana (frontend), using PostgreSQL as the backend, pointing to the OpenNMS UI service when available.
+* Multiple instances of Grafana (frontend), using PostgreSQL as the backend, pointing to the OpenNMS UI.
 ** The OpenNMS Helm Chart data sources point to the OpenNMS Core service.
 * `Secrets` to store the credentials, certificates, and truststores.
 * `ConfigMaps` to store initialization scripts and standard configuration settings.

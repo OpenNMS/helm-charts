@@ -54,12 +54,10 @@ You could build your images and move the logic from the scripts executed via `in
 The scripts configure only a certain number of things.
 Each deployment would likely need additional configuration, which is the main reason for using a Persistent Volume Claim (PVC) for the configuration directory of the Core OpenNMS instance.
 
-We must place the core configuration on a PVC configured as `ReadWriteMany` to allow the use of independent UI servers so that the Core can make changes.
 One advantage of configuring that volume is allowing backups and access to the files without accessing the OpenNMS instances running in Kubernetes.
 
 === Time series databases
 
-Similarly, when using RRDtool instead of Newts/Cassandra or Cortex, a shared volume with `ReadWriteMany` is required for the same reasons (the Core would be writing to it, and the UI servers would be reading from it).
 Additionally, when switching strategies and migration are required, you could work outside Kubernetes.
 
 Note that the volumes would still be configured that way unless you modify the logic of the Helm Chart.
