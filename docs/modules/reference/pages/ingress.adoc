@@ -8,7 +8,6 @@ You could modify the Helm Chart to avoid Ingress altogether (or make it optional
 
 For example, when deploying the Helm Chart names `acme` (remember about the rules for the `namespace`) with a value of `k8s.agalue.net` for the `domain`, it would create an Ingress instance exposing the following resources via custom FQDNs:
 
-* OpenNMS UI (read-only): `onms.acme.k8s.agalue.net`
 * OpenNMS Core: `onms-core.acme.k8s.agalue.net`
 * Grafana: `grafana.acme.k8s.agalue.net`
 
