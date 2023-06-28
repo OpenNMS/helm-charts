@@ -135,8 +135,8 @@ core:
       mibs: null  # Expects a size, e.g.: 1Gi
     http:  # Credentials to access the WebUI
       restUsername: opennms  # ReST user for Grafana/Helm, Sentinel and Minions (when Twin API is not available)
-      restPassword: 0p3nNM5
-      adminPassword: 0p3nNM5  # Password for the default admin account
+      restPassword: admin
+      adminPassword: admin  # Password for the default admin account
     etcUpdatePolicy: newer  # Experimental: options: never (don't update any files), newer (only newer timestamps), new (only brand new files)
     nodeSelector: null
     affinity: null
