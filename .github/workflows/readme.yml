@@ -2,7 +2,7 @@ name: Sync README file
 on:
     push:
      branches:
-        - main
+        - release-1.x
      paths:
         - 'README.md'
         - 'minion/README.md'
