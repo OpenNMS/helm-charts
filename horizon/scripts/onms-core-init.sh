@@ -383,6 +383,10 @@ cat <<EOF > ${CONFIG_DIR_OVERLAY}/opennms.properties.d/collectd.properties
 org.opennms.netmgt.collectd.strictInterval=true
 EOF
 
+if [[ $(find ${DEPLOY_DIR} -type f  | wc -l) -gt 0 ]]; then
+ cp ${DEPLOY_DIR}/*.kar /usr/share/opennms/deploy
+fi
+
 # Enable ALEC standalone
 if [[ ${ENABLE_ALEC} == "true" ]]; then
   cat <<EOF > ${CONFIG_DIR_OVERLAY}/featuresBoot.d/alec.boot
