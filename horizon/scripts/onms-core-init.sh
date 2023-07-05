@@ -390,6 +390,13 @@ alec-opennms-standalone wait-for-kar=opennms-alec-plugin
 EOF
 fi
 
+# Enable Velocloud
+if [[ ${ENABLE_VELOCLOUD} == "true" ]]; then
+  cat <<EOF > ${CONFIG_DIR_OVERLAY}/featuresBoot.d/plugin-velocloud.boot
+opennms-plugins-velocloud wait-for-kar=opennms-plugins-velocloud
+EOF
+fi
+
 # Configure Sink and RPC to use Kafka, and the Kafka Producer.
 if [[ -v KAFKA_BOOTSTRAP_SERVER ]]; then
   if [[ ${OPENNMS_INSTANCE_ID} == "" ]]; then
