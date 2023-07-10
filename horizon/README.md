@@ -34,11 +34,11 @@ For more detailed information on Kubernetes and containerized environments, see 
 
 ### General architecture
 
-![General architecture for OpenNMS Helm Charts](diagrams/helm-charts-diagrams.001.png)
+![General architecture for OpenNMS Helm Charts](../diagrams/helm-charts-diagrams.001.png)
 
 ### Customer namespace deployment
 
-![Customer Namespace Deployment Diagram](diagrams/helm-charts-diagrams.002.png)
+![Customer Namespace Deployment Diagram](../diagrams/helm-charts-diagrams.002.png)
 
 Deployment in each namespace includes OpenNMS Horizon Core, OpenNMS Sentinel, Grafana, and application scripts and configuration files.
 All components on a single `namespace` represent a single OpenNMS environment or customer deployment or a single tenant.
