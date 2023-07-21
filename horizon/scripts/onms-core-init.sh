@@ -209,10 +209,11 @@ else
      echo "Not updating etc files"
   elif [ "${OPENNMS_ETC_UPDATE_POLICY}" == "newer" ]; then
      echo "Synchronizing only newer files..."
-     rsync -aruO --no-perms --no-owner --no-group --out-format="%n %C" ${BACKUP_ETC}/ ${CONFIG_DIR}/
+     echo ${BACKUP_ETC}/ ${CONFIG_DIR}/
+     rsync -aruO -c -t --no-perms --no-owner --no-group --out-format="%n %C" ${BACKUP_ETC}/ ${CONFIG_DIR}/
   elif [ "${OPENNMS_ETC_UPDATE_POLICY}" == "new" ]; then
      echo "Synchronizing only new files..."
-     rsync -arO --ignore-existing --no-perms --no-owner --no-group --out-format="%n %C" ${BACKUP_ETC}/ ${CONFIG_DIR}/
+     rsync -arO -c -t --ignore-existing --no-perms --no-owner --no-group --out-format="%n %C" ${BACKUP_ETC}/ ${CONFIG_DIR}/
   else
      echo "Unsupported update policy '${OPENNMS_ETC_UPDATE_POLICY}'. Exiting." >&2
      exit 1
