@@ -209,8 +209,19 @@ else
      echo "Not updating etc files"
   elif [ "${OPENNMS_ETC_UPDATE_POLICY}" == "newer" ]; then
      echo "Synchronizing only newer files..."
-     echo ${BACKUP_ETC}/ ${CONFIG_DIR}/
-     rsync -aruO -c -t --no-perms --no-owner --no-group --out-format="%n %C" ${BACKUP_ETC}/ ${CONFIG_DIR}/
+     previous_opennms="$(<${CONFIG_DIR}/helm-chart-opennms-version)"
+     echo "Previous Version: $previous_opennms" > ${CONFIG_DIR}/zUpgradeReport 2>&1
+     echo "Current Version: ${PKG}-${VERSION}" >> ${CONFIG_DIR}/zUpgradeReport 2>&1
+     echo "Datetime: $(date)" >> ${CONFIG_DIR}/zUpgradeReport 2>&1
+     echo "Synchronizing only newer files..." >> ${CONFIG_DIR}/zUpgradeReport 2>&1
+     echo "" >> ${CONFIG_DIR}/zUpgradeReport 2>&1
+     echo "--[config-diff.sh report]--" >> ${CONFIG_DIR}/zUpgradeReport 2>&1
+     echo "$(cd /usr/share/opennms/bin; ./config-diff.sh -d )" >> ${CONFIG_DIR}/zUpgradeReport 2>&1
+     echo "--[END of config-diff.sh report]--" >> ${CONFIG_DIR}/zUpgradeReport 2>&1
+     echo "" >> ${CONFIG_DIR}/zUpgradeReport 2>&1
+     #(rsync -rcn --out-format="%n" ${BACKUP_ETC}/ ${CONFIG_DIR}/ && rsync -rcn --out-format="%n" ${BACKUP_ETC}/ ${CONFIG_DIR}/) | sort | uniq >> ${CONFIG_DIR}/zUpgradeReport 2>&1
+     echo "===" >> ${CONFIG_DIR}/zUpgradeReport 2>&1
+     rsync -aruO -c -t --no-perms --no-owner --no-group --out-format="%n %C" ${BACKUP_ETC}/ ${CONFIG_DIR}/ >> ${CONFIG_DIR}/zUpgradeReport 2>&1
   elif [ "${OPENNMS_ETC_UPDATE_POLICY}" == "new" ]; then
      echo "Synchronizing only new files..."
      rsync -arO -c -t --ignore-existing --no-perms --no-owner --no-group --out-format="%n %C" ${BACKUP_ETC}/ ${CONFIG_DIR}/
