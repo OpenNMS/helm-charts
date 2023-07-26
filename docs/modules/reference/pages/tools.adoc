@@ -49,7 +49,7 @@ Enable Inspector pod (shut down OpenNMS):
 
 [source, console]
 ----
-helm upgrade --reuse-values --set opennms.inspector.enabled=true <namespace> ./horizon
+helm upgrade --reuse-values --set core.inspector.enabled=true <namespace> ./horizon
 ----
 
 How to connect:
@@ -74,5 +74,5 @@ Disable Inspector pod (start OpenNMS):
 
 [source, console]
 ----
-helm upgrade --reuse-values --set opennms.inspector.enabled=false <namespace> ./horizon
+helm upgrade --reuse-values --set core.inspector.enabled=false <namespace> ./horizon
 ----
