@@ -43,6 +43,36 @@ export log_file="${root_path}log.txt"
 export our_domain=""
 export our_namespace=""
 export domain_defined=false
+export dependencies=""
+
+
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    -d|--domain)
+      our_domain="$2"
+      shift
+      shift
+      ;;
+    -n|--namespace)
+      our_namespace="$2"
+      shift 
+      shift 
+      ;;
+    -k|--kafka)
+     dependencies+="export INSTALL_KAFKA=true;"
+     shift 
+     ;;
+    -*|--*)
+      echo "Unknown option $1"
+      exit 1
+      ;;
+    *)
+      shift 
+      ;;
+  esac
+done
+
+
 
 if [ -z "$our_domain" ]; then
  read -p "Domain: " our_domain
@@ -95,6 +125,7 @@ echo ""
 
 # Start the dependencies
 printf "\033[36m%s\033[0m:\033[0m\033[33m %s\n\033[0m" "Step 3" "Starting Dependencies"
+$dependencies 
 ${root_path}scripts/start-dependencies.sh  >> $log_file 2>&1
 checkRC
 echo ""
