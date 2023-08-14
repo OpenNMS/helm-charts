@@ -3,8 +3,8 @@
 # Declare variables to be passed into your templates.
 
 timezone: America/New_York
-domain: example.com  # The common domain for the Ingress resource.
-createNamespace: true  # Whether to create the namespace for this deployment
+domain: apps-crc.testing  # The common domain for the Ingress resource.
+createNamespace: false  # Whether to create the namespace for this deployment
 
 # Optionally specify an array of imagePullSecrets.
 # Secrets must be manually created in the namespace.
@@ -27,11 +27,11 @@ dependencies:
 
   # The main OpenNMS database requires PostgreSQL (this is mandatory).
   postgresql:
-    hostname: onms-db.shared.svc  # IP or FQDN of the external PostgreSQL server
+    hostname: postgresql.opennms.svc.cluster.local  # IP or FQDN of the external PostgreSQL server
     port: 5432
     username: postgres
-    password: P0stgr3s
-    sslmode: require  # disable, allow, prefer, require, verify-ca, verify-full
+    password: postgres
+    sslmode: disable  # disable, allow, prefer, require, verify-ca, verify-full
     sslfactory: org.postgresql.ssl.LibPQFactory  # LibPQFactory, DefaultJavaSSLFactory, NonValidatingFactory
     caCert: ''  # A base64 encoded content of the CA Certificate
 
@@ -127,11 +127,11 @@ core:
 #      tag: v2.0.1
     database:  # Access to the OpenNMS database
       username: opennms
-      password: 0p3nNM5
+      password: opennms
       poolSize: 50
     storage:  # Sizes for RRDs and configuration
       etc: 1Gi  # Warning Google Filestore enforces 1TB at a minimum
-      rrd: 1000Gi  # Depends on how many files you are planning to have (each installation is different)
+      rrd: 1Gi  # Depends on how many files you are planning to have (each installation is different)
       mibs: null  # Expects a size, e.g.: 1Gi
     http:  # Credentials to access the WebUI
       restUsername: opennms  # ReST user for Grafana/Helm, Sentinel and Minions (when Twin API is not available)
@@ -170,7 +170,7 @@ grafana:
   image:
     repository: opennms/helm
     pullPolicy: IfNotPresent
-    tag: '9.0.4'
+    tag: '9.0.7'
   resources:
     limits:
       cpu: 200m
@@ -188,7 +188,7 @@ grafana:
       image:  # For the initialization container to create the database
         repository: postgres
         pullPolicy: IfNotPresent
-        tag: '13'
+        tag: '14'
   imageRenderer:  # Required to generate PDF reports from OpenNMS
     replicaCount: 2
     image:

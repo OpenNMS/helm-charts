@@ -31,7 +31,14 @@ spec:
         kubectl.kubernetes.io/default-container: "onms"
     spec:
       securityContext:
-        fsGroup: 10001
+          runAsNonRoot: true
+          seccompProfile:
+            type: RuntimeDefault
+#         capabilities:
+#           add:
+#            - NET_ADMIN
+#            - NET_RAW
+      #  fsGroup: 10001
       terminationGracePeriodSeconds: {{ .Values.core.terminationGracePeriodSeconds | default 120 }}
       {{- if .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -76,6 +83,8 @@ spec:
         - secretRef:
             name: app-credentials
         env:
+        - name: JAVA_HOME
+          value: /usr/lib/jvm/java-nocap
         - name: OPENNMS_DATABASE_CONNECTION_MAXPOOL
           value: {{ .Values.core.configuration.database.poolSize | default "50" | quote }}
         volumeMounts:
@@ -96,6 +105,14 @@ spec:
       containers:
       - name: onms
         image: {{ $image }}
+        securityContext:
+          runAsNonRoot: true
+          seccompProfile:
+            type: RuntimeDefault
+#          capabilities:
+#            add:
+#             - NET_ADMIN
+#             - NET_RAW
         imagePullPolicy: {{ .Values.core.image.pullPolicy }}
         args:
         - -s
@@ -141,6 +158,8 @@ spec:
             resourceFieldRef:
               resource: requests.memory
               divisor: 1Mi
+        - name: JAVA_HOME
+          value: /usr/lib/jvm/java-nocap
         - name: JAVA_OPTS
           value: -Xms$(MEM_TOTAL_MB)m -Xmx$(MEM_TOTAL_MB)m {{ $opt }}
         {{- end }}
