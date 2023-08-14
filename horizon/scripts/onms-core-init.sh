@@ -363,17 +363,13 @@ org.opennms.security.disableLoginSuccessEvent=true
 org.opennms.web.defaultGraphPeriod=last_2_hour
 EOF
 
-# Configure Elasticsearch to allow Helm/Grafana to access Flow data
-if [[ -v ELASTICSEARCH_SERVER ]]; then
-  echo "Configuring Elasticsearch for Flows..."
-  PREFIX=$(echo ${OPENNMS_INSTANCE_ID} | tr '[:upper:]' '[:lower:]')-
-  cat <<EOF > ${CONFIG_DIR_OVERLAY}/org.opennms.features.flows.persistence.elastic.cfg
-elasticUrl=https://${ELASTICSEARCH_SERVER}
-globalElasticUser=${ELASTICSEARCH_USER}
-globalElasticPassword=${ELASTICSEARCH_PASSWORD}
-elasticIndexStrategy=${ELASTICSEARCH_INDEX_STRATEGY_FLOWS}
-indexPrefix=${PREFIX}
-EOF
+# Configure Elasticsearch
+if [[ ${ELASTICSEARCH_FLOWS} == "true" ]] || [[${ELASTICSEARCH_ALARMS} == "true"]]; then
+  if [[ -e /scripts/onms-elastic-init.sh ]]; then
+    source /scripts/onms-elastic-init.sh
+  else
+    echo "Warning: cannot find onms-elastic-init.sh"
+  fi
 fi
 
 

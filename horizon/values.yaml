@@ -53,11 +53,19 @@ dependencies:
     port: 9200
     username: elastic
     password: 31@st1c
+    hosts: {}
     configuration:
       flows:
-        indexStrategy: daily
-        replicationFactor: 0
-        numShards: 1
+        enabled: false
+        config:
+          - elasticIndexStrategy=daily
+          - settings.index.number_of_replicas=0
+          - settings.index.number_of_shards=1
+      alarms:
+        enabled: false
+        config:
+          - settings.index.number_of_replicas=0
+          - settings.index.number_of_shards=1
 
   # The chosen solution for log aggregation (OpenNMS and Sentinel will forward logs to it via Promtail)
   loki:
@@ -170,7 +178,7 @@ grafana:
   image:
     repository: opennms/helm
     pullPolicy: IfNotPresent
-    tag: '9.0.4'
+    tag: '9.0.8'
   resources:
     limits:
       cpu: 200m

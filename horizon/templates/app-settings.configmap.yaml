@@ -38,9 +38,11 @@ data:
   {{- end }}
   {{- if ((.Values.dependencies).elasticsearch).hostname }}
   ELASTICSEARCH_SERVER: {{ printf "%s:%d" .Values.dependencies.elasticsearch.hostname (.Values.dependencies.elasticsearch.port | int) | quote }}
-  ELASTICSEARCH_INDEX_STRATEGY_FLOWS: {{ .Values.dependencies.elasticsearch.configuration.flows.indexStrategy | quote }}
-  ELASTICSEARCH_REPLICATION_FACTOR: {{ .Values.dependencies.elasticsearch.configuration.flows.replicationFactor | quote }}
-  ELASTICSEARCH_NUM_SHARDS: {{ .Values.dependencies.elasticsearch.configuration.flows.numShards | quote }}
+  ELASTICSEARCH_HOSTS: {{ join "," .Values.dependencies.elasticsearch.hosts | quote }}
+  ELASTICSEARCH_FLOWS: {{ .Values.dependencies.elasticsearch.configuration.flows.enabled | quote }}
+  ELASTICSEARCH_FLOWS_CONFIG: {{ join ";" .Values.dependencies.elasticsearch.configuration.flows.config }}
+  ELASTICSEARCH_ALARMS: {{ .Values.dependencies.elasticsearch.configuration.alarms.enabled | quote }}
+  ELASTICSEARCH_ALARMS_CONFIG: {{ join ";" .Values.dependencies.elasticsearch.configuration.alarms.config }}
   {{- end }}
   {{- if ((.Values.dependencies).kafka).hostname }}
   KAFKA_BOOTSTRAP_SERVER: {{ printf "%s:%d" .Values.dependencies.kafka.hostname (.Values.dependencies.kafka.port | default "9092" | int) | quote }}
