@@ -19,12 +19,9 @@
 # KAFKA_SASL_PASSWORD
 # KAFKA_SASL_MECHANISM
 # KAFKA_SECURITY_PROTOCOL
-# ELASTICSEARCH_SERVER
-# ELASTICSEARCH_USER
-# ELASTICSEARCH_PASSWORD
-# ELASTICSEARCH_INDEX_STRATEGY_FLOWS
-# ELASTICSEARCH_NUM_SHARDS
-# ELASTICSEARCH_REPLICATION_FACTOR
+# ELASTICSEARCH_HOSTS
+# ELASTICSEARCH_FLOWS
+# ELASTICSEARCH_FLOWS_CONFIG
 # NUM_LISTENER_THREADS
 
 set -euo pipefail
@@ -48,13 +45,10 @@ OPENNMS_DATABASE_CONNECTION_MAXPOOL=${OPENNMS_DATABASE_CONNECTION_MAXPOOL-50}
 NUM_LISTENER_THREADS=${NUM_LISTENER_THREADS-6}
 KAFKA_SASL_MECHANISM=${KAFKA_SASL_MECHANISM-PLAIN}
 KAFKA_SECURITY_PROTOCOL=${KAFKA_SECURITY_PROTOCOL-SASL_PLAINTEXT}
-ELASTICSEARCH_INDEX_STRATEGY_FLOWS=${ELASTICSEARCH_INDEX_STRATEGY_FLOWS-daily}
-ELASTICSEARCH_REPLICATION_FACTOR=${ELASTICSEARCH_REPLICATION_FACTOR-2}
-ELASTICSEARCH_NUM_SHARDS=${ELASTICSEARCH_NUM_SHARDS-6}
 
 # Wait for Dependencies
-if [[ -v ELASTICSEARCH_SERVER ]]; then
-  wait_for ${ELASTICSEARCH_SERVER}
+if [[ -v ELASTICSEARCH_HOSTS ]]; then
+  wait_for ${ELASTICSEARCH_HOSTS}
 fi
 if [[ -v KAFKA_BOOTSTRAP_SERVER ]]; then
   wait_for ${KAFKA_BOOTSTRAP_SERVER}
@@ -122,17 +116,44 @@ adapters.0.class-name=org.opennms.netmgt.telemetry.protocols.netflow.adapter.net
 queue.threads=${NUM_LISTENER_THREADS}
 EOF
 
+if [[ -v ELASTICSEARCH_HOSTS ]]; then
+  echo "Configuring Elasticsearch credentials"
+  IFS=';' read -a ES_HOSTS <<< ${ELASTICSEARCH_HOSTS}
+  ESHOST=""
+  ESCREDS="<elastic-credentials>\n"
+  for url in ${ES_HOSTS[@]}; do
+    without_protocol="${url#*://}"
+    protocol="${url%%://*}"
+    if [[ ${without_protocol} == *"@"* ]]; then
+      username_password="${without_protocol%%@*}"
+      IFS=':' read -r username password <<< "$username_password"
+      host="${without_protocol#*@}"
+      ES_URL="${protocol}://${host}"
+      ESCREDS+="   <credentials url=\"${ES_URL}\" username=\"${username}\" password=\"${password}\"/> \n"
+    else
+      host=${without_protocol}
+      ES_URL="${protocol}://${host}"
+    fi
+    ESHOST+="${ES_URL},"
+  done
+  ESHOST=${ESHOST%?}
+  ESCREDS+="</elastic-credentials>"
+  echo -e ${ESCREDS} > ${CONFIG_DIR_OVERLAY}/elastic-credentials.xml
+fi
+
   PREFIX=$(echo ${OPENNMS_INSTANCE_ID} | tr '[:upper:]' '[:lower:]')-
   cat <<EOF > ${OVERLAY_DIR}/org.opennms.features.flows.persistence.elastic.cfg
-elasticUrl=https://${ELASTICSEARCH_SERVER}
-globalElasticUser=${ELASTICSEARCH_USER}
-globalElasticPassword=${ELASTICSEARCH_PASSWORD}
-elasticIndexStrategy=${ELASTICSEARCH_INDEX_STRATEGY_FLOWS}
+elasticUrl=${ESHOST}
 indexPrefix=${PREFIX}
-# The following settings should be consistent with your ES cluster
-settings.index.number_of_shards=${ELASTICSEARCH_NUM_SHARDS}
-settings.index.number_of_replicas=${ELASTICSEARCH_REPLICATION_FACTOR}
 EOF
+  if [[ -v ELASTICSEARCH_FLOWS_CONFIG ]]; then
+    IFS=';' read -a ES_CONFIG <<< ${ELASTICSEARCH_FLOWS_CONFIG}
+    ESCFG=""
+    for LINE in ${ES_CONFIG[@]}; do
+      ESCFG+="${LINE}\n"
+    done
+    echo -e ${ESCFG} >> ${CONFIG_DIR_OVERLAY}/org.opennms.features.flows.persistence.elastic.cfg
+  fi
 fi
 
 if [[ -v KAFKA_BOOTSTRAP_SERVER ]]; then
