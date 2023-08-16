@@ -1,3 +1,4 @@
+{{- if eq (include "omOpenShift" .) "true" }}
 kind: Route
 apiVersion: route.openshift.io/v1
 metadata:
@@ -32,3 +33,4 @@ status:
           #lastTransitionTime: '2023-08-10T14:16:19Z'
       wildcardPolicy: None
       routerCanonicalHostname: router-default.apps-crc.testing
+{{- end }}

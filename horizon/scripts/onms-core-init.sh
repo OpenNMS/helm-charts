@@ -28,6 +28,7 @@
 # KAFKA_SASL_PASSWORD
 # KAFKA_SASL_USERNAME
 # KAFKA_SECURITY_PROTOCOL
+# OPENSHIFT_ENVIRONMENT
 # OPENNMS_ADMIN_PASS
 # OPENNMS_DATABASE_CONNECTION_MAXPOOL
 # OPENNMS_DBNAME
@@ -77,19 +78,26 @@ OPENNMS_DATABASE_CONNECTION_MAXPOOL=${OPENNMS_DATABASE_CONNECTION_MAXPOOL-50}
 KAFKA_SASL_MECHANISM=${KAFKA_SASL_MECHANISM-PLAIN}
 KAFKA_SECURITY_PROTOCOL=${KAFKA_SECURITY_PROTOCOL-SASL_PLAINTEXT}
 
-# See if we can get the OpenNMS package name and version from the package manager
-if command -v rpm   >/dev/null 2>&1; then
-  PKG=$(rpm -qa | egrep '(meridian|opennms)-core')
-  VERSION=$(rpm -q --queryformat '%{VERSION}' $PKG)
-elif command -v dpkg-query >/dev/null 2>&1; then
-  if PKG=$(dpkg-query -f '${Package}\n' -W | grep -Fx -e opennms-common -e meridian-common); then
-    VERSION=$(dpkg-query -f '${Version}\n' -W "${PKG}")
-  else
-    PKG="unknown"
-  fi
-else
-  PKG="unknown"
-fi
+
+if [[ $OPENSHIFT_ENVIRONMENT ]];then
+ echo "Running on OpenShift environment!" 
+ PKG=$(unzip -q -c "/opt/opennms/lib/opennms_install.jar" installer.properties | grep "install.package.name"  | cut -d '=' -f 2)
+ VERSION=$(tail -1 "/opt/opennms/jetty-webapps/opennms/WEB-INF/version.properties" | cut -d '=' -f 2)
+#else
+## See if we can get the OpenNMS package name and version from the package manager
+#if command -v rpm   >/dev/null 2>&1; then
+#  PKG=$(rpm -qa | egrep '(meridian|opennms)-core')
+#  VERSION=$(rpm -q --queryformat '%{VERSION}' $PKG)
+#elif command -v dpkg-query >/dev/null 2>&1; then
+#  if PKG=$(dpkg-query -f '${Package}\n' -W | grep -Fx -e opennms-common -e meridian-common); then
+#    VERSION=$(dpkg-query -f '${Version}\n' -W "${PKG}")
+#  else
+#    PKG="unknown"
+#  fi
+#else
+#  PKG="unknown"
+#fi
+fi 
 
 if [[ "${PKG}" == "unknown" ]]; then
   if [[ ! -e jetty-webapps/opennms/WEB-INF/version.properties ]]; then

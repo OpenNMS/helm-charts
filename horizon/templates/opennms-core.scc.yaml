@@ -1,4 +1,4 @@
-{{- if include "onOpenShift" . }}
+{{- if eq (include "omOpenShift" .) "true" }}
 ---
 kind: SecurityContextConstraints
 metadata:
