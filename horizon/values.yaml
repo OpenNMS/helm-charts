@@ -213,3 +213,6 @@ promtail:
     limits:
       cpu: 50m
       memory: 64Mi
+
+scc: {}
+#  apiVersion: ""

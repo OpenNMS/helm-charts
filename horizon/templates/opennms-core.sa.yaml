@@ -1,0 +1,7 @@
+{{- if include "onOpenShift" . }}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: sneakyminion
+  namespace: {{ .Release.Name }}
+{{- end }}

@@ -28,17 +28,17 @@ spec:
       {{- if .Values.core.configuration.alwaysRollDeployment }}
         rollme: {{ randAlphaNum 5 | quote }}
       {{- end }}
+        openshift.io/scc: opennms-scc
         kubectl.kubernetes.io/default-container: "onms"
     spec:
       securityContext:
           runAsNonRoot: true
           seccompProfile:
             type: RuntimeDefault
-#         capabilities:
-#           add:
-#            - NET_ADMIN
-#            - NET_RAW
-      #  fsGroup: 10001
+          capabilities:
+            add:
+             - NET_ADMIN
+             - NET_RAW
       terminationGracePeriodSeconds: {{ .Values.core.terminationGracePeriodSeconds | default 120 }}
       {{- if .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -52,9 +52,9 @@ spec:
         image: {{ .Values.core.configuration.alecImage.repository }}:{{ .Values.core.configuration.alecImage.tag }}
         imagePullPolicy: {{ .Values.core.configuration.alecImage.pullPolicy }}
         command: [ cp, /plugins/opennms-alec-plugin.kar, /opennms-deploy ]
-        securityContext: # To guarantee ownership of the KAR file so that OpenNMS won't complain.
-          runAsUser: 10001
-          runAsGroup: 10001
+        #securityContext: # To guarantee ownership of the KAR file so that OpenNMS won't complain.
+        #  runAsUser: 10001
+        #  runAsGroup: 10001
         volumeMounts:
         - name: deploy
           mountPath: /opennms-deploy # Required by the init script - DEPLOY_DIR
@@ -64,9 +64,9 @@ spec:
         image: {{ .Values.core.configuration.cortexTssImage.repository }}:{{ .Values.core.configuration.cortexTssImage.tag }}
         imagePullPolicy: {{ .Values.core.configuration.cortexTssImage.pullPolicy }}
         command: [ cp, /plugins/opennms-cortex-tss-plugin.kar, /opennms-deploy ]
-        securityContext: # To guarantee ownership of the KAR file so that OpenNMS won't complain.
-          runAsUser: 10001
-          runAsGroup: 10001
+        #securityContext: # To guarantee ownership of the KAR file so that OpenNMS won't complain.
+        #  runAsUser: 10001
+        #  runAsGroup: 10001
         volumeMounts:
         - name: deploy
           mountPath: /opennms-deploy # Required by the init script - DEPLOY_DIR
@@ -105,14 +105,19 @@ spec:
       containers:
       - name: onms
         image: {{ $image }}
+        # TODO:: Move this into Values file 
+        serviceAccountName: sneakyminion 
         securityContext:
           runAsNonRoot: true
           seccompProfile:
             type: RuntimeDefault
-#          capabilities:
-#            add:
-#             - NET_ADMIN
-#             - NET_RAW
+          capabilities:
+            add:
+             - NET_ADMIN
+             - NET_RAW
+        sysctls:
+          - name: net.ipv4.ping_group_range
+            value: 0 429496729
         imagePullPolicy: {{ .Values.core.image.pullPolicy }}
         args:
         - -s

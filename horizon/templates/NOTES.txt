@@ -1,4 +1,9 @@
+{{- if include "onOpenShift" . }}
+Thank you for installing OpenNMS {{ .Values.core.image.tag | default .Chart.AppVersion }} on RedHat OpenShift.
+{{- else}}
 Thank you for installing OpenNMS {{ .Values.core.image.tag | default .Chart.AppVersion }}.
+{{- end }}
+
 
 Your release is named "{{ .Release.Name }}", used for:
 - Customer/Deployment identifier.
@@ -17,11 +22,16 @@ OpenNMS Core: https://onms-core.{{ include "core.domain" . }}/opennms/index.jsp
 Grafana: https://grafana.{{ include "core.domain" . }}/
 {{- end }}
 
+{{- if include "onOpenShift" . }}
+
+Enjoy! (Replace me with a statement about OpenShift)
+{{- else }}
 To learn more about the release, try:
 
 $ helm status {{ .Release.Name }}
 $ helm get all {{ .Release.Name }}
 $ kubectl get all -n {{ .Release.Name }}
+{{- end }}
 
 {{- if not .Values.core.configuration.alwaysRollDeployment }}
 
