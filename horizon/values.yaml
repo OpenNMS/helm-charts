@@ -19,6 +19,10 @@ imagePullSecrets: []
 #   dockerEmail: admin@agalue.net
 
 dependencies:
+  securitycontext:
+   securitycontextconstraints: true
+   serviceAccount: true
+   route: true
 
   # A common JKS to white-list all CA certificates for all the dependencies OpenNMS or Sentinel uses.
   truststore:

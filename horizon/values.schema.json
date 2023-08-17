@@ -44,7 +44,8 @@
                                 "32.0.0",
                                 "32.0.1",
                                 "32.0.2",
-                                "bleeding"
+                                "33.0.0-SNAPSHOT",
+                                "develop"
                             ]
                         }
                     }
@@ -162,7 +163,10 @@
                                     "default": "1Gi"
                                 },
                                 "mibs": {
-                                    "type": ["string", "null"],
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ],
                                     "default": null
                                 }
                             }
@@ -193,15 +197,24 @@
                             "default": "newer"
                         },
                         "nodeSelector": {
-                            "type": ["string", "null"],
+                            "type": [
+                                "string",
+                                "null"
+                            ],
                             "default": null
                         },
                         "affinity": {
-                            "type": ["string", "null"],
+                            "type": [
+                                "string",
+                                "null"
+                            ],
                             "default": null
                         },
                         "tolerations": {
-                            "type": ["string", "null"],
+                            "type": [
+                                "string",
+                                "null"
+                            ],
                             "default": null
                         }
                     },
@@ -244,6 +257,24 @@
             "form": true,
             "title": "Dependencies",
             "properties": {
+                "securitycontext": {
+                    "type": "object",
+                    "form": true,
+                    "properties": {
+                        "securitycontextconstraints": {
+                            "type": "boolean",
+                            "default": true
+                        },
+                        "serviceaccount": {
+                            "type": "boolean",
+                            "default": true
+                        },
+                        "route": {
+                            "type": "boolean",
+                            "default": true
+                        }
+                    }
+                },
                 "truststore": {
                     "type": "object",
                     "form": true,

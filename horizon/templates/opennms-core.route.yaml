@@ -1,4 +1,4 @@
-{{- if eq (include "omOpenShift" .) "true" }}
+{{- if and (eq (include "onOpenShift" .) "true") ((.Values.dependencies.securitycontext).route) }}
 kind: Route
 apiVersion: route.openshift.io/v1
 metadata:

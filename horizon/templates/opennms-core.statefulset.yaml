@@ -84,7 +84,7 @@ spec:
             name: app-credentials
         env:
         - name: JAVA_HOME
-          value: /usr/lib/jvm/java-nocap
+          value: /usr/lib/jvm/java
         - name: OPENNMS_DATABASE_CONNECTION_MAXPOOL
           value: {{ .Values.core.configuration.database.poolSize | default "50" | quote }}
         volumeMounts:
@@ -164,7 +164,7 @@ spec:
               resource: requests.memory
               divisor: 1Mi
         - name: JAVA_HOME
-          value: /usr/lib/jvm/java-nocap
+          value: /usr/lib/jvm/java
         - name: JAVA_OPTS
           value: -Xms$(MEM_TOTAL_MB)m -Xmx$(MEM_TOTAL_MB)m {{ $opt }}
         {{- end }}
