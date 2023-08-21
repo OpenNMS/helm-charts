@@ -41,14 +41,22 @@ function wait_for {
 echo "OpenNMS Sentinel Configuration Script..."
 
 # Defaults
+OVERLAY_DIR=/opt/sentinel-etc-overlay
 OPENNMS_DATABASE_CONNECTION_MAXPOOL=${OPENNMS_DATABASE_CONNECTION_MAXPOOL-50}
 NUM_LISTENER_THREADS=${NUM_LISTENER_THREADS-6}
 KAFKA_SASL_MECHANISM=${KAFKA_SASL_MECHANISM-PLAIN}
 KAFKA_SECURITY_PROTOCOL=${KAFKA_SECURITY_PROTOCOL-SASL_PLAINTEXT}
 
+# Configure Elasticsearch
+if [[ -e /onms-sentinel-es-init.sh ]]; then
+  source /onms-sentinel-es-init.sh
+else
+  echo "Warning: cannot find onms-sentinel-es-init.sh"
+fi
+
 # Wait for Dependencies
-if [[ -v ELASTICSEARCH_HOSTS ]]; then
-  wait_for ${ELASTICSEARCH_HOSTS}
+if [[ -v ELASTICSEARCH_HOSTNAME ]]; then
+  wait_for ${ELASTICSEARCH_HOSTNAME}
 fi
 if [[ -v KAFKA_BOOTSTRAP_SERVER ]]; then
   wait_for ${KAFKA_BOOTSTRAP_SERVER}
@@ -56,7 +64,7 @@ fi
 wait_for ${POSTGRES_HOST}:${POSTGRES_PORT}
 wait_for ${OPENNMS_SERVER}:8980
 
-OVERLAY_DIR=/opt/sentinel-etc-overlay
+echo "Configuring System Properties..."
 
 # Configure the instance ID and Interface-to-Node cache
 # Required when having multiple OpenNMS backends sharing a Kafka cluster or an Elasticsearch cluster.
@@ -88,8 +96,8 @@ sentinel-jsonstore-postgres
 sentinel-blobstore-noop
 EOF
 
-if [[ -v ELASTICSEARCH_SERVER ]]; then
-  echo "Configuring Elasticsearch and Flows..."
+if [[ -v ELASTICSEARCH_HOSTNAME ]]; then
+  echo "Configuring Flows..."
 
   cat <<EOF > ${FEATURES_DIR}/flows.boot
 sentinel-flows
@@ -115,45 +123,6 @@ adapters.0.name=Netflow-9-Adapter
 adapters.0.class-name=org.opennms.netmgt.telemetry.protocols.netflow.adapter.netflow9.Netflow9Adapter
 queue.threads=${NUM_LISTENER_THREADS}
 EOF
-
-if [[ -v ELASTICSEARCH_HOSTS ]]; then
-  echo "Configuring Elasticsearch credentials"
-  IFS=';' read -a ES_HOSTS <<< ${ELASTICSEARCH_HOSTS}
-  ESHOST=""
-  ESCREDS="<elastic-credentials>\n"
-  for url in ${ES_HOSTS[@]}; do
-    without_protocol="${url#*://}"
-    protocol="${url%%://*}"
-    if [[ ${without_protocol} == *"@"* ]]; then
-      username_password="${without_protocol%%@*}"
-      IFS=':' read -r username password <<< "$username_password"
-      host="${without_protocol#*@}"
-      ES_URL="${protocol}://${host}"
-      ESCREDS+="   <credentials url=\"${ES_URL}\" username=\"${username}\" password=\"${password}\"/> \n"
-    else
-      host=${without_protocol}
-      ES_URL="${protocol}://${host}"
-    fi
-    ESHOST+="${ES_URL},"
-  done
-  ESHOST=${ESHOST%?}
-  ESCREDS+="</elastic-credentials>"
-  echo -e ${ESCREDS} > ${CONFIG_DIR_OVERLAY}/elastic-credentials.xml
-fi
-
-  PREFIX=$(echo ${OPENNMS_INSTANCE_ID} | tr '[:upper:]' '[:lower:]')-
-  cat <<EOF > ${OVERLAY_DIR}/org.opennms.features.flows.persistence.elastic.cfg
-elasticUrl=${ESHOST}
-indexPrefix=${PREFIX}
-EOF
-  if [[ -v ELASTICSEARCH_FLOWS_CONFIG ]]; then
-    IFS=';' read -a ES_CONFIG <<< ${ELASTICSEARCH_FLOWS_CONFIG}
-    ESCFG=""
-    for LINE in ${ES_CONFIG[@]}; do
-      ESCFG+="${LINE}\n"
-    done
-    echo -e ${ESCFG} >> ${CONFIG_DIR_OVERLAY}/org.opennms.features.flows.persistence.elastic.cfg
-  fi
 fi
 
 if [[ -v KAFKA_BOOTSTRAP_SERVER ]]; then

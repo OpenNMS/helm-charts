@@ -54,6 +54,9 @@ spec:
         - name: scripts
           mountPath: /init.sh
           subPath: onms-sentinel-init.sh
+        - name: scripts
+          mountPath: /onms-sentinel-es-init.sh
+          subPath: onms-sentinel-es-init.sh
       containers:
       - name: sentinel
         image: {{ $image }}

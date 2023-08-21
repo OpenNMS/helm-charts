@@ -5,8 +5,6 @@
 # External environment variables used by this script:
 
 # OVERLAY_DIR
-# ELASTICSEARCH_ALARMS
-# ELASTICSEARCH_ALARMS_CONFIG
 # ELASTICSEARCH_FLOWS
 # ELASTICSEARCH_FLOWS_CONFIG
 # ELASTICSEARCH_HOSTS
@@ -18,6 +16,7 @@ if [[ -v ELASTICSEARCH_HOSTS ]]; then
   echo "Configuring Elasticsearch credentials"
   IFS=';' read -a ES_HOSTS <<< ${ELASTICSEARCH_HOSTS}
   ESHOST=""
+  ELASTICSEARCH_HOSTNAME=""
   ESCREDS="<elastic-credentials>\n"
   for url in ${ES_HOSTS[@]}; do
     without_protocol="${url#*://}"
@@ -32,11 +31,14 @@ if [[ -v ELASTICSEARCH_HOSTS ]]; then
       host=${without_protocol}
       ES_URL="${protocol}://${host}"
     fi
+    if [[ -z "${ELASTICSEARCH_HOSTNAME}" ]]; then
+      ELASTICSEARCH_HOSTNAME=${host}
+    fi
     ESHOST+="${ES_URL},"
   done
  ESHOST=${ESHOST%?}
  ESCREDS+="</elastic-credentials>"
-  echo -e ${ESCREDS} > ${CONFIG_DIR_OVERLAY}/elastic-credentials.xml
+  echo -e ${ESCREDS} > ${OVERLAY_DIR}/elastic-credentials.xml
 fi
 
 
@@ -44,7 +46,7 @@ fi
 if [[ ${ELASTICSEARCH_FLOWS} == "true" ]]; then
   echo "Configuring Elasticsearch for Flows..."
   PREFIX=$(echo ${OPENNMS_INSTANCE_ID} | tr '[:upper:]' '[:lower:]')-
-  cat <<EOF > ${CONFIG_DIR_OVERLAY}/org.opennms.features.flows.persistence.elastic.cfg
+  cat <<EOF > ${OVERLAY_DIR}/org.opennms.features.flows.persistence.elastic.cfg
 elasticUrl=${ESHOST}
 indexPrefix=${PREFIX}
 EOF
@@ -54,27 +56,6 @@ EOF
     for LINE in ${ES_CONFIG[@]}; do
       ESCFG+="${LINE}\n"
     done
-    echo -e ${ESCFG} >> ${CONFIG_DIR_OVERLAY}/org.opennms.features.flows.persistence.elastic.cfg
+    echo -e ${ESCFG} >> ${OVERLAY_DIR}/org.opennms.features.flows.persistence.elastic.cfg
   fi
-fi
-
-# Configure Elasticsearch to allow Alarm History
-if [[ ${ELASTICSEARCH_ALARMS} == "true" ]]; then
-  echo "Configuring Elasticsearch for Alarms..."
-  PREFIX=$(echo ${OPENNMS_INSTANCE_ID} | tr '[:upper:]' '[:lower:]')-
-  cat <<EOF > ${CONFIG_DIR_OVERLAY}/org.opennms.features.alarms.history.elastic.cfg
-elasticUrl=${ESHOST}
-indexPrefix=${PREFIX}
-EOF
-  if [[ -v ELASTICSEARCH_ALARMS_CONFIG ]]; then
-    IFS=';' read -a ES_CONFIG <<< ${ELASTICSEARCH_ALARMS_CONFIG}
-    ESCFG=""
-    for LINE in ${ES_CONFIG[@]}; do
-      ESCFG+="${LINE}\n"
-    done
-    echo -e ${ESCFG} >> ${CONFIG_DIR_OVERLAY}/org.opennms.features.alarms.history.elastic.cfg
-  fi
-#cat <<EOF > ${CONFIG_DIR_OVERLAY}/featuresBoot.d/alarm-history.boot
-#opennms-alarm-history-elastic
-#EOF
 fi
