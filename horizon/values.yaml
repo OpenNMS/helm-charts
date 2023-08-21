@@ -20,9 +20,13 @@ imagePullSecrets: []
 
 dependencies:
   securitycontext:
-   securitycontextconstraints: true
-   serviceAccount: true
-   route: true
+   securitycontextconstraints: 
+    enabled: true
+    name: opennms-scc
+   serviceaccount: 
+     enabled: true
+     name: opennms-sa
+  route: true
 
   # A common JKS to white-list all CA certificates for all the dependencies OpenNMS or Sentinel uses.
   truststore:
@@ -65,7 +69,7 @@ dependencies:
 
   # The chosen solution for log aggregation (OpenNMS and Sentinel will forward logs to it via Promtail)
   loki:
-    hostname: ''  # IP or FQDN of the external Loki server (Example: loki.shared.svc); '' to disable
+    hostname: ''  # IP or FQDN of the external Loki server (Example: loki.shared.svc); '' to `disable`
     username: ''
     password: ''
     caCert: ''  # A base64 encoded content of the CA Certificate (assumes HTTPS for Loki's URL)
@@ -170,6 +174,7 @@ sentinel:
 # OpenNMS Plugin for Grafana
 # Do not use Grafana images, or you'd have to manually install the OpenNMS Plugin for Grafana from Github every time the container starts.
 grafana:
+  hostname: grafana.opennms.svc.cluster.local  # IP or FQDN of the external PostgreSQL server
   replicaCount: 0
   image:
     repository: opennms/helm

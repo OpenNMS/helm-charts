@@ -260,20 +260,41 @@
                 "securitycontext": {
                     "type": "object",
                     "form": true,
+                    "title": "Security Context",
                     "properties": {
                         "securitycontextconstraints": {
-                            "type": "boolean",
-                            "default": true
+                            "type": "object",
+                            "title": "Constraints",
+                            "properties": {
+                                "enabled": {
+                                    "type": "boolean",
+                                    "default": true
+                                },
+                                "name": {
+                                    "type": "string",
+                                    "default": "opennms-scc"
+                                }
+                            }
                         },
                         "serviceaccount": {
-                            "type": "boolean",
-                            "default": true
-                        },
-                        "route": {
-                            "type": "boolean",
-                            "default": true
+                            "type": "object",
+                            "title": "Service Account",
+                            "properties": {
+                                "enabled": {
+                                    "type": "boolean",
+                                    "default": true
+                                },
+                                "name": {
+                                    "type": "string",
+                                    "default": "opennms-sa"
+                                }
+                            }
                         }
                     }
+                },
+                "route": {
+                    "type": "boolean",
+                    "default": true
                 },
                 "truststore": {
                     "type": "object",

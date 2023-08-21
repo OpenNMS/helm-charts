@@ -2,20 +2,20 @@
 kind: Route
 apiVersion: route.openshift.io/v1
 metadata:
-  name: {{ include "core.name" . }}
+  name: grafana
   namespace: {{ .Release.Name }}
   labels:
-    app: {{ include "core.name" . }}
+    app: grafana
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
-    app.kubernetes.io/name: {{ include "core.name" . }}
+    app.kubernetes.io/name: grafana
     app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
     helm.sh/chart: {{ include "core.chart" . }}
 spec:
-  host: {{ printf "onms-core.%s" .Values.domain | quote }}
+  host: {{ printf "grafana-%s.%s" .Release.Name .Values.domain | quote }}
   to:
     kind: Service
-    name: onms-core
+    name: grafana
     weight: 100
   port:
     targetPort: http
@@ -25,12 +25,11 @@ spec:
   wildcardPolicy: None
 status:
   ingress:
-    - host: {{ printf "onms-core.%s.svc" .Release.Name | quote }}
+    - host: {{ printf "grafana-%s.%s" .Release.Name .Values.domain | quote }}
       routerName: default
       conditions:
         - type: Admitted
           status: 'True'
-          #lastTransitionTime: '2023-08-10T14:16:19Z'
       wildcardPolicy: None
       routerCanonicalHostname: router-default.apps-crc.testing
 {{- end }}

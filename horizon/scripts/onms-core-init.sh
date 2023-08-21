@@ -521,4 +521,10 @@ else
 fi
 
 echo "Updating admin password"
-perl /scripts/onms-set-admin-password.pl ${CONFIG_DIR}/users.xml admin "${OPENNMS_ADMIN_PASS}"
+if command -v perl   >/dev/null 2>&1; then
+  perl /scripts/onms-set-admin-password.pl ${CONFIG_DIR}/users.xml admin "${OPENNMS_ADMIN_PASS}"
+else
+  echo "FIX ME! Password is not set"
+  #tmp=$(echo -n "${OPENNMS_ADMIN_PASS}" | md5sum --tag | cut -d ' ' -f 4  )
+  #sed -i "12s/.*/         \<password salt=\"true\"\>gU2wmSW7k9v1xg4\/MrAsaI+VyddBAhJJt4zPX5SGG0BK+qiASGnJsqM8JOug\/aEL\<\/password\>/" ${CONFIG_DIR}/users.xml
+fi
