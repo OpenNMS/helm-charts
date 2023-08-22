@@ -28,16 +28,16 @@ spec:
       {{- if .Values.core.configuration.alwaysRollDeployment }}
         rollme: {{ randAlphaNum 5 | quote }}
       {{- end }}
-        openshift.io/scc: opennms-scc
+        openshift.io/scc: {{ (.Values.dependencies.securitycontext).securitycontextconstraints.name | quote }} 
         kubectl.kubernetes.io/default-container: "onms"
     spec:
       securityContext:
+          fsGroup: 10001
           runAsNonRoot: true
           seccompProfile:
             type: RuntimeDefault
           capabilities:
             add:
-             - NET_ADMIN
              - NET_RAW
       terminationGracePeriodSeconds: {{ .Values.core.terminationGracePeriodSeconds | default 120 }}
       {{- if .Values.imagePullSecrets }}
@@ -76,6 +76,15 @@ spec:
       - name: init
         image: {{ $image }}
         imagePullPolicy: {{ .Values.core.image.pullPolicy }}
+        serviceAccountName: {{ (.Values.dependencies.securitycontext).serviceaccount.name | quote }} 
+        securityContext:
+          fsGroup: 10001
+          runAsNonRoot: true
+          seccompProfile:
+            type: RuntimeDefault
+          capabilities:
+            add:
+             - NET_RAW
         command: [ bash, /scripts/onms-core-init.sh ]
         envFrom:
         - configMapRef:
@@ -103,9 +112,9 @@ spec:
       containers:
       - name: onms
         image: {{ $image }}
-        # TODO:: Move this into Values file 
-        serviceAccountName: sneakyminion 
+        serviceAccountName: {{ (.Values.dependencies.securitycontext).serviceaccount.name | quote }} 
         securityContext:
+          fsGroup: 10001
           runAsNonRoot: true
           seccompProfile:
             type: RuntimeDefault
@@ -155,12 +164,15 @@ spec:
         {{- if .Values.core.resources }}
         {{- with .Values.core.resources }}
         {{- if ((.requests).memory) }}
+        #- name: JAVA_HOME
+        #  value: /usr/lib/jvm/java-nocap
         - name: MEM_TOTAL_MB
           valueFrom:
             resourceFieldRef:
               resource: requests.memory
               divisor: 1Mi
         - name: JAVA_OPTS
+          #value: -Xms$(MEM_TOTAL_MB)m -Xmx$(MEM_TOTAL_MB)m  -Djava.library.path=/usr/java/packages/lib:/usr/lib64:/lib64:/lib:/usr/lib:/usr/lib/jni -Dorg.opennms.netmgt.icmp.pingerClass=org.opennms.netmgt.icmp.jna.JnaPinger  {{ $opt }}
           value: -Xms$(MEM_TOTAL_MB)m -Xmx$(MEM_TOTAL_MB)m {{ $opt }}
         {{- end }}
         resources:

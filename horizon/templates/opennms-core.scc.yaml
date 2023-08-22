@@ -12,14 +12,15 @@ allowHostPorts: false
 allowPrivilegeEscalation: true
 allowPrivilegedContainer: false
 allowedCapabilities:
-  - NET_BIND_SERVICE
-  - NET_RAW
-# - CAP_NET_RAW
+- NET_BIND_SERVICE
+- NET_RAW
+- CAP_NET_RAW
 #  - NET_ADMIN
 apiVersion: security.openshift.io/v1
 defaultAddCapabilities:
-  - NET_RAW
-# - CAP_NET_RAW
+- NET_BIND_SERVICE
+- NET_RAW
+- CAP_NET_RAW
 #  - NET_ADMIN
 fsGroup:
   type: RunAsAny
@@ -35,7 +36,9 @@ seccompProfiles:
 - runtime/default
 supplementalGroups:
   type: RunAsAny
-users: []
+users:
+- default
+- opennms-sa
 volumes:
 - configMap
 - csi
