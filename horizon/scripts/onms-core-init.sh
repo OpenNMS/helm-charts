@@ -490,8 +490,12 @@ sed -r -i '/enabled="false"/{$!{N;s/ enabled="false"[>]\n(.*OpenNMS:Name=Syslogd
 
 # Disable Telemetryd
 if [[ ${ENABLE_TELEMETRYD} == "false" ]]; then
+  echo "Disabling Telemetryd on core..."
   sed -i -r '/opennms-flows/d' ${CONFIG_DIR}/org.apache.karaf.features.cfg
   sed -i 'N;s/service.*\n\(.*Telemetryd\)/service enabled="false">\n\1/;P;D' ${CONFIG_DIR}/service-configuration.xml
+else
+  echo "Enabling Telemetryd on core..."
+  sed -i 'N;s/service.*\n\(.*Telemetryd\)/service enabled="true">\n\1/;P;D' ${CONFIG_DIR}/service-configuration.xml
 fi
 
 # Cleanup temporary requisition files

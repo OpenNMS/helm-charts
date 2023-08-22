@@ -15,7 +15,7 @@ data:
   POSTGRES_SSL_FACTORY: {{ .Values.dependencies.postgresql.sslfactory | quote }}
   ENABLE_ALEC: {{ ((.Values.core).configuration).enableAlec | default "false" | quote }}
   ENABLE_ACLS: {{ ((.Values.core).configuration).enableAcls | default "false" | quote }}
-  ENABLE_TELEMETRYD: {{ if gt ((.Values.sentinel).replicaCount|int) 0 }}"true"{{ else }}"false"{{ end }}
+  ENABLE_TELEMETRYD: {{ if eq (.Values.sentinel.replicaCount|int) 0 }}"true"{{ else }}"false"{{ end }}
   ENABLE_CORTEX: {{ ((.Values.core).configuration).enableCortex | quote }}
   ENABLE_TSS_DUAL_WRITE: {{ ((.Values.core).configuration).enableTssDualWrite | quote }}
   ENABLE_GRAFANA: {{ if gt ((.Values.grafana).replicaCount|int) 0 }}"true"{{ else }}"false"{{ end }}
