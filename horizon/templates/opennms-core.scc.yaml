@@ -38,7 +38,7 @@ supplementalGroups:
   type: RunAsAny
 users:
 - default
-- opennms-sa
+- {{ (.Values.dependencies.securitycontext).serviceaccount.name | quote }}
 volumes:
 - configMap
 - csi
