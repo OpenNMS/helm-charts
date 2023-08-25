@@ -69,7 +69,7 @@ org.opennms.grafanaBox.apiKey=${GRAFANA_KEY}
 
 # Settings used to build links url in the grafana box in opennms
 org.opennms.grafanaBox.link.protocol=https
-org.opennms.grafanaBox.link.hostname=${GF_SERVER_DOMAIN}
+org.opennms.grafanaBox.link.hostname=${GF_SERVER_ROUTE}
 org.opennms.grafanaBox.link.port=443
 org.opennms.grafanaBox.link.basePath=/
 
