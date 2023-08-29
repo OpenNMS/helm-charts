@@ -6,3 +6,4 @@ log.txt
 # Antora artifacts
 /build/
 /public/
+.vscode
