@@ -74,7 +74,8 @@ EOF
     done
     echo -e ${ESCFG} >> ${CONFIG_DIR_OVERLAY}/org.opennms.features.alarms.history.elastic.cfg
   fi
-#cat <<EOF > ${CONFIG_DIR_OVERLAY}/featuresBoot.d/alarm-history.boot
-#opennms-alarm-history-elastic
-#EOF
+cat <<EOF > ${CONFIG_DIR_OVERLAY}/featuresBoot.d/alarm-history.boot
+opennms-es-rest
+opennms-alarm-history-elastic
+EOF
 fi
