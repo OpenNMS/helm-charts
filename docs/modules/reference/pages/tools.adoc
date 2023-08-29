@@ -6,36 +6,36 @@ https://k9scli.io/
 
 == kubectl
 
-Tail logs (leave off `-f` to see all logs):
-
+* Tail logs (leave off `-f` to see all logs):
++
 [source, console]
 ----
 kubectl logs -n <namespace> -f -c onms pods/onms-core-0
 ----
 
-Get a shell:
-
+* Get a shell:
++
 [source, console]
 ----
 kubectl exec -it -n <namespace> pods/onms-core-0 -c onms -- /bin/bash
 ----
 
-Restart OpenNMS:
-
+* Restart OpenNMS:
++
 [source, console]
 ----
 kubectl rollout restart -n <namespace> statefulset/onms-core
 ----
 
-Stop OpenNMS:
-
+* Stop OpenNMS:
++
 [source, console]
 ----
 kubectl scale -n <namespace> --replicas=0 statefulset/onms-core
 ----
 
-Start OpenNMS:
-
+* Start OpenNMS:
++
 [source, console]
 ----
 kubectl scale -n <namespace> --replicas=1 statefulset/onms-core
@@ -45,22 +45,22 @@ kubectl scale -n <namespace> --replicas=1 statefulset/onms-core
 
 You can use this to cleanly shut down OpenNMS but still have a way to edit configuration files, inspect files before a backup or after a restore, and so on.
 
-Enable Inspector pod (shut down OpenNMS):
-
+* Enable Inspector pod (shut down OpenNMS):
++
 [source, console]
 ----
 helm upgrade --reuse-values --set core.inspector.enabled=true <namespace> ./horizon
 ----
 
-How to connect:
-
+* Connect to the Inspector:
++
 [source, console]
 ----
 kubectl exec -it -n <namespace> pods/inspector -- /bin/bash
 ----
 
-Examples:
-
+* Example commands to run on the Inspector:
++
 [source, console]
 ----
 # Run configuration tester
@@ -70,8 +70,8 @@ Examples:
 rm etc/configured
 ----
 
-Disable Inspector pod (start OpenNMS):
-
+* Disable Inspector pod (start OpenNMS):
++
 [source, console]
 ----
 helm upgrade --reuse-values --set core.inspector.enabled=false <namespace> ./horizon

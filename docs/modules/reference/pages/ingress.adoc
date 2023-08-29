@@ -6,10 +6,10 @@ Ingress is not required, although it is a good thing to have.
 //external dependencies says it is.
 You could modify the Helm Chart to avoid Ingress altogether (or make it optional) and expose the WebUIs via `LoadBalancer` or `NodePort` services, but that won't be covered here.
 
-For example, when deploying the Helm Chart names `acme` (remember about the rules for the `namespace`) with a value of `k8s.agalue.net` for the `domain`, it would create an Ingress instance exposing the following resources via custom FQDNs:
+For example, when deploying the Helm Chart named `acme` (remember about the rules for the `namespace`) with a value of `k8s.agalue.net` for the `domain`, it would create an Ingress instance exposing the following resources via custom FQDNs:
 
 * OpenNMS Core: `onms-core.acme.k8s.agalue.net`
-* Grafana: `grafana.acme.k8s.agalue.net`
+* Grafana (if enabled): `grafana.acme.k8s.agalue.net`
 
 If you get a certificate error with Chrome in a local cluster because you don't have a valid certificate, see https://cybercafe.dev/thisisunsafe-bypassing-chrome-security-warnings/[thisisunsafe - Bypassing chrome security warnings].
 
@@ -18,4 +18,4 @@ You might be running into problem related to https://issues.opennms.org/browse/N
 
 To customize behavior, you could pass custom annotations via `ingress.annotations` when deploying the Helm Chart.
 
-Note that it is expected to have https://cert-manager.io/docs/[cert-manager] deployed on your Kubernetes cluster, as that would be used to manage the certificates (configured via `ingress.certManager.clusterIssuer`).
+NOTE: It is expected to have https://cert-manager.io/docs/[cert-manager] deployed on your Kubernetes cluster, as that is used here to manage the certificates (configured via `ingress.certManager.clusterIssuer`).
