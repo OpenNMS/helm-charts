@@ -19,7 +19,7 @@ helm upgrade --install ingress-nginx ingress-nginx \
 
 cd scripts
 
-./start-dependencies.sh        
+./start-dependencies.sh
 
 helm repo add opennms https://opennms.github.io/helm-charts
 
