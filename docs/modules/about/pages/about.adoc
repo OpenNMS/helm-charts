@@ -6,7 +6,7 @@
 OpenNMS Helm Charts makes it easier for users to run OpenNMS Horizon locally in a Kubernetes cluster.
 It is not yet available for a Cloud environment.
 
-Each deployment through OpenNMS Helm Charts has a single Core server, Grafana, and a custom Ingress that shares the RRD files and some configuration files, and multiple Sentinels for flow processing.
+Each deployment through OpenNMS Helm Charts has a single Core server, with options for Grafana, a custom Ingress that shares the RRD files and some configuration files, and/or multiple Sentinels for flow processing.
 
 Note that this is one way to approach the solution.
 We recommend that you study the content of the Helm chart and tune it for your needs.
@@ -27,7 +27,8 @@ image::about/helm-charts-diagrams001.png["General architecture for OpenNMS Helm 
 
 image::about/helm-charts-diagrams002.png["Customer Namespace Deployment Diagram", 500]
 
-Deployment in each namespace includes OpenNMS Horizon Core, OpenNMS Sentinel, Grafana, and application scripts and configuration files.
+Deployment in each namespace includes OpenNMS Horizon Core with application scripts and configuration files.
+Optionally, you can include OpenNMS Sentinel, Grafana, Kafka, Mimir, and Elasticsearch services.
 All components on a single `namespace` represent a single OpenNMS environment or customer deployment or a single tenant.
 The name of the `namespace` is used as follows:
 
@@ -44,7 +45,7 @@ The name of the `namespace` is used as follows:
 == Design
 
 The solution is based and tested against the latest Horizon.
-It is not available for Meridian at this point, but will be in the future.
+It is not currently available for Meridian.
 
 === Scripts and core configuration
 
@@ -59,15 +60,15 @@ One advantage of configuring that volume is allowing backups and access to the f
 === Time series databases
 
 Multiple time series strategies are supported and you can switch from one to another as needed.
-Note that when switching strategies existing data is not migrated.
+Note that when switching strategies existing data is not migrated and you will experience loss of persisted metrics.
 
 === Scaling
 
 To alleviate load from OpenNMS, you can optionally start Sentinel instances for flow processing.
-That requires having an Elasticsearch cluster available.
+This requires having an Elasticsearch cluster available.
 When Sentinels are present, Telemetryd is disabled in OpenNMS.
 
-The OpenNMS Core and Sentinels are backed by a `StatefulSet` but keep in mind that there can be one and only one Core instance.
+The OpenNMS Core and Sentinels are backed by a `StatefulSet`, but keep in mind that there can be one and only one Core instance.
 To have multiple Sentinels, make sure you have enough partitions for the flow topics in your Kafka clusters, as all of them would be part of the same consumer group.
 
 === Log files and Grafana Loki
@@ -80,7 +81,7 @@ The current solution employs the sidecar pattern using https://grafana.com/docs/
 === Docker images
 
 You can customize all of the Docker images via Helm Values.
-The solution lets you configure custom Docker registries to access your custom images, or when all the images you plan to use will not be in Docker Hub or when your Kubernetes cluster will not have internet access.
+The solution lets you configure custom Docker registries to access your custom images  when all the images you plan to use will not be in Docker Hub or when your Kubernetes cluster will not have internet access.
 Keep in mind that your custom images should be based on those currently in use.
 
 === Plugins
