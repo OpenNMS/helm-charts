@@ -13,11 +13,18 @@ https://k9scli.io/
 kubectl logs -n <namespace> -f -c onms pods/onms-core-0
 ----
 
-* Get a shell:
+* Access the container OS shell:
 +
 [source, console]
 ----
 kubectl exec -it -n <namespace> pods/onms-core-0 -c onms -- /bin/bash
+----
+
+* Access the Karaf shell
++
+[source, console]
+----
+kubectl exec -it -n <namespace> pods/onms-core-0 -c onms -- ssh -p 8101 admin@localhost
 ----
 
 * Restart OpenNMS:
@@ -52,6 +59,7 @@ You can use this to cleanly shut down OpenNMS but still have a way to edit confi
 helm upgrade --reuse-values --set core.inspector.enabled=true <namespace> ./horizon
 ----
 
+[[inspector]]
 * Connect to the Inspector:
 +
 [source, console]

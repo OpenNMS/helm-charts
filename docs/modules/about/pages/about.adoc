@@ -8,7 +8,7 @@ It is not yet available for a Cloud environment.
 
 Each deployment through OpenNMS Helm Charts has a single Core server, with options for Grafana, a custom Ingress that shares the RRD files and some configuration files, and/or multiple Sentinels for flow processing.
 
-Note that this is one way to approach the solution.
+IMPORTANT: Note that this is one way to approach the solution.
 We recommend that you study the content of the Helm chart and tune it for your needs.
 
 == Architecture
@@ -45,7 +45,7 @@ The name of the `namespace` is used as follows:
 == Design
 
 The solution is based and tested against the latest Horizon.
-It is not currently available for Meridian.
+It is not currently tested against Meridian.
 
 === Scripts and core configuration
 

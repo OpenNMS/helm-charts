@@ -40,19 +40,21 @@ When using cloud resources, make sure you have https://learn.microsoft.com/en-us
 
 === Kubernetes
 
-* A Kubernetes environment running version 1.20 or later (cloud providers, kind, minikube, Docker Desktop, and so on.)
+* A Kubernetes environment running version 1.20 or later (for example, cloud providers, kind, minikube, or Docker Desktop)
 
-IMPORTANT: Containers are bundled with default plugins.
-You can add additional plugins by building your own container image (see https://github.com/OpenNMS/helm-charts/blob/main/kar-container/README.md[kar-container] for an example).
+IMPORTANT: OpenNMS Containers include only the default plugins.
+You can add additional plugins by xref:kar-container.adoc[building your own container image].
 
 === External dependencies
 
-Kafka, Elasticsearch, and PostgreSQL running externally (and maintained separately from the solution), all with SSL enabled.
+While there are a number of external dependencies that may be utilized, only a PostgreSQL server is required, the other services are optional based on your deployment needs.
+For production, these services should be running independently of the OpenNMS Kubernetes deployment.
+If you want to spin up instances for testing, see `/scripts/start-dependencies.sh`.
 
 * PostgreSQL server as the central database for OpenNMS and Grafana.
-** For Google Cloud, the solution was tested using Google SQL for PostgreSQL with SSL and a private IP.
+** For Google Cloud, this solution was tested using Google SQL for PostgreSQL with SSL and a private IP, and should work similiarly for other cloud-hosted PostgreSQL services.
 
-* Elasticsearch cluster for flow persistence.
+* Elasticsearch cluster for flow persistence and/or alarm history.
 
 * Grafana Loki server for log aggregation.
 ** https://grafana.com/docs/loki/latest/getting-started/logcli/[logcli] helps extract OpenNMS logs from the command line for troubleshooting purposes.
@@ -60,4 +62,4 @@ Kafka, Elasticsearch, and PostgreSQL running externally (and maintained separate
 * https://cert-manager.readthedocs.io/en/latest/[cert-manager] to provide HTTPS/TLS support to the web-based services the ingress controller manages.
 ** A `ClusterIssuer` to use it across multiple independent OpenNMS installations.
 
-* Nginx Ingress Controller, as the solution has not been tested with other Ingress implementations.
+* Nginx Ingress Controller. This solution has not been tested with other Ingress implementations.

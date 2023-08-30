@@ -2,13 +2,13 @@
 :imagesdir: ../assets/images
 :!sectids:
 
-= Manual Configuration Changes
+= Customize OpenNMS settings
 
-Either access the OpenNMS container via a remote shell through `kubectl`, and edit the file using vi (the only editor available within the OpenNMS container).
-
-Send the reload configuration event via `send-event.pl` or the Karaf Shell (not accessible within the container).
-
-In case OpenNMS has to be restarted, delete the Pod (not the StatefulSet), and the Kubernetes controller will recreate it again.
+If you want to make changes to the `$\{OPENNMS_HOME}/etc` config files, you can access the OpenNMS container via a remote shell through `kubectl`, and edit the file using vi (the only editor available within the OpenNMS container).
+See the xref:reference:tools.adoc#inspector[inspector] docs if you want to access and edit config files while the OpenNMS container is offline.
 
 
+If you make changes to config files while OpenNMS is running, you can send a reload configuration event via the usual methods.
+See the link:https://docs.opennms.com/horizon/latest/operation/deep-dive/admin/configuration/daemon-config-files.html[Horizon documentation] for details on how to send a reload command and xref:reference:tools.adoc[useful commands] for tips on connecting to the container shell.
 
+In the case OpenNMS has to be restarted, delete the Pod (not the StatefulSet), and the Kubernetes controller will recreate it again.

@@ -1,0 +1,40 @@
+= Build custom KAR container
+
+If there are extra KAR plugins you wish to install in your instance, you can use an `initContainer` to copy the KAR file to the `$\{OPENNMS_HOME}/deploy` directory at runtime.
+
+== Building and publishing
+
+* Create a `build` folder
+* Download the KAR file(s) into the `build` folder
+* Run Docker build command
+* Push the newly created image to a repository which can be accessed by the Helm Charts.
+
+== Usage
+
+[source, yaml]
+----
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: onms-core
+...
+      initContainers:
+      - name: alec
+        image: opennms/alec:v1.1.1
+        imagePullPolicy: IfNotPresent
+        command: [ cp, /plugins/opennms-alec-plugin.kar, /opennms-deploy ]
+        volumeMounts:
+        - name: deploy
+          mountPath: /opennms-deploy
+...
+      containers:
+      - name: onms
+      ...
+        volumeMounts:
+        - name: deploy
+          mountPath: /opt/opennms/deploy
+...
+      volumes:
+      - name: deploy
+        emptyDir: {}
+----
