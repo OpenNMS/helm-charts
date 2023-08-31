@@ -60,7 +60,7 @@ One advantage of configuring that volume is allowing backups and access to the f
 === Time series databases
 
 Multiple time series strategies are supported and you can switch from one to another as needed.
-Note that when switching strategies existing data is not migrated and you will experience loss of persisted metrics.
+Note that when switching strategies, existing data is not migrated and you will experience loss of persisted metrics.
 
 === Scaling
 
@@ -68,7 +68,7 @@ To alleviate load from OpenNMS, you can optionally start Sentinel instances for 
 This requires having an Elasticsearch cluster available.
 When Sentinels are present, Telemetryd is disabled in OpenNMS.
 
-The OpenNMS Core and Sentinels are backed by a `StatefulSet`, but keep in mind that there can be one and only one Core instance.
+The OpenNMS Core and Sentinels are backed by a `StatefulSet`, but keep in mind that there can be only one Core instance.
 To have multiple Sentinels, make sure you have enough partitions for the flow topics in your Kafka clusters, as all of them would be part of the same consumer group.
 
 === Log files and Grafana Loki
@@ -81,7 +81,7 @@ The current solution employs the sidecar pattern using https://grafana.com/docs/
 === Docker images
 
 You can customize all of the Docker images via Helm Values.
-The solution lets you configure custom Docker registries to access your custom images  when all the images you plan to use will not be in Docker Hub or when your Kubernetes cluster will not have internet access.
+The solution lets you configure custom Docker registries to access your custom images when all the images you plan to use will not be in Docker Hub or when your Kubernetes cluster will not have internet access.
 Keep in mind that your custom images should be based on those currently in use.
 
 === Plugins

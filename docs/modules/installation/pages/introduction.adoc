@@ -42,12 +42,13 @@ When using cloud resources, make sure you have https://learn.microsoft.com/en-us
 
 * A Kubernetes environment running version 1.20 or later (for example, cloud providers, kind, minikube, or Docker Desktop)
 
-IMPORTANT: OpenNMS Containers include only the default plugins.
+IMPORTANT: OpenNMS containers include only the default plugins.
 You can add additional plugins by xref:kar-container.adoc[building your own container image].
 
 === External dependencies
 
-While there are a number of external dependencies that may be utilized, only a PostgreSQL server is required, the other services are optional based on your deployment needs.
+While there are a number of external dependencies that may be used, only a PostgreSQL server is required.
+The other services are optional based on your deployment needs.
 For production, these services should be running independently of the OpenNMS Kubernetes deployment.
 If you want to spin up instances for testing, see `/scripts/start-dependencies.sh`.
 

@@ -1,13 +1,13 @@
-= Build custom KAR container
+= Build Custom KAR Container
 
-If there are extra KAR plugins you wish to install in your instance, you can use an `initContainer` to copy the KAR file to the `$\{OPENNMS_HOME}/deploy` directory at runtime.
+If there are extra KAR plugins you want to install in your instance, you can use an `initContainer` to copy the KAR file to the `$\{OPENNMS_HOME}/deploy` directory at runtime.
 
-== Building and publishing
+== Build and publish
 
 * Create a `build` folder
 * Download the KAR file(s) into the `build` folder
 * Run Docker build command
-* Push the newly created image to a repository which can be accessed by the Helm Charts.
+* Push the newly created image to a repository which can be accessed by the Helm charts
 
 == Usage
 

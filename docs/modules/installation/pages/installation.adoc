@@ -15,7 +15,7 @@ To install and configure OpenNMS Helm Charts, follow these steps:
 The install script requires a `.yaml` file that contains at least the domain name that you are using.
 You may also want to specify the password for the OpenNMS instance.
 +
-On GitHub, see https://github.com/OpenNMS/helm-charts/blob/main/opennms/values.yaml[values.yaml] for example configuration parameters you can specify.
+On GitHub, see https://github.com/OpenNMS/helm-charts/blob/main/opennms/values.yaml[values.yaml] for sample configuration parameters you can specify.
 See https://github.com/OpenNMS/helm-charts/blob/main/examples/helm-cloud.yaml[helm-cloud.yaml] for a sample file for testing purposes.
 
 . Configure your VNC with a UI.
@@ -56,7 +56,7 @@ The minimal command to load the Helm chart and start OpenNMS services assumes th
 helm upgrade --install <namespace> ./horizon
 ----
 
-If you wish to customize your deployment, such as if you want to use one chart to deploy multiple instances into a cloud datacenter, you can call an additional yaml and/or include `--set` parameters to override values in the yaml file.
+If you want to customize your deployment (for example, to use one chart to deploy multiple instances into a cloud datacenter), you can call an additional yaml and/or include `--set` parameters to override values in the yaml file.
 
 [source,bash]
 ----
@@ -92,9 +92,9 @@ See the following topics might be useful after installation:
 * xref:troubleshooting:debugging.adoc[]
 * xref:reference:reference.adoc[]
 
-== Updating OpenNMS service settings
+== Update OpenNMS service settings
 
-If you make changes to the Helm chart definition, such as modifying `values.yaml`, updating one of the init scripts, or changing a container image version, you can redeploy the container by doing an upgrade of the helm chart.
+If you make changes to the Helm chart definition, such as modifying `values.yaml`, updating one of the init scripts, or changing a container image version, you can redeploy the container by updating the Helm release.
 
 [source, bash]
 ----

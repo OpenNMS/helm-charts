@@ -6,7 +6,7 @@ Ingress is not required, although it is a good thing to have.
 //external dependencies says it is.
 You could modify the Helm Chart to avoid Ingress altogether (or make it optional) and expose the WebUIs via `LoadBalancer` or `NodePort` services, but that won't be covered here.
 
-For example, when deploying the Helm Chart named `acme` (remember about the rules for the `namespace`) with a value of `k8s.agalue.net` for the `domain`, it would create an Ingress instance exposing the following resources via custom FQDNs:
+For example, when deploying the Helm chart named `acme` (remember about the rules for the `namespace`) with a value of `k8s.agalue.net` for the `domain`, it would create an Ingress instance exposing the following resources via custom FQDNs:
 
 * OpenNMS Core: `onms-core.acme.k8s.agalue.net`
 * Grafana (if enabled): `grafana.acme.k8s.agalue.net`
