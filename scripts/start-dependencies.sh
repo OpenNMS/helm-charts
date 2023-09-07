@@ -81,9 +81,13 @@ fi
 
 # Install PostgreSQL
 if [ "$INSTALL_POSTGRESQL" == "true" ]; then
-  kubectl apply -f https://raw.githubusercontent.com/zalando/postgres-operator/master/manifests/postgresql.crd.yaml
-  kubectl wait --for condition=established crd postgresqls.acid.zalan.do --timeout=10s
-  kubectl apply -k github.com/zalando/postgres-operator/manifests
+  helm repo add postgres-operator-charts https://opensource.zalando.com/postgres-operator/charts/postgres-operator
+  # The default image repo at registry.opensource.zalan.do doesn't support multi-arch images yet,
+  # so use the ghcr repo which has multi-arch images for the operator.
+  helm upgrade --install \
+    --set image.registry=ghcr.io \
+    --set image.repository=zalando/postgres-operator \
+    postgres-operator postgres-operator-charts/postgres-operator
   kubectl create secret generic $PG_USER.onms-db.credentials.postgresql.acid.zalan.do --from-literal="username=$PG_USER" --from-literal="password=$PG_PASSWORD" -n $NAMESPACE --dry-run=client -o yaml | kubectl apply -f -
   kubectl create secret generic $PG_ONMS_USER.onms-db.credentials.postgresql.acid.zalan.do --from-literal="username=$PG_ONMS_USER" --from-literal="password=$PG_ONMS_PASSWORD" -n $NAMESPACE --dry-run=client -o yaml | kubectl apply -f -
   kubectl apply -f dependencies/postgresql.yaml -n $NAMESPACE
