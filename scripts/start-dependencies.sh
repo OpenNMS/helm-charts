@@ -38,8 +38,10 @@ TRUSTSTORE_PASSWORD="0p3nNM5" # Must match dependencies.kafka.truststore.passwor
 CLUSTER_NAME="onms" # Must match the name of the cluster inside dependencies/kafka.yaml and dependencies/elasticsearch.yaml
 
 # Patch NGinx to allow SSL Passthrough for Strimzi
-kubectl patch deployment ingress-nginx-controller -n ingress-nginx --type json -p \
-  '[{"op":"add","path":"/spec/template/spec/containers/0/args/-","value":"--enable-ssl-passthrough"}]'
+if [ "$INSTALL_KAFKA" == "true" ]; then
+  kubectl patch deployment ingress-nginx-controller -n ingress-nginx --type json -p \
+    '[{"op":"add","path":"/spec/template/spec/containers/0/args/-","value":"--enable-ssl-passthrough"}]'
+fi
 
 # Update Helm Repositories
 helm repo add jetstack https://charts.jetstack.io
