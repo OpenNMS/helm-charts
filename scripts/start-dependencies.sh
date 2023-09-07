@@ -90,8 +90,8 @@ if [ "$INSTALL_POSTGRESQL" == "true" ]; then
     --set image.registry=ghcr.io \
     --set image.repository=zalando/postgres-operator \
     postgres-operator postgres-operator-charts/postgres-operator
-  kubectl create secret generic $PG_USER.onms-db.credentials.postgresql.acid.zalan.do --from-literal="username=$PG_USER" --from-literal="password=$PG_PASSWORD" -n $NAMESPACE --dry-run=client -o yaml | kubectl apply -f -
-  kubectl create secret generic $PG_ONMS_USER.onms-db.credentials.postgresql.acid.zalan.do --from-literal="username=$PG_ONMS_USER" --from-literal="password=$PG_ONMS_PASSWORD" -n $NAMESPACE --dry-run=client -o yaml | kubectl apply -f -
+  kubectl create secret generic "$PG_USER.onms-db.credentials.postgresql.acid.zalan.do" --from-literal="username=$PG_USER" --from-literal="password=$PG_PASSWORD" -n $NAMESPACE --dry-run=client -o yaml | kubectl apply -f -
+  kubectl create secret generic "$PG_ONMS_USER.onms-db.credentials.postgresql.acid.zalan.do" --from-literal="username=$PG_ONMS_USER" --from-literal="password=$PG_ONMS_PASSWORD" -n $NAMESPACE --dry-run=client -o yaml | kubectl apply -f -
   kubectl apply -f dependencies/postgresql.yaml -n $NAMESPACE
 fi
 
