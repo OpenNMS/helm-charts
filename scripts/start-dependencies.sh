@@ -125,7 +125,7 @@ if [ "$INSTALL_KAFKA" == "true" ]; then
   kubectl wait kafka/$CLUSTER_NAME --for=condition=Ready --timeout=300s -n $NAMESPACE
 fi
 if [ "$INSTALL_ELASTIC" == "true" ]; then
-  kubectl wait pod -l elasticsearch.k8s.elastic.co/cluster-name=$CLUSTER_NAME --for=condition=Ready --timeout=300s -n $NAMESPACE
+  kubectl wait elasticsearch/$CLUSTER_NAME --for='jsonpath={.status.phase}=Ready' --timeout=300s -n $NAMESPACE
 fi
 
 # Prepare target directory for the Truststores
