@@ -81,8 +81,8 @@ Define custom content for JVM_OPTS to conditionally handle Truststores
 {{/*
 Define whether RRD is enabled
 */}}
-{{- define "core.enable_tss_rrd" -}}
-  {{ or (not .Values.core.configuration.enable_cortex) .Values.core.configuration.enable_tss_dual_write -}}
+{{- define "core.enableTssDualWrite" -}}
+  {{ or (not .Values.core.configuration.enableCortex) .Values.core.configuration.enableTssDualWrite -}}
 {{- end }}
 
 {{/*
@@ -90,7 +90,7 @@ Define common content for Grafana Promtail
 */}}
 {{- define "core.promtailBaseConfig" -}}
 {{- $scheme := "http" -}}
-{{- if ((.Values.dependencies).loki).ca_cert -}}
+{{- if ((.Values.dependencies).loki).caCert -}}
   {{- $scheme := "https" -}}
 {{- end -}}
 server:
@@ -104,7 +104,7 @@ clients:
     username: {{ .Values.dependencies.loki.username }}
     password: {{ .Values.dependencies.loki.password }}
   {{- end }}
-  {{- if ((.Values.dependencies).loki).ca_cert }}
+  {{- if ((.Values.dependencies).loki).caCert }}
   tls_config:
     ca_file: /etc/jks/loki-ca.cert
   {{- end }}

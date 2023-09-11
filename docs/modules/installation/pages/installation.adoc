@@ -55,7 +55,7 @@ helm upgrade --install -f helm-cloud.yaml \
   --set storageClass=onms-share \
   --set ingress.certManager.clusterIssuer=opennms-issuer \
   --set-file dependencies.truststore.content=jks/truststore.jks \
-  --set-file dependencies.postgresql.ca_cert=jks/postgresql-ca.crt \
+  --set-file dependencies.postgresql.caCert=jks/postgresql-ca.crt \
   --set dependencies.postgresql.hostname=onms-db.shared.svc \
   --set dependencies.kafka.hostname=onms-kafka-bootstrap.shared.svc \
   --set dependencies.elasticsearch.hostname=onms-es-http.shared.svc \
