@@ -121,7 +121,7 @@ spec:
         - name: etc
           mountPath: /opt/opennms/etc
         - name: deploy
-          mountPath: /opt/opennms/deploy
+          mountPath: /opennms-deploy
         - name: logs
           mountPath: /opt/opennms/logs
         - name: overlay
