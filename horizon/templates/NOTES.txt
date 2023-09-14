@@ -9,6 +9,12 @@ Your release is named "{{ .Release.Name }}", used for:
 - Prefix for PostgreSQL database names.
 - Prefix for Kafka consumer groups.
 
+{{- if include "onOpenShift" . }}
+
+<b>OpenNMS</b> is running in OpenShift
+
+{{- else }}
+
 Resources URLs:
 
 OpenNMS Core: https://onms-core.{{ include "core.domain" . }}/opennms/index.jsp
@@ -17,11 +23,13 @@ OpenNMS Core: https://onms-core.{{ include "core.domain" . }}/opennms/index.jsp
 Grafana: https://grafana.{{ include "core.domain" . }}/
 {{- end }}
 
+
 To learn more about the release, try:
 
 $ helm status {{ .Release.Name }}
 $ helm get all {{ .Release.Name }}
 $ kubectl get all -n {{ .Release.Name }}
+{{- end }}
 
 {{- if not .Values.core.configuration.alwaysRollDeployment }}
 

@@ -30,8 +30,19 @@ spec:
       {{- end }}
         kubectl.kubernetes.io/default-container: "onms"
     spec:
+      {{- if include "onOpenShift" . }}
+      serviceAccountName: {{ (.Values.dependencies.securitycontext).serviceaccount.name | quote }} 
+      {{- end }}
       securityContext:
         fsGroup: 10001
+        {{- if include "onOpenShift" . }}
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+        capabilities:
+          add:
+            - NET_RAW
+        {{- end }}
       terminationGracePeriodSeconds: {{ .Values.core.terminationGracePeriodSeconds | default 120 }}
       {{- if .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -78,6 +89,16 @@ spec:
         env:
         - name: OPENNMS_DATABASE_CONNECTION_MAXPOOL
           value: {{ .Values.core.configuration.database.poolSize | default "50" | quote }}
+        securityContext:
+         fsGroup: 10001
+        {{- if include "onOpenShift" . }}
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+        capabilities:
+          add:
+            - NET_RAW
+        {{- end }}
         volumeMounts:
         - name: etc
           mountPath: /opennms-etc # Required by the script - CONFIG_DIR
@@ -97,6 +118,20 @@ spec:
       - name: onms
         image: {{ $image }}
         imagePullPolicy: {{ .Values.core.image.pullPolicy }}
+       {{- if include "onOpenShift" . }}
+        securityContext:
+         fsGroup: 10001
+         serviceAccountName: {{ (.Values.dependencies.securitycontext).serviceaccount.name | quote }} 
+         runAsNonRoot: true
+         seccompProfile:
+           type: RuntimeDefault
+         capabilities:
+           add:
+             - NET_RAW
+         {{- end }}
+        sysctls:
+          - name: net.ipv4.ping_group_range
+            value: 0 429496729
         args:
         - -s
         ports:

@@ -4,7 +4,7 @@
 
 timezone: America/New_York
 domain: example.com  # The common domain for the Ingress resource.
-createNamespace: true  # Whether to create the namespace for this deployment
+createNamespace: false  # Whether to create the namespace for this deployment
 
 # Optionally specify an array of imagePullSecrets.
 # Secrets must be manually created in the namespace.
@@ -19,6 +19,17 @@ imagePullSecrets: []
 #   dockerEmail: admin@agalue.net
 
 dependencies:
+  # Openshift related settings for creating the required security context for OpenNMS Core
+  securitycontext:
+   securitycontextconstraints: 
+    enabled: true
+    name: opennms-scc
+   serviceaccount: 
+     enabled: true
+     name: opennms-sa
+
+  # Openshift related settings for creating a route to OpenNMS Core pod
+  route: true
 
   # A common JKS to white-list all CA certificates for all the dependencies OpenNMS or Sentinel uses.
   truststore:
@@ -170,14 +181,14 @@ grafana:
   image:
     repository: opennms/helm
     pullPolicy: IfNotPresent
-    tag: '9.0.4'
+    tag: '9.0.9'
   resources:
     limits:
       cpu: 200m
-      memory: 256Mi
+      memory: 1Gi
     requests:
       cpu: 100m
-      memory: 128Mi
+      memory: 1Gi
   configuration:
     ui:
       adminPassword: 0p3nNM5  # Default password for the admin account

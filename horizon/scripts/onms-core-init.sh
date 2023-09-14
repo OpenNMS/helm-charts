@@ -77,21 +77,11 @@ OPENNMS_DATABASE_CONNECTION_MAXPOOL=${OPENNMS_DATABASE_CONNECTION_MAXPOOL-50}
 KAFKA_SASL_MECHANISM=${KAFKA_SASL_MECHANISM-PLAIN}
 KAFKA_SECURITY_PROTOCOL=${KAFKA_SECURITY_PROTOCOL-SASL_PLAINTEXT}
 
-# See if we can get the OpenNMS package name and version from the package manager
-if command -v rpm   >/dev/null 2>&1; then
-  PKG=$(rpm -qa | egrep '(meridian|opennms)-core')
-  VERSION=$(rpm -q --queryformat '%{VERSION}' $PKG)
-elif command -v dpkg-query >/dev/null 2>&1; then
-  if PKG=$(dpkg-query -f '${Package}\n' -W | grep -Fx -e opennms-common -e meridian-common); then
-    VERSION=$(dpkg-query -f '${Version}\n' -W "${PKG}")
-  else
-    PKG="unknown"
-  fi
-else
-  PKG="unknown"
-fi
+# Retrieve OpenNMS package name and version
+PKG=$(unzip -q -c "/opt/opennms/lib/opennms_install.jar" installer.properties | grep "install.package.name"  | cut -d '=' -f 2)
+VERSION=$(tail -1 "/opt/opennms/jetty-webapps/opennms/WEB-INF/version.properties" | cut -d '=' -f 2)
 
-if [[ "${PKG}" == "unknown" ]]; then
+if [[ "${PKG}" == "unknown" ]] || [[ "${PKG}" == "" ]]; then
   if [[ ! -e jetty-webapps/opennms/WEB-INF/version.properties ]]; then
     echo >&2 "Couldn't determine version number from package manager (which is normal for newer containers) and jetty-webapps/opennms/WEB-INF/version.properties does not exist. Aborting."; exit 1;
   fi
@@ -514,7 +504,17 @@ if [[ ${ENABLE_GRAFANA} == "true" ]]; then
   fi
 else
   echo "Grafana is not enabled, not running onms-grafana-init.sh"
+  if [[ -e "${CONFIG_DIR}/opennms.properties.d/grafana.properties" ]];then
+   echo "Found ${CONFIG_DIR}/opennms.properties.d/grafana.properties, we are going to remove it."
+   rm "${CONFIG_DIR}/opennms.properties.d/grafana.properties"  >/dev/null 2>&1;
+  fi
 fi
 
 echo "Updating admin password"
-perl /scripts/onms-set-admin-password.pl ${CONFIG_DIR}/users.xml admin "${OPENNMS_ADMIN_PASS}"
+if [[ -e "/opt/opennms/bin/password.jar" ]];then 
+ java -jar /opt/opennms/bin/password.jar "${CONFIG_DIR}/users.xml" "admin" "${OPENNMS_ADMIN_PASS}"
+elif command -v perl   >/dev/null 2>&1; then
+ perl /scripts/onms-set-admin-password.pl ${CONFIG_DIR}/users.xml admin "${OPENNMS_ADMIN_PASS}"
+else
+ echo "We are unable to update Admin password. You can use the default password to login."
+fi

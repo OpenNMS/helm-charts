@@ -1,3 +1,5 @@
+createNamespace: false  # Whether to create the namespace for this deployment
+
 minion:
  location: pod
  name: myminion
@@ -21,3 +23,12 @@ core:
 truststore:
  content: ''  # A base64 encoded content of the JKS Truststore file.
  password: ''
+
+securitycontext:
+  securitycontextconstraints: 
+    enabled: true
+    name: minion-scc
+  serviceaccount: 
+     enabled: true
+     name: minion-sa
+  route: true

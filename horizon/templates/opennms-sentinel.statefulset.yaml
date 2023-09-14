@@ -28,6 +28,16 @@ spec:
         app: onms-sentinel
         {{- include "core.selectorLabels" . | nindent 8 }}
     spec:
+     {{- if include "onOpenShift" . }}
+      securityContext:
+          fsGroup: 10001
+          runAsNonRoot: true
+          seccompProfile:
+            type: RuntimeDefault
+          capabilities:
+            add:
+             - NET_RAW
+      {{- end }}
       terminationGracePeriodSeconds: {{ .Values.sentinel.terminationGracePeriodSeconds | default 60 }}
       {{- if .Values.imagePullSecrets }}
       imagePullSecrets:
