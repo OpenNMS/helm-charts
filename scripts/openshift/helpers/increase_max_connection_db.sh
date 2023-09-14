@@ -39,6 +39,7 @@ oc scale statefulset postgres --replicas=0
 checkRC
 oc scale statefulset postgres --replicas=1
 checkRC
+sleep 45
 
 echo "Getting max_connections"
 oc exec postgres-0 -- psql -c "SHOW max_connections" -U postgres

@@ -28,21 +28,22 @@ spec:
       {{- if .Values.core.configuration.alwaysRollDeployment }}
         rollme: {{ randAlphaNum 5 | quote }}
       {{- end }}
+        openshift.io/scc: {{ (.Values.dependencies.securitycontext).securitycontextconstraints.name | quote }} 
         kubectl.kubernetes.io/default-container: "onms"
     spec:
-      {{- if include "onOpenShift" . }}
+      {{- if eq (include "onOpenShift" .) "true" }}
       serviceAccountName: {{ (.Values.dependencies.securitycontext).serviceaccount.name | quote }} 
       {{- end }}
       securityContext:
-        fsGroup: 10001
-        {{- if include "onOpenShift" . }}
-        runAsNonRoot: true
-        seccompProfile:
-          type: RuntimeDefault
-        capabilities:
-          add:
-            - NET_RAW
-        {{- end }}
+          fsGroup: 10001
+         {{- if eq (include "onOpenShift" .) "true" }}
+          runAsNonRoot: true
+          seccompProfile:
+            type: RuntimeDefault
+          capabilities:
+            add:
+             - NET_RAW
+         {{- end }}
       terminationGracePeriodSeconds: {{ .Values.core.terminationGracePeriodSeconds | default 120 }}
       {{- if .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -56,9 +57,9 @@ spec:
         image: {{ .Values.core.configuration.alecImage.repository }}:{{ .Values.core.configuration.alecImage.tag }}
         imagePullPolicy: {{ .Values.core.configuration.alecImage.pullPolicy }}
         command: [ cp, /plugins/opennms-alec-plugin.kar, /opennms-deploy ]
-        securityContext: # To guarantee ownership of the KAR file so that OpenNMS won't complain.
-          runAsUser: 10001
-          runAsGroup: 10001
+        #securityContext: # To guarantee ownership of the KAR file so that OpenNMS won't complain.
+        #  runAsUser: 10001
+        #  runAsGroup: 10001
         volumeMounts:
         - name: deploy
           mountPath: /opennms-deploy # Required by the init script - DEPLOY_DIR
@@ -68,9 +69,9 @@ spec:
         image: {{ .Values.core.configuration.cortexTssImage.repository }}:{{ .Values.core.configuration.cortexTssImage.tag }}
         imagePullPolicy: {{ .Values.core.configuration.cortexTssImage.pullPolicy }}
         command: [ cp, /plugins/opennms-cortex-tss-plugin.kar, /opennms-deploy ]
-        securityContext: # To guarantee ownership of the KAR file so that OpenNMS won't complain.
-          runAsUser: 10001
-          runAsGroup: 10001
+        #securityContext: # To guarantee ownership of the KAR file so that OpenNMS won't complain.
+        #  runAsUser: 10001
+        #  runAsGroup: 10001
         volumeMounts:
         - name: deploy
           mountPath: /opennms-deploy # Required by the init script - DEPLOY_DIR
@@ -80,6 +81,16 @@ spec:
       - name: init
         image: {{ $image }}
         imagePullPolicy: {{ .Values.core.image.pullPolicy }}
+        {{- if eq (include "onOpenShift" .) "true" }}
+        securityContext:
+          fsGroup: 10001
+          runAsNonRoot: true
+          seccompProfile:
+            type: RuntimeDefault
+          capabilities:
+            add:
+             - NET_RAW
+        {{- end }}
         command: [ bash, /scripts/onms-core-init.sh ]
         envFrom:
         - configMapRef:
@@ -89,16 +100,6 @@ spec:
         env:
         - name: OPENNMS_DATABASE_CONNECTION_MAXPOOL
           value: {{ .Values.core.configuration.database.poolSize | default "50" | quote }}
-        securityContext:
-         fsGroup: 10001
-        {{- if include "onOpenShift" . }}
-        runAsNonRoot: true
-        seccompProfile:
-          type: RuntimeDefault
-        capabilities:
-          add:
-            - NET_RAW
-        {{- end }}
         volumeMounts:
         - name: etc
           mountPath: /opennms-etc # Required by the script - CONFIG_DIR
@@ -117,21 +118,20 @@ spec:
       containers:
       - name: onms
         image: {{ $image }}
-        imagePullPolicy: {{ .Values.core.image.pullPolicy }}
-       {{- if include "onOpenShift" . }}
+        {{- if eq (include "onOpenShift" .) "true" }}
         securityContext:
-         fsGroup: 10001
-         serviceAccountName: {{ (.Values.dependencies.securitycontext).serviceaccount.name | quote }} 
-         runAsNonRoot: true
-         seccompProfile:
-           type: RuntimeDefault
-         capabilities:
-           add:
+          fsGroup: 10001
+          runAsNonRoot: true
+          seccompProfile:
+            type: RuntimeDefault
+          capabilities:
+            add:
              - NET_RAW
          {{- end }}
         sysctls:
           - name: net.ipv4.ping_group_range
             value: 0 429496729
+        imagePullPolicy: {{ .Values.core.image.pullPolicy }}
         args:
         - -s
         ports:
