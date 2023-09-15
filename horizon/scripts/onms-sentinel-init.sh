@@ -19,12 +19,9 @@
 # KAFKA_SASL_PASSWORD
 # KAFKA_SASL_MECHANISM
 # KAFKA_SECURITY_PROTOCOL
-# ELASTICSEARCH_SERVER
-# ELASTICSEARCH_USER
-# ELASTICSEARCH_PASSWORD
-# ELASTICSEARCH_INDEX_STRATEGY_FLOWS
-# ELASTICSEARCH_NUM_SHARDS
-# ELASTICSEARCH_REPLICATION_FACTOR
+# ELASTICSEARCH_HOSTS
+# ELASTICSEARCH_FLOWS
+# ELASTICSEARCH_FLOWS_CONFIG
 # NUM_LISTENER_THREADS
 
 set -euo pipefail
@@ -44,17 +41,22 @@ function wait_for {
 echo "OpenNMS Sentinel Configuration Script..."
 
 # Defaults
+OVERLAY_DIR=/opt/sentinel-etc-overlay
 OPENNMS_DATABASE_CONNECTION_MAXPOOL=${OPENNMS_DATABASE_CONNECTION_MAXPOOL-50}
 NUM_LISTENER_THREADS=${NUM_LISTENER_THREADS-6}
 KAFKA_SASL_MECHANISM=${KAFKA_SASL_MECHANISM-PLAIN}
 KAFKA_SECURITY_PROTOCOL=${KAFKA_SECURITY_PROTOCOL-SASL_PLAINTEXT}
-ELASTICSEARCH_INDEX_STRATEGY_FLOWS=${ELASTICSEARCH_INDEX_STRATEGY_FLOWS-daily}
-ELASTICSEARCH_REPLICATION_FACTOR=${ELASTICSEARCH_REPLICATION_FACTOR-2}
-ELASTICSEARCH_NUM_SHARDS=${ELASTICSEARCH_NUM_SHARDS-6}
+
+# Configure Elasticsearch
+if [[ -e /onms-sentinel-es-init.sh ]]; then
+  source /onms-sentinel-es-init.sh
+else
+  echo "Warning: cannot find onms-sentinel-es-init.sh"
+fi
 
 # Wait for Dependencies
-if [[ -v ELASTICSEARCH_SERVER ]]; then
-  wait_for ${ELASTICSEARCH_SERVER}
+if [[ -v ELASTICSEARCH_HOSTNAME ]]; then
+  wait_for ${ELASTICSEARCH_HOSTNAME}
 fi
 if [[ -v KAFKA_BOOTSTRAP_SERVER ]]; then
   wait_for ${KAFKA_BOOTSTRAP_SERVER}
@@ -62,7 +64,7 @@ fi
 wait_for ${POSTGRES_HOST}:${POSTGRES_PORT}
 wait_for ${OPENNMS_SERVER}:8980
 
-OVERLAY_DIR=/opt/sentinel-etc-overlay
+echo "Configuring System Properties..."
 
 # Configure the instance ID and Interface-to-Node cache
 # Required when having multiple OpenNMS backends sharing a Kafka cluster or an Elasticsearch cluster.
@@ -94,8 +96,8 @@ sentinel-jsonstore-postgres
 sentinel-blobstore-noop
 EOF
 
-if [[ -v ELASTICSEARCH_SERVER ]]; then
-  echo "Configuring Elasticsearch and Flows..."
+if [[ -v ELASTICSEARCH_HOSTNAME ]]; then
+  echo "Configuring Flows..."
 
   cat <<EOF > ${FEATURES_DIR}/flows.boot
 sentinel-flows
@@ -120,18 +122,6 @@ name=Netflow-9
 adapters.0.name=Netflow-9-Adapter
 adapters.0.class-name=org.opennms.netmgt.telemetry.protocols.netflow.adapter.netflow9.Netflow9Adapter
 queue.threads=${NUM_LISTENER_THREADS}
-EOF
-
-  PREFIX=$(echo ${OPENNMS_INSTANCE_ID} | tr '[:upper:]' '[:lower:]')-
-  cat <<EOF > ${OVERLAY_DIR}/org.opennms.features.flows.persistence.elastic.cfg
-elasticUrl=https://${ELASTICSEARCH_SERVER}
-globalElasticUser=${ELASTICSEARCH_USER}
-globalElasticPassword=${ELASTICSEARCH_PASSWORD}
-elasticIndexStrategy=${ELASTICSEARCH_INDEX_STRATEGY_FLOWS}
-indexPrefix=${PREFIX}
-# The following settings should be consistent with your ES cluster
-settings.index.number_of_shards=${ELASTICSEARCH_NUM_SHARDS}
-settings.index.number_of_replicas=${ELASTICSEARCH_REPLICATION_FACTOR}
 EOF
 fi
 

@@ -13,10 +13,11 @@
 # CORTEX_READ_URL
 # CORTEX_WRITE_TIMEOUT
 # CORTEX_WRITE_URL
-# ELASTICSEARCH_INDEX_STRATEGY_FLOWS
-# ELASTICSEARCH_PASSWORD
-# ELASTICSEARCH_SERVER
-# ELASTICSEARCH_USER
+# ELASTICSEARCH_HOSTS
+# ELASTICSEARCH_FLOWS
+# ELASTICSEARCH_FLOWS_CONFIG
+# ELASTICSEARCH_ALARMS
+# ELASTICSEARCH_ALARMS_CONFIG
 # ENABLE_ACLS
 # ENABLE_ALEC
 # ENABLE_CORTEX
@@ -363,17 +364,13 @@ org.opennms.security.disableLoginSuccessEvent=true
 org.opennms.web.defaultGraphPeriod=last_2_hour
 EOF
 
-# Configure Elasticsearch to allow Helm/Grafana to access Flow data
-if [[ -v ELASTICSEARCH_SERVER ]]; then
-  echo "Configuring Elasticsearch for Flows..."
-  PREFIX=$(echo ${OPENNMS_INSTANCE_ID} | tr '[:upper:]' '[:lower:]')-
-  cat <<EOF > ${CONFIG_DIR_OVERLAY}/org.opennms.features.flows.persistence.elastic.cfg
-elasticUrl=https://${ELASTICSEARCH_SERVER}
-globalElasticUser=${ELASTICSEARCH_USER}
-globalElasticPassword=${ELASTICSEARCH_PASSWORD}
-elasticIndexStrategy=${ELASTICSEARCH_INDEX_STRATEGY_FLOWS}
-indexPrefix=${PREFIX}
-EOF
+# Configure Elasticsearch
+if [[ ${ELASTICSEARCH_FLOWS} == "true" ]] || [[${ELASTICSEARCH_ALARMS} == "true"]]; then
+  if [[ -e /scripts/onms-elastic-init.sh ]]; then
+    source /scripts/onms-elastic-init.sh
+  else
+    echo "Warning: cannot find onms-elastic-init.sh"
+  fi
 fi
 
 
@@ -497,8 +494,12 @@ sed -r -i '/enabled="false"/{$!{N;s/ enabled="false"[>]\n(.*OpenNMS:Name=Syslogd
 
 # Disable Telemetryd
 if [[ ${ENABLE_TELEMETRYD} == "false" ]]; then
+  echo "Disabling Telemetryd on core..."
   sed -i -r '/opennms-flows/d' ${CONFIG_DIR}/org.apache.karaf.features.cfg
   sed -i 'N;s/service.*\n\(.*Telemetryd\)/service enabled="false">\n\1/;P;D' ${CONFIG_DIR}/service-configuration.xml
+else
+  echo "Enabling Telemetryd on core..."
+  sed -i 'N;s/service.*\n\(.*Telemetryd\)/service enabled="true">\n\1/;P;D' ${CONFIG_DIR}/service-configuration.xml
 fi
 
 # Cleanup temporary requisition files
