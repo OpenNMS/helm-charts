@@ -19,7 +19,7 @@ imagePullSecrets: []
 #   dockerEmail: admin@agalue.net
 
 dependencies:
-  # Openshift related settings for creating the required security context for OpenNMS Core
+  # Red Hat OpenShift related settings for creating the required security context for OpenNMS Core
   securitycontext:
    securitycontextconstraints: 
     enabled: true
@@ -28,7 +28,7 @@ dependencies:
      enabled: true
      name: opennms-sa
 
-  # Openshift related settings for creating a route to OpenNMS Core pod
+  # Red Hat OpenShift related settings for creating a route to OpenNMS Core pod
   route: true
 
   # A common JKS to white-list all CA certificates for all the dependencies OpenNMS or Sentinel uses.

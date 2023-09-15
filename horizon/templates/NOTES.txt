@@ -11,7 +11,7 @@ Your release is named "{{ .Release.Name }}", used for:
 
 {{- if include "onOpenShift" . }}
 
-<b>OpenNMS</b> is running in OpenShift
+<b>OpenNMS</b> is running in Red Hat OpenShift environment.
 
 {{- else }}
 

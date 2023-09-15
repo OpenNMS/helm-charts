@@ -1,6 +1,6 @@
 apiVersion: v2
 name: horizon
-description: A Helm chart for running OpenNMS Horizon in Kubernetes and OpenShift
+description: A Helm chart for running OpenNMS Horizon in Kubernetes and Red Hat OpenShift
 home: https://github.com/OpenNMS/helm-charts
 icon: https://www.opennms.com/wp-content/uploads/2021/04/OpenNMS_Favicon_36px.png
 

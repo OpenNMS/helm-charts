@@ -138,7 +138,7 @@ security.openshift.io/v1
 {{- end }}
 
 {{/*
-Are we running in an OpenShift cluster.
+Are we running in an Red Hat OpenShift cluster?
 */}}
 {{- define "onOpenShift" -}}
 {{- $sccApiVersion := include "scc.apiVersion" . -}}
