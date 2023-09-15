@@ -28,7 +28,9 @@ spec:
       {{- if .Values.core.configuration.alwaysRollDeployment }}
         rollme: {{ randAlphaNum 5 | quote }}
       {{- end }}
+      {{- if eq (include "onOpenShift" .) "true" }}
         openshift.io/scc: {{ (.Values.dependencies.securitycontext).securitycontextconstraints.name | quote }} 
+      {{- end }}
         kubectl.kubernetes.io/default-container: "onms"
     spec:
       {{- if eq (include "onOpenShift" .) "true" }}

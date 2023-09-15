@@ -9,7 +9,7 @@ Your release is named "{{ .Release.Name }}", used for:
 - Prefix for PostgreSQL database names.
 - Prefix for Kafka consumer groups.
 
-{{- if include "onOpenShift" . }}
+{{- if eq (include "onOpenShift" .) "true" }}
 
 <b>OpenNMS</b> is running in Red Hat OpenShift environment.
 

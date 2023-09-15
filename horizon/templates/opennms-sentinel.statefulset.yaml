@@ -27,8 +27,12 @@ spec:
       labels:
         app: onms-sentinel
         {{- include "core.selectorLabels" . | nindent 8 }}
+      {{- if eq (include "onOpenShift" .) "true" }}
+        openshift.io/scc: {{ (.Values.dependencies.securitycontext).securitycontextconstraints.name | quote }} 
+      {{- end }}
     spec:
-     {{- if include "onOpenShift" . }}
+      {{- if eq (include "onOpenShift" .) "true" }}
+      serviceAccountName: {{ (.Values.dependencies.securitycontext).serviceaccount.name | quote }} 
       securityContext:
           fsGroup: 10001
           runAsNonRoot: true

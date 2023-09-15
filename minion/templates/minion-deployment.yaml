@@ -18,7 +18,7 @@ spec:
       labels:
         app: minion
     spec:
-      {{- if include "onOpenShift" . }}
+      {{- if eq (include "onOpenShift" .) "true" }}
       serviceAccountName: {{ (.Values.securitycontext).serviceaccount.name | quote }} 
       securityContext:
           runAsUser: 10001
