@@ -118,7 +118,7 @@
                 "password": {
                     "title": "Password",
                     "type": "string",
-                    "default": "0p3nNM5",
+                    "default": "",
                     "description": "Passsword used for Java Truststore file"
                 }
             }

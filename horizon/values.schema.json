@@ -134,7 +134,7 @@
                                 },
                                 "password": {
                                     "type": "string",
-                                    "default": "0p3nNM5"
+                                    "default": ""
                                 },
                                 "poolSize": {
                                     "type": "integer",
@@ -171,11 +171,11 @@
                                 },
                                 "restPassword": {
                                     "type": "string",
-                                    "default": "admin"
+                                    "default": ""
                                 },
                                 "adminPassword": {
                                     "type": "string",
-                                    "default": "admin"
+                                    "default": ""
                                 }
                             }
                         },
@@ -296,7 +296,7 @@
                         },
                         "password": {
                             "type": "string",
-                            "default": "0p3nNM5"
+                            "default": ""
                         }
                     }
                 },
@@ -318,7 +318,7 @@
                         },
                         "password": {
                             "type": "string",
-                            "default": "postgres"
+                            "default": ""
                         },
                         "sslmode": {
                             "enum": [
@@ -364,7 +364,7 @@
                         },
                         "password": {
                             "type": "string",
-                            "default": "0p3nNM5"
+                            "default": ""
                         },
                         "configuration": {
                             "type": "object",
@@ -400,7 +400,7 @@
                         },
                         "password": {
                             "type": "string",
-                            "default": "31@st1c"
+                            "default": ""
                         },
                         "configuration": {
                             "type": "object",
