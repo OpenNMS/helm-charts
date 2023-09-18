@@ -31,5 +31,5 @@ status:
         - type: Admitted
           status: 'True'
       wildcardPolicy: None
-      routerCanonicalHostname: router-default.apps-crc.testing
+      #routerCanonicalHostname: router-default.apps-crc.testing
 {{- end }}
