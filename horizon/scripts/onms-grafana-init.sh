@@ -8,6 +8,7 @@
 # GRAFANA_SERVER
 # GF_SERVER_DOMAIN
 # GF_SECURITY_ADMIN_PASSWORD
+# GF_SERVER_ROOT_URL
 
 set -euo pipefail
 trap 's=$?; echo >&2 "$0: Error on line "$LINENO": $BASH_COMMAND"; exit $s' ERR
@@ -71,7 +72,7 @@ org.opennms.grafanaBox.apiKey=${GRAFANA_KEY}
 org.opennms.grafanaBox.link.protocol=https
 org.opennms.grafanaBox.link.hostname=${GF_SERVER_DOMAIN}
 org.opennms.grafanaBox.link.port=443
-org.opennms.grafanaBox.link.basePath=/
+org.opennms.grafanaBox.link.basePath=${GF_SERVER_ROOT_URL}
 
 EOF
 fi
