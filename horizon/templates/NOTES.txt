@@ -11,29 +11,26 @@ Your release is named "{{ .Release.Name }}", used for:
 
 {{- if eq (include "onOpenShift" .) "true" }}
 
-<br/>
-<b>OpenNMS</b> is running in Red Hat OpenShift environment.<br/>
+OpenNMS is running in Red Hat OpenShift environment.
 
-<h2>Resources URLs:</h2><br/>
-<table border="1px">
- <tr>
-  <td><b>OpenNMS Core</b></td><td><a href="https://onms-core.{{ include "core.domain" . }}/opennms/index.jsp">https://onms-core.{{ include "core.domain" . }}/opennms/index.jsp</a></td>
- </tr>
+Resources URLs:
+
+* OpenNMS Core: https://onms-core.{{ include "core.domain" . }}/opennms/index.jsp
+
+
 {{- if gt ((.Values.grafana).replicaCount|int) 0 }}
- <tr>
-  <td><b>Grafana</b></td><td><a href="https://grafana.{{ include "core.domain" . }}/">https://grafana.{{ include "core.domain" . }}/</a></td>
- </tr>
+* Grafana: https://grafana-{{ include "core.domain" . }}/
 {{- end }}
-</table>
 
 {{- else }}
 
 Resources URLs:
 
-OpenNMS Core: https://onms-core.{{ include "core.domain" . }}/opennms/index.jsp
+
+* OpenNMS Core: https://onms-core.{{ include "core.domain" . }}/opennms/index.jsp
 
 {{- if gt ((.Values.grafana).replicaCount|int) 0 }}
-Grafana: https://grafana.{{ include "core.domain" . }}/
+* Grafana: https://grafana.{{ include "core.domain" . }}/
 {{- end }}
 
 
