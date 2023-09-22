@@ -1,5 +1,9 @@
 createNamespace: false  # Whether to create the namespace for this deployment
 
+# Red Hat OpenShift related settings for creating Cluster Role and Binding
+clusterRole: true
+clusterRoleBinding: true
+  
 minion:
  location: pod
  name: myminion
@@ -24,6 +28,7 @@ truststore:
  content: ''  # A base64 encoded content of the JKS Truststore file.
  password: ''
 
+# Red Hat OpenShift related settings for creating the required security context for OpenNMS Core
 securitycontext:
   securitycontextconstraints: 
     enabled: true

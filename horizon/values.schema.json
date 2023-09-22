@@ -248,6 +248,16 @@
             "form": true,
             "title": "Dependencies",
             "properties": {
+                "clusterRole": {
+                    "type": "boolean",
+                    "title": "Create cluster role",
+                    "default": true
+                },
+                "clusterRoleBinding": {
+                    "type": "boolean",
+                    "title": "Create cluster role binding",
+                    "default": true
+                },
                 "securitycontext": {
                     "type": "object",
                     "form": true,

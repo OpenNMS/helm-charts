@@ -7,6 +7,16 @@
             "title": "Create Namespace",
             "default": false
         },
+        "clusterRole": {
+            "type": "boolean",
+            "title": "Create cluster role",
+            "default": true
+        },
+        "clusterRoleBinding": {
+            "type": "boolean",
+            "title": "Create cluster role binding",
+            "default": true
+        },
         "minion": {
             "title": "Minion Settings",
             "type": "object",

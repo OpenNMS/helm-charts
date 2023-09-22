@@ -19,6 +19,10 @@ imagePullSecrets: []
 #   dockerEmail: admin@agalue.net
 
 dependencies:
+  # Red Hat OpenShift related settings for creating Cluster Role and Binding
+  clusterRole: true
+  clusterRoleBinding: true
+
   # Red Hat OpenShift related settings for creating the required security context for OpenNMS Core
   securitycontext:
    securitycontextconstraints: 
