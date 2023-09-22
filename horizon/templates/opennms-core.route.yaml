@@ -12,7 +12,7 @@ metadata:
     app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
     helm.sh/chart: {{ include "core.chart" . }}
 spec:
-  host: {{ printf "onms-core.%s" .Values.domain | quote }}
+  host: {{ printf "onms-core.%s" (include "core.domain" .) | quote }}
   to:
     kind: Service
     name: onms-core
