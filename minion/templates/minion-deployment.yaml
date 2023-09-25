@@ -18,8 +18,10 @@ spec:
       labels:
         app: minion
     spec:
-      {{- if eq (include "onOpenShift" .) "true" }}
+      {{- if and (eq (include "onOpenShift" .) "true") ((.Values.securitycontext).serviceaccount.enabled) }}
       serviceAccountName: {{ (.Values.securitycontext).serviceaccount.name | quote }} 
+      {{- end }}
+      {{- if eq (include "onOpenShift" .) "true" }}
       securityContext:
           runAsUser: 10001
           runAsGroup: 10001
