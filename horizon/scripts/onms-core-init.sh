@@ -78,14 +78,8 @@ KAFKA_SASL_MECHANISM=${KAFKA_SASL_MECHANISM-PLAIN}
 KAFKA_SECURITY_PROTOCOL=${KAFKA_SECURITY_PROTOCOL-SASL_PLAINTEXT}
 
 # Retrieve OpenNMS package name and version
-if command -v unzip   >/dev/null 2>&1; then
 PKG=$(unzip -q -c "/opt/opennms/lib/opennms_install.jar" installer.properties | grep "install.package.name"  | cut -d '=' -f 2)
 VERSION=$(tail -1 "/opt/opennms/jetty-webapps/opennms/WEB-INF/version.properties" | cut -d '=' -f 2)
-else
-# Assume opennms PKG
-PKG=opennms
-VERSION=$(tail -1 "/opt/opennms/jetty-webapps/opennms/WEB-INF/version.properties" | cut -d '=' -f 2)
-fi
 
 if [[ "${PKG}" == "unknown" ]] || [[ "${PKG}" == "" ]]; then
   if [[ ! -e jetty-webapps/opennms/WEB-INF/version.properties ]]; then
@@ -111,9 +105,6 @@ if [[ "$PKG" == *"meridian"* ]]; then
   if (( $MAJOR > 2021 )); then
     USE_TWIN=true
   fi
-elif [[ "$PKG" == *"opennms"* ]] && [[ $MAJOR > 2021 ]];then
-  echo "OpenNMS Core $MAJOR detected"
-  USE_TWIN=true
 else
   echo "OpenNMS Horizon $MAJOR detected"
   if (( $MAJOR > 28 )); then

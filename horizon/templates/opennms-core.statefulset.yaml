@@ -28,12 +28,12 @@ spec:
       {{- if .Values.core.configuration.alwaysRollDeployment }}
         rollme: {{ randAlphaNum 5 | quote }}
       {{- end }}
-      {{- if and (eq (include "onOpenShift" .) "true") ((.Values.dependencies.securitycontext).securitycontextconstraints.enabled) }}
+      {{- if eq (include "onOpenShift" .) "true" }}
         openshift.io/scc: {{ (.Values.dependencies.securitycontext).securitycontextconstraints.name | quote }} 
       {{- end }}
         kubectl.kubernetes.io/default-container: "onms"
     spec:
-      {{- if and (eq (include "onOpenShift" .) "true") ((.Values.dependencies.securitycontext).serviceaccount.enabled) }}
+      {{- if eq (include "onOpenShift" .) "true" }}
       serviceAccountName: {{ (.Values.dependencies.securitycontext).serviceaccount.name | quote }} 
       {{- end }}
       securityContext:
@@ -120,11 +120,8 @@ spec:
       containers:
       - name: onms
         image: {{ $image }}
-        securityContext:
-          sysctls:
-            - name: net.ipv4.ping_group_range
-              value: 0 10001
         {{- if eq (include "onOpenShift" .) "true" }}
+        securityContext:
           fsGroup: 10001
           runAsNonRoot: true
           seccompProfile:
@@ -132,7 +129,10 @@ spec:
           capabilities:
             add:
              - NET_RAW
-        {{- end }}
+         {{- end }}
+        sysctls:
+          - name: net.ipv4.ping_group_range
+            value: 0 429496729
         imagePullPolicy: {{ .Values.core.image.pullPolicy }}
         args:
         - -s
