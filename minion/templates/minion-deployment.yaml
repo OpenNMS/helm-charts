@@ -31,6 +31,12 @@ spec:
             add:
              - NET_RAW
       {{- end }}
+      {{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- range $k, $r := .Values.imagePullSecrets }}
+        - name: {{ $r.name }}
+        {{- end }}
+      {{- end }}
       containers:
         - args:
             - -f

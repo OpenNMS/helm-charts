@@ -239,7 +239,7 @@
             "type": "array",
             "title": "Image Pull Secrets",
             "items": {
-                "type": "string",
+                "type": "object",
                 "default": []
             }
         },

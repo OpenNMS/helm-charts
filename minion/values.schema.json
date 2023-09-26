@@ -7,6 +7,14 @@
             "title": "Create Namespace",
             "default": false
         },
+        "imagePullSecrets": {
+            "type": "array",
+            "title": "Image Pull Secrets",
+            "items": {
+                "type": "object",
+                "default": []
+            }
+        },
         "clusterRole": {
             "type": "boolean",
             "title": "Create cluster role",
