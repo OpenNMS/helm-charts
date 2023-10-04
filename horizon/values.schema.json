@@ -263,6 +263,30 @@
                     "form": true,
                     "title": "Security Context",
                     "properties": {
+                        "allowedCapabilities":{
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "default": [
+                                    "NET_BIND_SERVICE",
+                                    "CAP_NET_RAW"
+                                ]
+                            }
+                        },
+                        "defaultAddCapabilities":{
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "default": [
+                                    "NET_BIND_SERVICE",
+                                    "CAP_NET_RAW"
+                                ]
+                            }
+                        },
+                        "allowPrivilegeEscalation":{
+                            "type": "boolean",
+                            "default": true
+                        },
                         "securitycontextconstraints": {
                             "type": "object",
                             "title": "Constraints",

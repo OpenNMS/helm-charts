@@ -112,7 +112,7 @@ if [[ "$PKG" == *"meridian"* ]]; then
     USE_TWIN=true
   fi
 else
-  echo "OpenNMS Horizon $MAJOR detected"
+  echo "OpenNMS Core $MAJOR detected"
   if (( $MAJOR > 28 )); then
     USE_TWIN=true
   fi

@@ -42,9 +42,11 @@ spec:
           runAsNonRoot: true
           seccompProfile:
             type: RuntimeDefault
+          {{- if has "CAP_NET_RAW" ((.Values.dependencies.securitycontext).allowedCapabilities) }}
           capabilities:
             add:
-             - NET_RAW
+             - CAP_NET_RAW
+         {{- end }}
          {{- end }}
       terminationGracePeriodSeconds: {{ .Values.core.terminationGracePeriodSeconds | default 120 }}
       {{- if .Values.imagePullSecrets }}
@@ -89,9 +91,11 @@ spec:
           runAsNonRoot: true
           seccompProfile:
             type: RuntimeDefault
+          {{- if has "CAP_NET_RAW" (.Values.dependencies.securitycontext).allowedCapabilities }}
           capabilities:
             add:
-             - NET_RAW
+             - CAP_NET_RAW
+          {{- end }}
         {{- end }}
         command: [ bash, /scripts/onms-core-init.sh ]
         envFrom:
@@ -126,9 +130,11 @@ spec:
           runAsNonRoot: true
           seccompProfile:
             type: RuntimeDefault
+          {{- if has "CAP_NET_RAW" (.Values.dependencies.securitycontext).allowedCapabilities }}
           capabilities:
             add:
-             - NET_RAW
+             - CAP_NET_RAW
+          {{- end }}
          {{- end }}
         sysctls:
           - name: net.ipv4.ping_group_range
@@ -169,6 +175,10 @@ spec:
           mountPath: /opt/opennms/.postgresql/root.crt
           subPath: postgresql-ca.crt
         env:
+        {{- if not (has "CAP_NET_RAW" ((.Values.dependencies).securitycontext).allowedCapabilities) }}
+        - name: JAVA_HOME
+          value: /usr/lib/jvm/java-nocap
+        {{- end }}   
         {{- $opt :=  include "core.jvmOptions" . }}
         {{- if .Values.core.resources }}
         {{- with .Values.core.resources }}
@@ -187,7 +197,7 @@ spec:
         {{- else }}
         - name: JAVA_OPTS
           value: {{ $opt }}
-        {{- end }}
+        {{- end }} 
         startupProbe:
           httpGet:
             path: /opennms/login.jsp
