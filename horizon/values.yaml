@@ -28,9 +28,6 @@ dependencies:
    allowedCapabilities: 
     - NET_BIND_SERVICE
     - CAP_NET_RAW
-   defaultAddCapabilities: 
-    - NET_BIND_SERVICE
-    - CAP_NET_RAW
    allowPrivilegeEscalation: true
    securitycontextconstraints: 
     enabled: true
