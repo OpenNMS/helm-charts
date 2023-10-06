@@ -42,10 +42,12 @@ spec:
           runAsNonRoot: true
           seccompProfile:
             type: RuntimeDefault
+          {{- if eq (include "onOpenShift" .) "true" }}
           {{- if has "CAP_NET_RAW" ((.Values.dependencies.securitycontext).allowedCapabilities) }}
           capabilities:
             add:
              - CAP_NET_RAW
+         {{- end }}
          {{- end }}
          {{- end }}
       terminationGracePeriodSeconds: {{ .Values.core.terminationGracePeriodSeconds | default 120 }}
@@ -91,10 +93,12 @@ spec:
           runAsNonRoot: true
           seccompProfile:
             type: RuntimeDefault
+          {{- if eq (include "onOpenShift" .) "true" }}
           {{- if has "CAP_NET_RAW" (.Values.dependencies.securitycontext).allowedCapabilities }}
           capabilities:
             add:
              - CAP_NET_RAW
+          {{- end }}
           {{- end }}
         {{- end }}
         command: [ bash, /scripts/onms-core-init.sh ]
@@ -130,10 +134,12 @@ spec:
           runAsNonRoot: true
           seccompProfile:
             type: RuntimeDefault
+          {{- if eq (include "onOpenShift" .) "true" }}
           {{- if has "CAP_NET_RAW" (.Values.dependencies.securitycontext).allowedCapabilities }}
           capabilities:
             add:
              - CAP_NET_RAW
+          {{- end }}
           {{- end }}
          {{- end }}
         sysctls:
@@ -175,9 +181,11 @@ spec:
           mountPath: /opt/opennms/.postgresql/root.crt
           subPath: postgresql-ca.crt
         env:
-        {{- if not (has "CAP_NET_RAW" ((.Values.dependencies).securitycontext).allowedCapabilities) }}
+        {{- if eq (include "onOpenShift" .) "true" }}
+        {{- if or (not (has "CAP_NET_RAW" ((.Values.dependencies).securitycontext).allowedCapabilities)) (not ((.Values.dependencies).securitycontext).allowPrivilegeEscalation )  }}
         - name: JAVA_HOME
           value: /usr/lib/jvm/java-nocap
+        {{- end }}   
         {{- end }}   
         {{- $opt :=  include "core.jvmOptions" . }}
         {{- if .Values.core.resources }}

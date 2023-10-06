@@ -27,10 +27,12 @@ spec:
           runAsNonRoot: true
           seccompProfile:
             type: RuntimeDefault
+          {{- if eq (include "onOpenShift" .) "true" }}
           {{- if has "CAP_NET_RAW" ((.Values.securitycontext).allowedCapabilities) }}
           capabilities:
             add:
              - CAP_NET_RAW
+         {{- end }}
          {{- end }}
       {{- end }}
       {{- if .Values.imagePullSecrets }}
@@ -43,10 +45,12 @@ spec:
         - args:
             - -f
           env:
-            {{- if not (has "CAP_NET_RAW" ((.Values.securitycontext).allowedCapabilities)) }}
+            {{- if eq (include "onOpenShift" .) "true" }}
+            {{- if or (not (has "CAP_NET_RAW" (.Values.securitycontext).allowedCapabilities)) (not ((.Valuessecuritycontext).allowPrivilegeEscalation ))  }}
             - name: JAVA_HOME
               value: /usr/lib/jvm/java-nocap
             {{- end }}   
+            {{- end }}
             - name: JAVA_MAX_MEM
               value: 2048M
             - name: JAVA_MIN_MEM

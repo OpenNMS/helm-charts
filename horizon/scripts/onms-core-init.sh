@@ -41,6 +41,7 @@
 # POSTGRES_SSL_FACTORY
 # POSTGRES_SSL_MODE
 # POSTGRES_USER
+# ON_OPENSHIFT
 
 set -euo pipefail
 trap 's=$?; echo >&2 "$0: Error on line "$LINENO": $BASH_COMMAND"; exit $s' ERR
@@ -201,7 +202,7 @@ EOF
   touch ${CONFIG_DIR}/helm-chart-configured
 else
   echo -n "Previous configuration found. Updating per policy opennms.configuration.etcUpdatePolicy == ${OPENNMS_ETC_UPDATE_POLICY}. "
-  if [ "${OPENNMS_ETC_UPDATE_POLICY}" == "never" ]; then
+  if [ "${OPENNMS_ETC_UPDATE_POLICY}" == "never" ] || {[ "${allowPrivilegeEscalation}" == "false" ] && [ "${ON_OPENSHIFT}" == "true" ] }; then
      echo "Not updating etc files"
   elif [ "${OPENNMS_ETC_UPDATE_POLICY}" == "newer" ]; then
      echo "Synchronizing only newer files..."

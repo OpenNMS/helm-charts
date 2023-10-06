@@ -265,6 +265,7 @@
                     "properties": {
                         "allowedCapabilities":{
                             "type": "array",
+                            "description": "(Red Hat OpenShift only) Capabilities a container is allowed to use " ,
                             "items": {
                                 "type": "string",
                                 "default": [
@@ -275,7 +276,8 @@
                         },
                         "allowPrivilegeEscalation":{
                             "type": "boolean",
-                            "default": true
+                            "default": true,
+                            "description": "(Red Hat OpenShift only) Controls whether a process can gain more privileges than its parent process " 
                         },
                         "securitycontextconstraints": {
                             "type": "object",
