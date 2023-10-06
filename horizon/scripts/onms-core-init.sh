@@ -202,7 +202,7 @@ EOF
   touch ${CONFIG_DIR}/helm-chart-configured
 else
   echo -n "Previous configuration found. Updating per policy opennms.configuration.etcUpdatePolicy == ${OPENNMS_ETC_UPDATE_POLICY}. "
-  if [ "${OPENNMS_ETC_UPDATE_POLICY}" == "never" ] || {[ "${allowPrivilegeEscalation}" == "false" ] && [ "${ON_OPENSHIFT}" == "true" ] }; then
+  if [ "${OPENNMS_ETC_UPDATE_POLICY}" == "never" ]; then
      echo "Not updating etc files"
   elif [ "${OPENNMS_ETC_UPDATE_POLICY}" == "newer" ]; then
      echo "Synchronizing only newer files..."
