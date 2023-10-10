@@ -63,9 +63,11 @@ spec:
         image: {{ .Values.core.configuration.alecImage.repository }}:{{ .Values.core.configuration.alecImage.tag }}
         imagePullPolicy: {{ .Values.core.configuration.alecImage.pullPolicy }}
         command: [ cp, /plugins/opennms-alec-plugin.kar, /opennms-deploy ]
-        #securityContext: # To guarantee ownership of the KAR file so that OpenNMS won't complain.
-        #  runAsUser: 10001
-        #  runAsGroup: 10001
+        {{- if eq (include "onOpenShift" .) "false" }}
+        securityContext: # To guarantee ownership of the KAR file so that OpenNMS won't complain.
+          runAsUser: 10001
+          runAsGroup: 10001
+        {{- end }}
         volumeMounts:
         - name: deploy
           mountPath: /opennms-deploy # Required by the init script - DEPLOY_DIR
@@ -75,9 +77,11 @@ spec:
         image: {{ .Values.core.configuration.cortexTssImage.repository }}:{{ .Values.core.configuration.cortexTssImage.tag }}
         imagePullPolicy: {{ .Values.core.configuration.cortexTssImage.pullPolicy }}
         command: [ cp, /plugins/opennms-cortex-tss-plugin.kar, /opennms-deploy ]
-        #securityContext: # To guarantee ownership of the KAR file so that OpenNMS won't complain.
-        #  runAsUser: 10001
-        #  runAsGroup: 10001
+        {{- if eq (include "onOpenShift" .) "false" }}
+        securityContext: # To guarantee ownership of the KAR file so that OpenNMS won't complain.
+          runAsUser: 10001
+          runAsGroup: 10001
+        {{- end }}
         volumeMounts:
         - name: deploy
           mountPath: /opennms-deploy # Required by the init script - DEPLOY_DIR
