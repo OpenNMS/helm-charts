@@ -108,7 +108,6 @@ spec:
             drop:
              - ALL
           {{- end }}
-          {{- end }}
         {{- end }}
         command: [ bash, /scripts/onms-core-init.sh ]
         envFrom:
