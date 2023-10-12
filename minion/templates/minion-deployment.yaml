@@ -20,14 +20,15 @@ spec:
     spec:
       {{- if eq (include "onOpenShift" .) "true" }}
       serviceAccountName: {{ (.Values.securitycontext).serviceaccount.name | quote }} 
+      {{- end }}
       securityContext:
+          fsGroup: 10001
+      {{- if eq (include "onOpenShift" .) "true" }}
           runAsUser: 10001
           runAsGroup: 10001
-          fsGroup: 10001
           runAsNonRoot: true
           seccompProfile:
             type: RuntimeDefault
-          {{- if eq (include "onOpenShift" .) "true" }}
           {{- if has "CAP_NET_RAW" ((.Values.securitycontext).allowedCapabilities) }}
           capabilities:
             add:

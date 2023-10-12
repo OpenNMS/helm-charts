@@ -94,13 +94,12 @@ spec:
       - name: init
         image: {{ $image }}
         imagePullPolicy: {{ .Values.core.image.pullPolicy }}
-        {{- if eq (include "onOpenShift" .) "true" }}
         securityContext:
           fsGroup: 10001
+        {{- if eq (include "onOpenShift" .) "true" }}
           runAsNonRoot: true
           seccompProfile:
             type: RuntimeDefault
-          {{- if eq (include "onOpenShift" .) "true" }}
           capabilities:
           {{- if has "CAP_NET_RAW" (.Values.dependencies.securitycontext).allowedCapabilities }}
             add:
@@ -138,13 +137,12 @@ spec:
       containers:
       - name: onms
         image: {{ $image }}
-        {{- if eq (include "onOpenShift" .) "true" }}
         securityContext:
           fsGroup: 10001
+        {{- if eq (include "onOpenShift" .) "true" }}
           runAsNonRoot: true
           seccompProfile:
             type: RuntimeDefault
-          {{- if eq (include "onOpenShift" .) "true" }}
           capabilities:
           {{- if has "CAP_NET_RAW" (.Values.dependencies.securitycontext).allowedCapabilities }}
             add:

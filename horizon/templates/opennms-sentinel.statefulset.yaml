@@ -35,10 +35,10 @@ spec:
       serviceAccountName: {{ (.Values.dependencies.securitycontext).serviceaccount.name | quote }} 
       securityContext:
           fsGroup: 10001
+          {{- if eq (include "onOpenShift" .) "true" }}
           runAsNonRoot: true
           seccompProfile:
             type: RuntimeDefault
-          {{- if eq (include "onOpenShift" .) "true" }}
           capabilities:
           {{- if has "CAP_NET_RAW" (.Values.dependencies.securitycontext).allowedCapabilities }}
             add:
