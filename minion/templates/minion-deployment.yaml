@@ -18,11 +18,10 @@ spec:
       labels:
         app: minion
     spec:
-      {{- if eq (include "onOpenShift" .) "true" }}
+      {{- if and (eq (include "onOpenShift" .) "true") ((.Values.dependencies.securitycontext).serviceaccount.enabled) }}
       serviceAccountName: {{ (.Values.securitycontext).serviceaccount.name | quote }} 
       {{- end }}
       securityContext:
-          fsGroup: 10001
       {{- if eq (include "onOpenShift" .) "true" }}
           runAsUser: 10001
           runAsGroup: 10001
@@ -37,6 +36,8 @@ spec:
             drop:
              - ALL
          {{- end }}
+      {{- else }}
+          fsGroup: 10001
       {{- end }}
       {{- if .Values.imagePullSecrets }}
       imagePullSecrets:

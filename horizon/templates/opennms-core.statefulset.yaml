@@ -28,21 +28,19 @@ spec:
       {{- if .Values.core.configuration.alwaysRollDeployment }}
         rollme: {{ randAlphaNum 5 | quote }}
       {{- end }}
-      {{- if eq (include "onOpenShift" .) "true" }}
+      {{- if and (eq (include "onOpenShift" .) "true") ((.Values.dependencies.securitycontext).securitycontextconstraints.enabled) }}
         openshift.io/scc: {{ (.Values.dependencies.securitycontext).securitycontextconstraints.name | quote }} 
       {{- end }}
         kubectl.kubernetes.io/default-container: "onms"
     spec:
-      {{- if eq (include "onOpenShift" .) "true" }}
+      {{- if and (eq (include "onOpenShift" .) "true") ((.Values.dependencies.securitycontext).serviceaccount.enabled) }}
       serviceAccountName: {{ (.Values.dependencies.securitycontext).serviceaccount.name | quote }} 
       {{- end }}
       securityContext:
-          fsGroup: 10001
          {{- if eq (include "onOpenShift" .) "true" }}
           runAsNonRoot: true
           seccompProfile:
             type: RuntimeDefault
-          {{- if eq (include "onOpenShift" .) "true" }}
           capabilities:
           {{- if has "CAP_NET_RAW" (.Values.dependencies.securitycontext).allowedCapabilities }}
             add:
@@ -51,7 +49,8 @@ spec:
             drop:
              - ALL
           {{- end }}
-         {{- end }}
+         {{- else }}
+          fsGroup: 10001
          {{- end }}
       terminationGracePeriodSeconds: {{ .Values.core.terminationGracePeriodSeconds | default 120 }}
       {{- if .Values.imagePullSecrets }}
@@ -95,7 +94,6 @@ spec:
         image: {{ $image }}
         imagePullPolicy: {{ .Values.core.image.pullPolicy }}
         securityContext:
-          fsGroup: 10001
         {{- if eq (include "onOpenShift" .) "true" }}
           runAsNonRoot: true
           seccompProfile:
@@ -108,6 +106,8 @@ spec:
             drop:
              - ALL
           {{- end }}
+        {{- else }}
+          fsGroup: 10001
         {{- end }}
         command: [ bash, /scripts/onms-core-init.sh ]
         envFrom:
@@ -137,7 +137,6 @@ spec:
       - name: onms
         image: {{ $image }}
         securityContext:
-          fsGroup: 10001
         {{- if eq (include "onOpenShift" .) "true" }}
           runAsNonRoot: true
           seccompProfile:
@@ -150,6 +149,8 @@ spec:
             drop:
              - ALL
           {{- end }}
+        {{- else }}
+          fsGroup: 10001
         {{- end }}
         sysctls:
           - name: net.ipv4.ping_group_range

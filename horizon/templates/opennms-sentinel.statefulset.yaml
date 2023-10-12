@@ -33,8 +33,8 @@ spec:
     spec:
       {{- if and (eq (include "onOpenShift" .) "true") ((.Values.dependencies.securitycontext).serviceaccount.enabled) }}
       serviceAccountName: {{ (.Values.dependencies.securitycontext).serviceaccount.name | quote }} 
+      {{- end }}
       securityContext:
-          fsGroup: 10001
           {{- if eq (include "onOpenShift" .) "true" }}
           runAsNonRoot: true
           seccompProfile:
@@ -47,8 +47,9 @@ spec:
             drop:
              - ALL
           {{- end }}
+          {{- else }}
+          fsGroup: 10001
           {{- end }}
-      {{- end }}
       terminationGracePeriodSeconds: {{ .Values.sentinel.terminationGracePeriodSeconds | default 60 }}
       {{- if .Values.imagePullSecrets }}
       imagePullSecrets:
