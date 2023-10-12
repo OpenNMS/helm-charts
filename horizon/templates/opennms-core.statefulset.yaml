@@ -150,8 +150,7 @@ spec:
             drop:
              - ALL
           {{- end }}
-          {{- end }}
-         {{- end }}
+        {{- end }}
         sysctls:
           - name: net.ipv4.ping_group_range
             value: 0 429496729
