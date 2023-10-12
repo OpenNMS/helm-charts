@@ -13,6 +13,12 @@ spec:
   template:
     spec:
       restartPolicy: Never
+      {{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- range $k, $r := .Values.imagePullSecrets }}
+        - name: {{ $r.name }}
+        {{- end }}
+      {{- end }}
       containers:
       - name: init
         image: {{ printf "%s:%s" .Values.core.image.repository (.Values.core.image.tag | default .Chart.AppVersion) }}
