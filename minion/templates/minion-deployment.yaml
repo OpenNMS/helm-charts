@@ -32,6 +32,9 @@ spec:
           capabilities:
             add:
              - CAP_NET_RAW
+          {{- else }}
+            drop:
+             - ALL
          {{- end }}
          {{- end }}
       {{- end }}

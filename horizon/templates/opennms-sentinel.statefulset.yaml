@@ -38,9 +38,16 @@ spec:
           runAsNonRoot: true
           seccompProfile:
             type: RuntimeDefault
+          {{- if eq (include "onOpenShift" .) "true" }}
           capabilities:
+          {{- if has "CAP_NET_RAW" (.Values.dependencies.securitycontext).allowedCapabilities }}
             add:
-             - NET_RAW
+             - CAP_NET_RAW
+          {{- else }}
+            drop:
+             - ALL
+          {{- end }}
+          {{- end }}
       {{- end }}
       terminationGracePeriodSeconds: {{ .Values.sentinel.terminationGracePeriodSeconds | default 60 }}
       {{- if .Values.imagePullSecrets }}

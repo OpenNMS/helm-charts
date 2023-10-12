@@ -43,11 +43,14 @@ spec:
           seccompProfile:
             type: RuntimeDefault
           {{- if eq (include "onOpenShift" .) "true" }}
-          {{- if has "CAP_NET_RAW" ((.Values.dependencies.securitycontext).allowedCapabilities) }}
           capabilities:
+          {{- if has "CAP_NET_RAW" (.Values.dependencies.securitycontext).allowedCapabilities }}
             add:
              - CAP_NET_RAW
-         {{- end }}
+          {{- else }}
+            drop:
+             - ALL
+          {{- end }}
          {{- end }}
          {{- end }}
       terminationGracePeriodSeconds: {{ .Values.core.terminationGracePeriodSeconds | default 120 }}
@@ -98,10 +101,13 @@ spec:
           seccompProfile:
             type: RuntimeDefault
           {{- if eq (include "onOpenShift" .) "true" }}
-          {{- if has "CAP_NET_RAW" (.Values.dependencies.securitycontext).allowedCapabilities }}
           capabilities:
+          {{- if has "CAP_NET_RAW" (.Values.dependencies.securitycontext).allowedCapabilities }}
             add:
              - CAP_NET_RAW
+          {{- else }}
+            drop:
+             - ALL
           {{- end }}
           {{- end }}
         {{- end }}
@@ -139,10 +145,13 @@ spec:
           seccompProfile:
             type: RuntimeDefault
           {{- if eq (include "onOpenShift" .) "true" }}
-          {{- if has "CAP_NET_RAW" (.Values.dependencies.securitycontext).allowedCapabilities }}
           capabilities:
+          {{- if has "CAP_NET_RAW" (.Values.dependencies.securitycontext).allowedCapabilities }}
             add:
              - CAP_NET_RAW
+          {{- else }}
+            drop:
+             - ALL
           {{- end }}
           {{- end }}
          {{- end }}
