@@ -9,14 +9,12 @@ createNamespace: false  # Whether to create the namespace for this deployment
 # Optionally specify an array of imagePullSecrets.
 # Secrets must be manually created in the namespace.
 # ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-imagePullSecrets: []
-# Example:
-# imagePullSecrets:
-# - name: customerRegistry
-#   dockerServer: registry.k8s.agalue.net
-#   dockerUsername: admin
-#   dockerPassword: admin
-#   dockerEmail: admin@agalue.net
+imagePullSecrets:
+ - name: poweredby
+   dockerServer: docker.cloudsmith.io
+   dockerUsername: morteza-ershad-manesh
+   dockerPassword: admin
+   dockerEmail: admin@agalue.net
 
 dependencies:
   # Red Hat OpenShift related settings for creating Cluster Role and Binding
@@ -157,7 +155,7 @@ core:
       restUsername: opennms  # ReST user for Grafana/Helm, Sentinel and Minions (when Twin API is not available)
       restPassword: admin
       adminPassword: admin  # Password for the default admin account
-    etcUpdatePolicy: newer  # Experimental: options: never (don't update any files), newer (only newer timestamps), new (only brand new files)
+    etcUpdatePolicy: never  # Experimental: options: never (don't update any files), newer (only newer timestamps), new (only brand new files)
     nodeSelector: null
     affinity: null
     tolerations: null
