@@ -517,8 +517,12 @@ else
 fi
 
 echo "Updating admin password"
-if [[ -e "/opt/opennms/bin/password.jar" ]];then 
- java -jar /opt/opennms/bin/password.jar "${CONFIG_DIR}/users.xml" "admin" "${OPENNMS_ADMIN_PASS}"
+if [[ -e "/opt/opennms/bin/password" ]];then 
+ echo "RUNAS=$(whoami)" > /opt/opennms/etc/opennms.conf
+ bash /opt/opennms/bin/runjava -s > /dev/null 2>&1
+ /opt/opennms/bin/password "admin" "${OPENNMS_ADMIN_PASS}"
+ rm /opt/opennms/etc/opennms.conf /opt/opennms/etc/java.conf
+ cp /opt/opennms/etc/users.xml ${CONFIG_DIR}/users.xml
 elif command -v perl   >/dev/null 2>&1; then
  perl /scripts/onms-set-admin-password.pl ${CONFIG_DIR}/users.xml admin "${OPENNMS_ADMIN_PASS}"
 else
