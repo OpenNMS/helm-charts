@@ -18,13 +18,14 @@ spec:
       labels:
         app: minion
     spec:
-      {{- if and (eq (include "onOpenShift" .) "true") ((.Values.dependencies.securitycontext).serviceaccount.enabled) }}
+      {{- if and (eq (include "onOpenShift" .) "true") ((.Values.securitycontext).serviceaccount.enabled) }}
       serviceAccountName: {{ (.Values.securitycontext).serviceaccount.name | quote }} 
       {{- end }}
       securityContext:
       {{- if eq (include "onOpenShift" .) "true" }}
           runAsUser: 10001
           runAsGroup: 10001
+          fsGroup: 10001
           runAsNonRoot: true
           seccompProfile:
             type: RuntimeDefault
