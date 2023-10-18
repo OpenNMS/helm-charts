@@ -17,85 +17,85 @@ imagePullSecrets:
    dockerEmail: admin@agalue.net
 
 dependencies:
-  # Red Hat OpenShift related settings for creating Cluster Role and Binding
-  clusterRole: true
-  clusterRoleBinding: true
+ # Red Hat OpenShift related settings for creating Cluster Role and Binding
+ clusterRole: true
+ clusterRoleBinding: true
 
-  # Red Hat OpenShift related settings for creating the required security context for OpenNMS Core
-  securitycontext:
-    allowedCapabilities:
-      - NET_BIND_SERVICE
-      - CAP_NET_RAW
-    allowPrivilegeEscalation: true
-    securitycontextconstraints:
-      enabled: true
-      name: opennms-scc
-    serviceaccount:
-      enabled: true
-      name: opennms-sa
+ # Red Hat OpenShift related settings for creating the required security context for OpenNMS Core
+ securitycontext:
+   allowedCapabilities:
+     - NET_BIND_SERVICE
+     - CAP_NET_RAW
+   allowPrivilegeEscalation: true
+   securitycontextconstraints:
+     enabled: true
+     name: opennms-scc
+   serviceaccount:
+     enabled: true
+     name: opennms-sa
 
-  # Red Hat OpenShift related settings for creating a route to OpenNMS Core pod
-  route: true
+ # Red Hat OpenShift related settings for creating a route to OpenNMS Core pod
+ route: true
 
-  # A common JKS to white-list all CA certificates for all the dependencies OpenNMS or Sentinel uses.
-  truststore:
-    content: ''  # A base64 encoded content of the JKS Truststore file.
-    password: '0p3nNM5'
+ # A common JKS to white-list all CA certificates for all the dependencies OpenNMS or Sentinel uses.
+ truststore:
+   content: ''  # A base64 encoded content of the JKS Truststore file.
+   password: '0p3nNM5'
 
-  # The main OpenNMS database requires PostgreSQL (this is mandatory).
-  postgresql:
-    hostname: onms-db.shared.svc  # IP or FQDN of the external PostgreSQL server
-    port: 5432
-    username: postgres
-    password: P0stgr3s
-    sslmode: require  # disable, allow, prefer, require, verify-ca, verify-full
-    sslfactory: org.postgresql.ssl.LibPQFactory  # LibPQFactory, DefaultJavaSSLFactory, NonValidatingFactory
-    caCert: ''  # A base64 encoded content of the CA Certificate
+ # The main OpenNMS database requires PostgreSQL (this is mandatory).
+ postgresql:
+   hostname: onms-db.shared.svc  # IP or FQDN of the external PostgreSQL server
+   port: 5432
+   username: postgres
+   password: P0stgr3s
+   sslmode: require  # disable, allow, prefer, require, verify-ca, verify-full
+   sslfactory: org.postgresql.ssl.LibPQFactory  # LibPQFactory, DefaultJavaSSLFactory, NonValidatingFactory
+   caCert: ''  # A base64 encoded content of the CA Certificate
 
-  # The chosen broker technology for the Minion-to-OpenNMS communication (this is mandatory).
-  # For TLS with private CA, use the common Truststore.
-  kafka:
-    hostname: ''  # IP or FQDN of the external Kafka server (Example: onms-kafka-bootstrap.shared.svc)
-    port: 9093
-    username: opennms  # Pass empty username when using saslMechanism=PLAIN
-    password: 0p3nNM5  # Pass empty password when using saslMechanism=PLAIN
-    configuration:
-      saslMechanism: SCRAM-SHA-512  # PLAIN, SCRAM-SHA-512
-      securityProtocol: SASL_SSL  # PLAINTEXT, SSL, SASL_PLAINTEXT, SASL_SSL
+ # The chosen broker technology for the Minion-to-OpenNMS communication (this is mandatory).
+ # For TLS with private CA, use the common Truststore.
+ kafka:
+   hostname: ''  # IP or FQDN of the external Kafka server (Example: onms-kafka-bootstrap.shared.svc)
+   port: 9093
+   username: opennms  # Pass empty username when using saslMechanism=PLAIN
+   password: 0p3nNM5  # Pass empty password when using saslMechanism=PLAIN
+   configuration:
+     saslMechanism: SCRAM-SHA-512  # PLAIN, SCRAM-SHA-512
+     securityProtocol: SASL_SSL  # PLAINTEXT, SSL, SASL_PLAINTEXT, SASL_SSL
 
-  # Persisting flows requires Elasticsearch
-  # For TLS with private CA, use the common Truststore.
-  elasticsearch:
-    hostname: ''  # IP or FQDN of the external Elasticsearch server (Example: onms-es-http.shared.svc)
-    port: 9200
-    username: elastic
-    password: 31@st1c
-    configuration:
-      flows:
-        indexStrategy: daily
-        replicationFactor: 0
-        numShards: 1
+ # Persisting flows requires Elasticsearch
+ # For TLS with private CA, use the common Truststore.
+ elasticsearch:
+   hostname: ''  # IP or FQDN of the external Elasticsearch server (Example: onms-es-http.shared.svc)
+   port: 9200
+   username: elastic
+   password: 31@st1c
+   configuration:
+     flows:
+       indexStrategy: daily
+       replicationFactor: 0
+       numShards: 1
 
-  # The chosen solution for log aggregation (OpenNMS and Sentinel will forward logs to it via Promtail)
-  loki:
-    hostname: ''  # IP or FQDN of the external Loki server (Example: loki.shared.svc); '' to disable
-    username: ''
-    password: ''
-    caCert: ''  # A base64 encoded content of the CA Certificate (assumes HTTPS for Loki's URL)
-    port: 3100
+ # The chosen solution for log aggregation (OpenNMS and Sentinel will forward logs to it via Promtail)
+ loki:
+   hostname: ''  # IP or FQDN of the external Loki server (Example: loki.shared.svc); '' to disable
+   username: ''
+   password: ''
+   caCert: ''  # A base64 encoded content of the CA Certificate (assumes HTTPS for Loki's URL)
+   port: 3100
 
-  # The metrics persistence layer as an alternative to RRDtool.
-  cortex:
-    # Used only when opennms.configuration.enableCortex=true
-    # See: https://github.com/OpenNMS/opennms-cortex-tss-plugin/blob/master/plugin/src/main/resources/OSGI-INF/blueprint/blueprint.xml
-    writeUrl: http://cortex-distributor.shared.svc.cluster.local:8080/api/v1/push
-    readUrl: http://cortex-query-frontend.shared.svc.cluster.local:8080/prometheus/api/v1
-    maxConcurrentHttpConnections: 100
-    writeTimeoutInMs: 1000
-    readTimeoutInMs: 1000
-    metricCacheSize: 1000
-    externalTagsCacheSize: 1000
-    bulkheadMaxWaitDuration: '9223372036854775807'  # this is set as a string so it doesn't end up in scientific notation along the way which causes problems later
+ # The metrics persistence layer as an alternative to RRDtool.
+ cortex:
+   # Used only when opennms.configuration.enableCortex=true
+   # See: https://github.com/OpenNMS/opennms-cortex-tss-plugin/blob/master/plugin/src/main/resources/OSGI-INF/blueprint/blueprint.xml
+   writeUrl: http://cortex-distributor.shared.svc.cluster.local:8080/api/v1/push
+   readUrl: http://cortex-query-frontend.shared.svc.cluster.local:8080/prometheus/api/v1
+   maxConcurrentHttpConnections: 100
+   writeTimeoutInMs: 1000
+   readTimeoutInMs: 1000
+   metricCacheSize: 1000
+   externalTagsCacheSize: 1000
+   bulkheadMaxWaitDuration: '9223372036854775807'  # this is set as a string so it doesn't end up in scientific notation along the way which causes problems later
 
 # The Ingress to expose the OpenNMS and Grafana.
 # TODO: Disable this if it's empty
