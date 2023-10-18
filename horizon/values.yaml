@@ -178,7 +178,7 @@ sentinel:
    memory: 2Gi
  configuration:
   database:
-    poolSize: 25
+   poolSize: 25
 
 # OpenNMS Plugin for Grafana
 # Do not use Grafana images, or you'd have to manually install the OpenNMS Plugin for Grafana from Github every time the container starts.
