@@ -1,4 +1,4 @@
-{{- if and (and (eq (include "onOpenShift" .) "true") ((.Values.dependencies).route)) (gt ((.Values.grafana).replicaCount|int) 0) }}
+{{- if and (eq (include "onOpenShift" .) "true") ((.Values.dependencies).route) (gt ((.Values.grafana).replicaCount|int) 0) }}
 kind: Route
 apiVersion: route.openshift.io/v1
 metadata:
