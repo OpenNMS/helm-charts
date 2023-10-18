@@ -40,12 +40,16 @@ truststore:
  content: ''  # A base64 encoded content of the JKS Truststore file.
  password: ''
 
-# Red Hat OpenShift related settings for creating the required security context for OpenNMS Core
+# Red Hat OpenShift related settings for creating the required security context for OpenNMS Minion
 securitycontext:
-  securitycontextconstraints: 
-    enabled: true
-    name: minion-scc
-  serviceaccount: 
-     enabled: true
-     name: minion-sa
-  route: true
+ allowedCapabilities:
+  - NET_BIND_SERVICE
+  - CAP_NET_RAW
+ allowPrivilegeEscalation: true
+ securitycontextconstraints:
+  enabled: true
+  name: minion-scc
+ serviceaccount:
+  enabled: true
+  name: minion-sa
+ route: true
