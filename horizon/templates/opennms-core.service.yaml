@@ -14,6 +14,12 @@ spec:
     name: http
   - port: 8101
     name: karaf
+  - port: 1116
+    name: trapd
+    protocol: UDP
+  - port: 10514
+    name: syslog
+    protocol: UDP
   selector:
     app: onms-core
     {{- include "core.selectorLabels" . | nindent 4 }}

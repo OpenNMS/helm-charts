@@ -1,0 +1,44 @@
+{{- if and (eq (include "onOpenShift" .) "true") ((.Values.securitycontext).securitycontextconstraints.enabled) }}
+---
+kind: SecurityContextConstraints
+metadata:
+  name: {{ (.Values.securitycontext).securitycontextconstraints.name | quote }}
+  namespace: {{ .Release.Name }}
+allowHostDirVolumePlugin: false
+allowHostIPC: false
+allowHostNetwork: false
+allowHostPID: false
+allowHostPorts: false
+allowPrivilegeEscalation: {{ (.Values.securitycontext).allowPrivilegeEscalation }}
+allowPrivilegedContainer: false
+allowedCapabilities: {{ toYaml (.Values.securitycontext).allowedCapabilities | nindent 2 }}
+apiVersion: security.openshift.io/v1
+defaultAddCapabilities:
+- NET_BIND_SERVICE
+fsGroup:
+  type: RunAsAny
+groups: []
+priority: 10
+readOnlyRootFilesystem: false
+requiredDropCapabilities: null
+runAsUser:
+  type: RunAsAny
+seLinuxContext:
+  type: MustRunAs
+seccompProfiles:
+- runtime/default
+supplementalGroups:
+  type: RunAsAny
+users:
+- default
+- {{ (.Values.securitycontext).serviceaccount.name | quote }}
+volumes:
+- configMap
+- csi
+- downwardAPI
+- emptyDir
+- ephemeral
+- persistentVolumeClaim
+- projected
+- secret
+{{- end }}

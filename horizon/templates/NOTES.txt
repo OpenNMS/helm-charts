@@ -9,19 +9,37 @@ Your release is named "{{ .Release.Name }}", used for:
 - Prefix for PostgreSQL database names.
 - Prefix for Kafka consumer groups.
 
+{{- if eq (include "onOpenShift" .) "true" }}
+
+OpenNMS is running in Red Hat OpenShift environment.
+
 Resources URLs:
 
-OpenNMS Core: https://onms-core.{{ include "core.domain" . }}/opennms/index.jsp
+* OpenNMS Core: https://onms-core.{{ include "core.domain" . }}/opennms/index.jsp
+
 
 {{- if gt ((.Values.grafana).replicaCount|int) 0 }}
-Grafana: https://grafana.{{ include "core.domain" . }}/
+* Grafana: https://grafana-{{ include "core.domain" . }}/
 {{- end }}
+
+{{- else }}
+
+Resources URLs:
+
+
+* OpenNMS Core: https://onms-core.{{ include "core.domain" . }}/opennms/index.jsp
+
+{{- if gt ((.Values.grafana).replicaCount|int) 0 }}
+* Grafana: https://grafana.{{ include "core.domain" . }}/
+{{- end }}
+
 
 To learn more about the release, try:
 
 $ helm status {{ .Release.Name }}
 $ helm get all {{ .Release.Name }}
 $ kubectl get all -n {{ .Release.Name }}
+{{- end }}
 
 {{- if not .Values.core.configuration.alwaysRollDeployment }}
 

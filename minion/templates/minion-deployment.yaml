@@ -18,10 +18,44 @@ spec:
       labels:
         app: minion
     spec:
+      {{- if and (eq (include "onOpenShift" .) "true") ((.Values.securitycontext).serviceaccount.enabled) }}
+      serviceAccountName: {{ (.Values.securitycontext).serviceaccount.name | quote }} 
+      {{- end }}
+      securityContext:
+      {{- if eq (include "onOpenShift" .) "true" }}
+          runAsUser: 10001
+          runAsGroup: 10001
+          fsGroup: 10001
+          runAsNonRoot: true
+          seccompProfile:
+            type: RuntimeDefault
+          {{- if has "CAP_NET_RAW" ((.Values.securitycontext).allowedCapabilities) }}
+          capabilities:
+            add:
+             - CAP_NET_RAW
+          {{- else }}
+            drop:
+             - ALL
+         {{- end }}
+      {{- else }}
+          fsGroup: 10001
+      {{- end }}
+      {{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- range $k, $r := .Values.imagePullSecrets }}
+        - name: {{ $r.name }}
+        {{- end }}
+      {{- end }}
       containers:
         - args:
             - -f
           env:
+            {{- if eq (include "onOpenShift" .) "true" }}
+            {{- if or (not (has "CAP_NET_RAW" (.Values.securitycontext).allowedCapabilities)) (not ((.Valuessecuritycontext).allowPrivilegeEscalation ))  }}
+            - name: JAVA_HOME
+              value: /usr/lib/jvm/java-nocap
+            {{- end }}   
+            {{- end }}
             - name: JAVA_MAX_MEM
               value: 2048M
             - name: JAVA_MIN_MEM

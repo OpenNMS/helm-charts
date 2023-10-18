@@ -77,21 +77,17 @@ OPENNMS_DATABASE_CONNECTION_MAXPOOL=${OPENNMS_DATABASE_CONNECTION_MAXPOOL-50}
 KAFKA_SASL_MECHANISM=${KAFKA_SASL_MECHANISM-PLAIN}
 KAFKA_SECURITY_PROTOCOL=${KAFKA_SECURITY_PROTOCOL-SASL_PLAINTEXT}
 
-# See if we can get the OpenNMS package name and version from the package manager
-if command -v rpm   >/dev/null 2>&1; then
-  PKG=$(rpm -qa | egrep '(meridian|opennms)-core')
-  VERSION=$(rpm -q --queryformat '%{VERSION}' $PKG)
-elif command -v dpkg-query >/dev/null 2>&1; then
-  if PKG=$(dpkg-query -f '${Package}\n' -W | grep -Fx -e opennms-common -e meridian-common); then
-    VERSION=$(dpkg-query -f '${Version}\n' -W "${PKG}")
-  else
-    PKG="unknown"
-  fi
+# Retrieve OpenNMS package name and version
+if command -v unzip   >/dev/null 2>&1; then
+PKG=$(unzip -q -c "/opt/opennms/lib/opennms_install.jar" installer.properties | grep "install.package.name"  | cut -d '=' -f 2)
+VERSION=$(tail -1 "/opt/opennms/jetty-webapps/opennms/WEB-INF/version.properties" | cut -d '=' -f 2)
 else
-  PKG="unknown"
+# Assume opennms PKG
+PKG=opennms
+VERSION=$(tail -1 "/opt/opennms/jetty-webapps/opennms/WEB-INF/version.properties" | cut -d '=' -f 2)
 fi
 
-if [[ "${PKG}" == "unknown" ]]; then
+if [[ "${PKG}" == "unknown" ]] || [[ "${PKG}" == "" ]]; then
   if [[ ! -e jetty-webapps/opennms/WEB-INF/version.properties ]]; then
     echo >&2 "Couldn't determine version number from package manager (which is normal for newer containers) and jetty-webapps/opennms/WEB-INF/version.properties does not exist. Aborting."; exit 1;
   fi
@@ -108,6 +104,12 @@ echo "Package: ${PKG}"
 echo "Version: ${VERSION}"
 echo "Major: ${MAJOR}"
 
+IFS=. read -r MAJOR MINOR PATCH <<<"$VERSION"
+echo "Minor: ${MINOR}"
+PATCH=${PATCH//-SNAPSHOT}
+echo "Patch: ${PATCH}"
+
+
 # Verify if Twin API is available
 USE_TWIN="false"
 if [[ "$PKG" == *"meridian"* ]]; then
@@ -116,7 +118,7 @@ if [[ "$PKG" == *"meridian"* ]]; then
     USE_TWIN=true
   fi
 else
-  echo "OpenNMS Horizon $MAJOR detected"
+  echo "OpenNMS Core $MAJOR detected"
   if (( $MAJOR > 28 )); then
     USE_TWIN=true
   fi
@@ -269,11 +271,26 @@ acknowledged-at=Sun Mar 01 00\:00\:00 EDT 2020
 EOF
 
 # Configure Database access
+USE_UPDATED_DATASOURCE=false
+if [ "${MAJOR}" -eq 32 ];then
+  if [ "${MINOR}" -gt 0 ];then
+    USE_UPDATED_DATASOURCE=true
+  elif [ "${MINOR}" -eq 0 ] && [ "${PATCH}" -ge 4 ];then
+    USE_UPDATED_DATASOURCE=true
+  else
+    USE_UPDATED_DATASOURCE=false
+  fi
+elif [ "${MAJOR}" -ge 33 ] && [ "${MAJOR}" -lt 2000 ]; then
+  USE_UPDATED_DATASOURCE=true
+else
+  USE_UPDATED_DATASOURCE=false
+fi
+echo "USE_UPDATED_DATASOURCE: $USE_UPDATED_DATASOURCE"
 cat <<EOF > ${CONFIG_DIR_OVERLAY}/opennms-datasources.xml
 <?xml version="1.0" encoding="UTF-8"?>
-<datasource-configuration xmlns:this="http://xmlns.opennms.org/xsd/config/opennms-datasources"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://xmlns.opennms.org/xsd/config/opennms-datasources
+<datasource-configuration xmlns:this="http://xmlns.opennms.org/xsd/config/opennms-datasources" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xsi:schemaLocation="http://xmlns.opennms.org/xsd/config/opennms-datasources 
   http://www.opennms.org/xsd/config/opennms-datasources.xsd ">
 
   <connection-pool factory="org.opennms.core.db.HikariCPConnectionFactory"
@@ -283,13 +300,43 @@ cat <<EOF > ${CONFIG_DIR_OVERLAY}/opennms-datasources.xml
     maxPool="50"
     maxSize="${OPENNMS_DATABASE_CONNECTION_MAXPOOL}" />
 
-  <jdbc-data-source name="opennms"
-                    database-name="${OPENNMS_DBNAME}"
-                    class-name="org.postgresql.Driver"
+  <jdbc-data-source name="opennms" 
+                    database-name="${OPENNMS_DBNAME}" 
+                    class-name="org.postgresql.Driver" 
                     url="jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${OPENNMS_DBNAME}?sslmode=${POSTGRES_SSL_MODE}&amp;sslfactory=${POSTGRES_SSL_FACTORY}"
                     user-name="${OPENNMS_DBUSER}"
                     password="${OPENNMS_DBPASS}" />
 
+EOF
+if $USE_UPDATED_DATASOURCE; then
+cat <<EOF >> ${CONFIG_DIR_OVERLAY}/opennms-datasources.xml
+  <jdbc-data-source name="opennms-admin" 
+                    database-name="template1" 
+                    class-name="org.postgresql.Driver" 
+                    url="jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/template1?sslmode=${POSTGRES_SSL_MODE}&amp;sslfactory=${POSTGRES_SSL_FACTORY}"
+                    user-name="${POSTGRES_USER}"
+                    password="${POSTGRES_PASSWORD}">
+    <connection-pool idleTimeout="600"
+                     minPool="0"
+                     maxPool="10"
+                     maxSize="${OPENNMS_DATABASE_CONNECTION_MAXPOOL}" />
+  </jdbc-data-source>
+  
+  <jdbc-data-source name="opennms-monitor" 
+                    database-name="postgres" 
+                    class-name="org.postgresql.Driver" 
+                    url="jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/postgres?sslmode=${POSTGRES_SSL_MODE}&amp;sslfactory=${POSTGRES_SSL_FACTORY}"
+                    user-name="${POSTGRES_PASSWORD}"
+                    password="${POSTGRES_PASSWORD}">
+    <connection-pool idleTimeout="600"
+                     minPool="0"
+                     maxPool="10"
+                     maxSize="${OPENNMS_DATABASE_CONNECTION_MAXPOOL}" />
+  </jdbc-data-source>
+</datasource-configuration>
+EOF
+else
+cat <<EOF >> ${CONFIG_DIR_OVERLAY}/opennms-datasources.xml
   <jdbc-data-source name="opennms-admin"
                     database-name="template1"
                     class-name="org.postgresql.Driver"
@@ -298,6 +345,7 @@ cat <<EOF > ${CONFIG_DIR_OVERLAY}/opennms-datasources.xml
                     password="${POSTGRES_PASSWORD}"/>
 </datasource-configuration>
 EOF
+fi
 
 # Enable storeByGroup to improve performance
 # RRD Strategy is enabled by default
@@ -514,7 +562,23 @@ if [[ ${ENABLE_GRAFANA} == "true" ]]; then
   fi
 else
   echo "Grafana is not enabled, not running onms-grafana-init.sh"
+  if [[ -e "${CONFIG_DIR}/opennms.properties.d/grafana.properties" ]];then
+   echo "Found ${CONFIG_DIR}/opennms.properties.d/grafana.properties, we are going to remove it."
+   rm "${CONFIG_DIR}/opennms.properties.d/grafana.properties"  >/dev/null 2>&1;
+  fi
 fi
 
 echo "Updating admin password"
-perl /scripts/onms-set-admin-password.pl ${CONFIG_DIR}/users.xml admin "${OPENNMS_ADMIN_PASS}"
+if [[ -e "/opt/opennms/bin/password" ]];then 
+   cp ${CONFIG_DIR}/users.xml /opt/opennms/etc/users.xml 
+   echo "RUNAS=$(whoami)" > /opt/opennms/etc/opennms.conf
+   /opt/opennms/bin/runjava -s -q 
+   /opt/opennms/bin/password "admin" "${OPENNMS_ADMIN_PASS}"
+   rm /opt/opennms/etc/opennms.conf /opt/opennms/etc/java.conf
+   cp /opt/opennms/etc/users.xml ${CONFIG_DIR}/users.xml
+elif command -v perl   >/dev/null 2>&1; then
+ perl /scripts/onms-set-admin-password.pl ${CONFIG_DIR}/users.xml admin "${OPENNMS_ADMIN_PASS}"
+else
+ echo "We are unable to update Admin password. Exiting."
+ exit 1
+fi

@@ -1,3 +1,21 @@
+createNamespace: false  # Whether to create the namespace for this deployment
+
+# Red Hat OpenShift related settings for creating Cluster Role and Binding
+clusterRole: true
+clusterRoleBinding: true
+
+# Optionally specify an array of imagePullSecrets.
+# Secrets must be manually created in the namespace.
+# ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+imagePullSecrets: []
+# Example:
+# imagePullSecrets:
+# - name: customerRegistry
+#   dockerServer: registry.k8s.agalue.net
+#   dockerUsername: admin
+#   dockerPassword: admin
+#   dockerEmail: admin@agalue.net
+
 minion:
  location: pod
  name: myminion
@@ -21,3 +39,17 @@ core:
 truststore:
  content: ''  # A base64 encoded content of the JKS Truststore file.
  password: ''
+
+# Red Hat OpenShift related settings for creating the required security context for OpenNMS Minion
+securitycontext:
+ allowedCapabilities:
+  - NET_BIND_SERVICE
+  - CAP_NET_RAW
+ allowPrivilegeEscalation: true
+ securitycontextconstraints:
+  enabled: true
+  name: minion-scc
+ serviceaccount:
+  enabled: true
+  name: minion-sa
+ route: true
