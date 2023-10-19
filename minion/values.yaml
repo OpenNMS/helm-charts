@@ -52,4 +52,3 @@ securitycontext:
  serviceaccount:
   enabled: true
   name: minion-sa
- route: true

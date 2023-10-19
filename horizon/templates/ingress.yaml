@@ -1,4 +1,3 @@
-# TODO: Add an option to disable this
 {{- if ((.Values.ingress).className) }}
 ---
 apiVersion: networking.k8s.io/v1
