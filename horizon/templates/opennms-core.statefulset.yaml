@@ -37,14 +37,20 @@ spec:
       serviceAccountName: {{ (.Values.dependencies.securitycontext).serviceaccount.name | quote }} 
       {{- end }}
       securityContext:
-          fsGroup: 10001
          {{- if eq (include "onOpenShift" .) "true" }}
           runAsNonRoot: true
           seccompProfile:
             type: RuntimeDefault
           capabilities:
+          {{- if has "CAP_NET_RAW" (.Values.dependencies.securitycontext).allowedCapabilities }}
             add:
-             - NET_RAW
+             - CAP_NET_RAW
+          {{- else }}
+            drop:
+             - ALL
+          {{- end }}
+         {{- else }}
+          fsGroup: 10001
          {{- end }}
       terminationGracePeriodSeconds: {{ .Values.core.terminationGracePeriodSeconds | default 120 }}
       {{- if .Values.imagePullSecrets }}
@@ -59,9 +65,11 @@ spec:
         image: {{ .Values.core.configuration.alecImage.repository }}:{{ .Values.core.configuration.alecImage.tag }}
         imagePullPolicy: {{ .Values.core.configuration.alecImage.pullPolicy }}
         command: [ cp, /plugins/opennms-alec-plugin.kar, /opennms-deploy ]
-        #securityContext: # To guarantee ownership of the KAR file so that OpenNMS won't complain.
-        #  runAsUser: 10001
-        #  runAsGroup: 10001
+        {{- if eq (include "onOpenShift" .) "false" }}
+        securityContext: # To guarantee ownership of the KAR file so that OpenNMS won't complain.
+          runAsUser: 10001
+          runAsGroup: 10001
+        {{- end }}
         volumeMounts:
         - name: deploy
           mountPath: /opennms-deploy # Required by the init script - DEPLOY_DIR
@@ -71,9 +79,11 @@ spec:
         image: {{ .Values.core.configuration.cortexTssImage.repository }}:{{ .Values.core.configuration.cortexTssImage.tag }}
         imagePullPolicy: {{ .Values.core.configuration.cortexTssImage.pullPolicy }}
         command: [ cp, /plugins/opennms-cortex-tss-plugin.kar, /opennms-deploy ]
-        #securityContext: # To guarantee ownership of the KAR file so that OpenNMS won't complain.
-        #  runAsUser: 10001
-        #  runAsGroup: 10001
+        {{- if eq (include "onOpenShift" .) "false" }}
+        securityContext: # To guarantee ownership of the KAR file so that OpenNMS won't complain.
+          runAsUser: 10001
+          runAsGroup: 10001
+        {{- end }}
         volumeMounts:
         - name: deploy
           mountPath: /opennms-deploy # Required by the init script - DEPLOY_DIR
@@ -83,15 +93,21 @@ spec:
       - name: init
         image: {{ $image }}
         imagePullPolicy: {{ .Values.core.image.pullPolicy }}
-        {{- if eq (include "onOpenShift" .) "true" }}
         securityContext:
-          fsGroup: 10001
+        {{- if eq (include "onOpenShift" .) "true" }}
           runAsNonRoot: true
           seccompProfile:
             type: RuntimeDefault
           capabilities:
+          {{- if has "CAP_NET_RAW" (.Values.dependencies.securitycontext).allowedCapabilities }}
             add:
-             - NET_RAW
+             - CAP_NET_RAW
+          {{- else }}
+            drop:
+             - ALL
+          {{- end }}
+        {{- else }}
+          fsGroup: 10001
         {{- end }}
         command: [ bash, /scripts/onms-core-init.sh ]
         envFrom:
@@ -121,18 +137,24 @@ spec:
       - name: onms
         image: {{ $image }}
         securityContext:
-          sysctls:
-            - name: net.ipv4.ping_group_range
-              value: 0 10001
         {{- if eq (include "onOpenShift" .) "true" }}
-          fsGroup: 10001
           runAsNonRoot: true
           seccompProfile:
             type: RuntimeDefault
           capabilities:
+          {{- if has "CAP_NET_RAW" (.Values.dependencies.securitycontext).allowedCapabilities }}
             add:
-             - NET_RAW
+             - CAP_NET_RAW
+          {{- else }}
+            drop:
+             - ALL
+          {{- end }}
+        {{- else }}
+          fsGroup: 10001
         {{- end }}
+        sysctls:
+          - name: net.ipv4.ping_group_range
+            value: 0 429496729
         imagePullPolicy: {{ .Values.core.image.pullPolicy }}
         args:
         - -s
@@ -169,6 +191,12 @@ spec:
           mountPath: /opt/opennms/.postgresql/root.crt
           subPath: postgresql-ca.crt
         env:
+        {{- if eq (include "onOpenShift" .) "true" }}
+        {{- if or (not (has "CAP_NET_RAW" ((.Values.dependencies).securitycontext).allowedCapabilities)) (not ((.Values.dependencies).securitycontext).allowPrivilegeEscalation )  }}
+        - name: JAVA_HOME
+          value: /usr/lib/jvm/java-nocap
+        {{- end }}   
+        {{- end }}   
         {{- $opt :=  include "core.jvmOptions" . }}
         {{- if .Values.core.resources }}
         {{- with .Values.core.resources }}
@@ -187,7 +215,7 @@ spec:
         {{- else }}
         - name: JAVA_OPTS
           value: {{ $opt }}
-        {{- end }}
+        {{- end }} 
         startupProbe:
           httpGet:
             path: /opennms/login.jsp

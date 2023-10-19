@@ -60,3 +60,4 @@ data:
   GF_DATABASE_SSL_MODE: {{ (((.Values.grafana).configuration).database).sslmode | default "disable" | quote }}
   GF_DATABASE_CA_CERT_PATH: "/etc/java/jks/postgresql-ca.crt"
   GF_SESSION_PROVIDER: "postgres"
+  ON_OPENSHIFT: {{ if eq (include "onOpenShift" .) "true" }}"true"{{ else }}"false"{{ end }}

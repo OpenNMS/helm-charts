@@ -33,15 +33,23 @@ spec:
     spec:
       {{- if and (eq (include "onOpenShift" .) "true") ((.Values.dependencies.securitycontext).serviceaccount.enabled) }}
       serviceAccountName: {{ (.Values.dependencies.securitycontext).serviceaccount.name | quote }} 
+      {{- end }}
       securityContext:
-          fsGroup: 10001
+          {{- if eq (include "onOpenShift" .) "true" }}
           runAsNonRoot: true
           seccompProfile:
             type: RuntimeDefault
           capabilities:
+          {{- if has "CAP_NET_RAW" (.Values.dependencies.securitycontext).allowedCapabilities }}
             add:
-             - NET_RAW
-      {{- end }}
+             - CAP_NET_RAW
+          {{- else }}
+            drop:
+             - ALL
+          {{- end }}
+          {{- else }}
+          fsGroup: 10001
+          {{- end }}
       terminationGracePeriodSeconds: {{ .Values.sentinel.terminationGracePeriodSeconds | default 60 }}
       {{- if .Values.imagePullSecrets }}
       imagePullSecrets:

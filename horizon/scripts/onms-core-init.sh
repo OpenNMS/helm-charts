@@ -104,6 +104,12 @@ echo "Package: ${PKG}"
 echo "Version: ${VERSION}"
 echo "Major: ${MAJOR}"
 
+IFS=. read -r MAJOR MINOR PATCH <<<"$VERSION"
+echo "Minor: ${MINOR}"
+PATCH=${PATCH//-SNAPSHOT}
+echo "Patch: ${PATCH}"
+
+
 # Verify if Twin API is available
 USE_TWIN="false"
 if [[ "$PKG" == *"meridian"* ]]; then
@@ -115,7 +121,7 @@ elif [[ "$PKG" == *"opennms"* ]] && [[ $MAJOR > 2021 ]];then
   echo "OpenNMS Core $MAJOR detected"
   USE_TWIN=true
 else
-  echo "OpenNMS Horizon $MAJOR detected"
+  echo "OpenNMS Core $MAJOR detected"
   if (( $MAJOR > 28 )); then
     USE_TWIN=true
   fi
@@ -268,11 +274,26 @@ acknowledged-at=Sun Mar 01 00\:00\:00 EDT 2020
 EOF
 
 # Configure Database access
+USE_UPDATED_DATASOURCE=false
+if [ "${MAJOR}" -eq 32 ];then
+  if [ "${MINOR}" -gt 0 ];then
+    USE_UPDATED_DATASOURCE=true
+  elif [ "${MINOR}" -eq 0 ] && [ "${PATCH}" -ge 4 ];then
+    USE_UPDATED_DATASOURCE=true
+  else
+    USE_UPDATED_DATASOURCE=false
+  fi
+elif [ "${MAJOR}" -ge 33 ] && [ "${MAJOR}" -lt 2000 ]; then
+  USE_UPDATED_DATASOURCE=true
+else
+  USE_UPDATED_DATASOURCE=false
+fi
+echo "USE_UPDATED_DATASOURCE: $USE_UPDATED_DATASOURCE"
 cat <<EOF > ${CONFIG_DIR_OVERLAY}/opennms-datasources.xml
 <?xml version="1.0" encoding="UTF-8"?>
-<datasource-configuration xmlns:this="http://xmlns.opennms.org/xsd/config/opennms-datasources"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://xmlns.opennms.org/xsd/config/opennms-datasources
+<datasource-configuration xmlns:this="http://xmlns.opennms.org/xsd/config/opennms-datasources" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xsi:schemaLocation="http://xmlns.opennms.org/xsd/config/opennms-datasources 
   http://www.opennms.org/xsd/config/opennms-datasources.xsd ">
 
   <connection-pool factory="org.opennms.core.db.HikariCPConnectionFactory"
@@ -282,13 +303,43 @@ cat <<EOF > ${CONFIG_DIR_OVERLAY}/opennms-datasources.xml
     maxPool="50"
     maxSize="${OPENNMS_DATABASE_CONNECTION_MAXPOOL}" />
 
-  <jdbc-data-source name="opennms"
-                    database-name="${OPENNMS_DBNAME}"
-                    class-name="org.postgresql.Driver"
+  <jdbc-data-source name="opennms" 
+                    database-name="${OPENNMS_DBNAME}" 
+                    class-name="org.postgresql.Driver" 
                     url="jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${OPENNMS_DBNAME}?sslmode=${POSTGRES_SSL_MODE}&amp;sslfactory=${POSTGRES_SSL_FACTORY}"
                     user-name="${OPENNMS_DBUSER}"
                     password="${OPENNMS_DBPASS}" />
 
+EOF
+if $USE_UPDATED_DATASOURCE; then
+cat <<EOF >> ${CONFIG_DIR_OVERLAY}/opennms-datasources.xml
+  <jdbc-data-source name="opennms-admin" 
+                    database-name="template1" 
+                    class-name="org.postgresql.Driver" 
+                    url="jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/template1?sslmode=${POSTGRES_SSL_MODE}&amp;sslfactory=${POSTGRES_SSL_FACTORY}"
+                    user-name="${POSTGRES_USER}"
+                    password="${POSTGRES_PASSWORD}">
+    <connection-pool idleTimeout="600"
+                     minPool="0"
+                     maxPool="10"
+                     maxSize="${OPENNMS_DATABASE_CONNECTION_MAXPOOL}" />
+  </jdbc-data-source>
+  
+  <jdbc-data-source name="opennms-monitor" 
+                    database-name="postgres" 
+                    class-name="org.postgresql.Driver" 
+                    url="jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/postgres?sslmode=${POSTGRES_SSL_MODE}&amp;sslfactory=${POSTGRES_SSL_FACTORY}"
+                    user-name="${POSTGRES_PASSWORD}"
+                    password="${POSTGRES_PASSWORD}">
+    <connection-pool idleTimeout="600"
+                     minPool="0"
+                     maxPool="10"
+                     maxSize="${OPENNMS_DATABASE_CONNECTION_MAXPOOL}" />
+  </jdbc-data-source>
+</datasource-configuration>
+EOF
+else
+cat <<EOF >> ${CONFIG_DIR_OVERLAY}/opennms-datasources.xml
   <jdbc-data-source name="opennms-admin"
                     database-name="template1"
                     class-name="org.postgresql.Driver"
@@ -297,6 +348,7 @@ cat <<EOF > ${CONFIG_DIR_OVERLAY}/opennms-datasources.xml
                     password="${POSTGRES_PASSWORD}"/>
 </datasource-configuration>
 EOF
+fi
 
 # Enable storeByGroup to improve performance
 # RRD Strategy is enabled by default
@@ -520,10 +572,16 @@ else
 fi
 
 echo "Updating admin password"
-if [[ -e "/opt/opennms/bin/password.jar" ]];then 
- java -jar /opt/opennms/bin/password.jar "${CONFIG_DIR}/users.xml" "admin" "${OPENNMS_ADMIN_PASS}"
+if [[ -e "/opt/opennms/bin/password" ]];then 
+   cp ${CONFIG_DIR}/users.xml /opt/opennms/etc/users.xml 
+   echo "RUNAS=$(whoami)" > /opt/opennms/etc/opennms.conf
+   /opt/opennms/bin/runjava -s -q 
+   /opt/opennms/bin/password "admin" "${OPENNMS_ADMIN_PASS}"
+   rm /opt/opennms/etc/opennms.conf /opt/opennms/etc/java.conf
+   cp /opt/opennms/etc/users.xml ${CONFIG_DIR}/users.xml
 elif command -v perl   >/dev/null 2>&1; then
  perl /scripts/onms-set-admin-password.pl ${CONFIG_DIR}/users.xml admin "${OPENNMS_ADMIN_PASS}"
 else
- echo "We are unable to update Admin password. You can use the default password to login."
+ echo "We are unable to update Admin password. Exiting."
+ exit 1
 fi
