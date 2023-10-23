@@ -33,6 +33,13 @@ RHEL::
 --
 include::os/RHEL.adoc[]
 --
+
+OpenShift::
++
+--
+include::os/openshift.adoc[]
+--
+
 ====
 
 NOTE: For information on how to set up with minikube, see the following on GitHub:
