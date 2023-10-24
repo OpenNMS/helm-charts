@@ -4,6 +4,7 @@
 
 OpenNMS Helm Charts makes it easier for users to run OpenNMS Horizon locally in a https://kubernetes.io/[Kubernetes] cluster or Red Hat OpenShift.
 It is not yet available for a Cloud environment.
+
 It provides a package that includes all the resources needed to deploy OpenNMS through https://helm.sh/[Helm], a tool that helps manage Kubernetes applications.
 
 // could use more of a spin here

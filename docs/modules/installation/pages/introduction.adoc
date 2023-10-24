@@ -28,6 +28,8 @@ We do not yet support cloud deployments.
 
 === Local
 
+*Kubernetes*
+
 You must have the following installed on your machine:
 
 * https://kubernetes.io/docs/reference/kubectl/[kubectl]
@@ -37,6 +39,11 @@ You must have the following installed on your machine:
 //Do we need to include minimum OS requirements?
 
 When using cloud resources, make sure you have https://learn.microsoft.com/en-us/cli/azure/reference-index?view=azure-cli-latest[az] for Azure or https://cloud.google.com/sdk/gcloud[gcloud] for Google Cloud.
+
+*OpenShift*
+You must have the following installed on your machine:
+
+* OpenShift 4.x
 
 === Kubernetes
 

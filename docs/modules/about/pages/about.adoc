@@ -3,10 +3,10 @@
 
 = About OpenNMS Helm Charts
 
-OpenNMS Helm Charts makes it easier for users to run OpenNMS Horizon locally in a Kubernetes cluster.
+OpenNMS Helm Charts makes it easier for users to run OpenNMS Horizon locally in a https://kubernetes.io/[Kubernetes] cluster or Red Hat OpenShift.
 It is not yet available for a Cloud environment.
 
-Each deployment through OpenNMS Helm Charts has a single Core server, Grafana, and a custom Ingress that shares the RRD files and some configuration files, and multiple Sentinels for flow processing.
+Each deployment through OpenNMS Helm Charts has a single Core server, Grafana, a custom Ingress that shares the RRD files and some configuration files, and multiple Sentinels for flow processing.
 
 Note that this is one way to approach the solution.
 We recommend that you study the content of the Helm chart and tune it for your needs.
@@ -67,7 +67,7 @@ To alleviate load from OpenNMS, you can optionally start Sentinel instances for 
 That requires having an Elasticsearch cluster available.
 When Sentinels are present, Telemetryd is disabled in OpenNMS.
 
-The OpenNMS Core and Sentinels are backed by a `StatefulSet` but keep in mind that there can be one and only one Core instance.
+The OpenNMS Core and Sentinels are backed by a `StatefulSet` but keep in mind that there can be only one Core instance.
 To have multiple Sentinels, make sure you have enough partitions for the flow topics in your Kafka clusters, as all of them would be part of the same consumer group.
 
 === Log files and Grafana Loki
@@ -92,5 +92,5 @@ You can add additional plugins by building your own container image (see https:/
 
 The Helm Chart assumes that all external dependencies are running somewhere else.
 None of them would be initialized or maintained here.
-Those are Loki, PostgreSQL, Elasticsearch, Kafka, and Cortex (when applied).
-The solution provides a script to start up a set of dependencies for testing as a part of the same cluster but **this is not intended for production use.**
+Those dependencies are Loki, PostgreSQL, Elasticsearch, Kafka, and Cortex (when applied).
+The solution provides a script to start up a set of dependencies for testing as part of the same cluster but *this is not intended for production use*.

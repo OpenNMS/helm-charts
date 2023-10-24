@@ -4,6 +4,7 @@
 .Installation
 * xref:installation:introduction.adoc[]
 * xref:installation:installation.adoc[]
+* xref:installation:openshift.adoc[Install on OpenShift]
 
 .Configuration
 * xref:configuration:configuration.adoc[]

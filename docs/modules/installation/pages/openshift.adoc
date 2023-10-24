@@ -1,0 +1,42 @@
+
+[[openshift-install]]
+= Install OpenNMS Horizon on OpenShift
+
+This section provides basic information on how to install Horizon on Red Hat OpenShift.
+For information on how to use Red Hat OpenShift, refer to the https://access.redhat.com/documentation/en-us/openshift_container_platform/4.13[product documentation].
+
+== Limitations and known issues
+
+* Removing `CAP_NET_RAW` capability or setting allowPrivilegeEscalation to false will impact ICMP and auto discovery features.
+** *WORKAROUND:* Use a Minion that is located outside of the OpenShift cluster.
+
+== Installation process
+
+NOTE: By default, OpenNMS creates a ClusterRole, ClusterRoleBinding, Route, SecurityContextConstraints, and ServiceAccount.
+If you want to to run in privileged mode, the user used to install OpenNMS must have the required permissions to make these modifications the OpenShift Cluster, including admin access.
+There are options to disable the creation of these elements, but if you do so, you will need to figure out a way to get the pods to work.
+
+. Log in to OpenShift and switch to *Developer* view.
+. Create a project with a unique name.
+. Go to the *Helm* section.
+. In the *Create* drop-down menu, select Repository.
+.. In the *Create Repository* page,
+.. Add a unique name and display name.
+.. Use https://opennms.github.io/helm-charts/ for the URL.
+.. Save the changes.
+. In the *Create* drop-down menu, select *Helm Release*.
+. Under *Repository*, select the newly created repository entry.
+. Click on Horizon.
+. Make sure that the project name matches the name you set in step 2.
+.. Skip this step if you are setting “CreateNamespace” option to true.
+. Make the required modifications (for example, set the PostgreSQL information).
+. Click *Create*.
+. Wait for the pods to come up.
+This may take a few minutes.
+
+NOTE: The process to install the Minion is similar.
+
+== Log in to Horizon
+
+You can access Horizon through the route created during the OpenShift installation process.
+Note that if you did not have route creation enabled, you will need to create a route manually.

@@ -5,6 +5,7 @@
 Before installing OpenNMS Helm Charts, make sure your environment meets the xref:installation:introduction.adoc#requirements[minimum requirements].
 
 This section describes a basic local installation on different operating systems with a Horizon Core.
+For information on installing Horizon on Red Hat OpenShift, see xref:installation:openshift.adoc[].
 
 == Installation and configuration
 
@@ -33,13 +34,6 @@ RHEL::
 --
 include::os/RHEL.adoc[]
 --
-
-OpenShift::
-+
---
-include::os/openshift.adoc[]
---
-
 ====
 
 NOTE: For information on how to set up with minikube, see the following on GitHub:
@@ -84,7 +78,7 @@ Click on the link in the output file to log in.
 
 == Post-installation tasks
 
-See the following topics might be useful after installation:
+The following topics might be useful after installation:
 
 * xref:configuration:configuration.adoc[Manual configuration changes]
 * xref:troubleshooting:debugging.adoc[Troubleshooting]
