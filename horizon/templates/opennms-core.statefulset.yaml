@@ -37,18 +37,16 @@ spec:
       serviceAccountName: {{ (.Values.dependencies.securitycontext).serviceaccount.name | quote }} 
       {{- end }}
       securityContext:
+          sysctls:
+            - name: net.ipv4.ping_group_range
+              value: "0           429496729"
          {{- if eq (include "onOpenShift" .) "true" }}
+          {{- if eq ((.Values.dependencies.securitycontext).allowPrivilegeEscalation) true }}
+          fsGroup: 10001
+          {{- end }}
           runAsNonRoot: true
           seccompProfile:
             type: RuntimeDefault
-          capabilities:
-          {{- if has "CAP_NET_RAW" (.Values.dependencies.securitycontext).allowedCapabilities }}
-            add:
-             - CAP_NET_RAW
-          {{- else }}
-            drop:
-             - ALL
-          {{- end }}
          {{- else }}
           fsGroup: 10001
          {{- end }}
@@ -96,16 +94,12 @@ spec:
         securityContext:
         {{- if eq (include "onOpenShift" .) "true" }}
           runAsNonRoot: true
+          allowPrivilegeEscalation: false
           seccompProfile:
             type: RuntimeDefault
           capabilities:
-          {{- if has "CAP_NET_RAW" (.Values.dependencies.securitycontext).allowedCapabilities }}
-            add:
-             - CAP_NET_RAW
-          {{- else }}
             drop:
              - ALL
-          {{- end }}
         {{- else }}
           fsGroup: 10001
         {{- end }}
@@ -139,6 +133,7 @@ spec:
         securityContext:
         {{- if eq (include "onOpenShift" .) "true" }}
           runAsNonRoot: true
+          allowPrivilegeEscalation: {{ (.Values.dependencies.securitycontext).allowPrivilegeEscalation }}
           seccompProfile:
             type: RuntimeDefault
           capabilities:
@@ -152,9 +147,6 @@ spec:
         {{- else }}
           fsGroup: 10001
         {{- end }}
-        sysctls:
-          - name: net.ipv4.ping_group_range
-            value: 0 429496729
         imagePullPolicy: {{ .Values.core.image.pullPolicy }}
         args:
         - -s
@@ -192,7 +184,7 @@ spec:
           subPath: postgresql-ca.crt
         env:
         {{- if eq (include "onOpenShift" .) "true" }}
-        {{- if or (not (has "CAP_NET_RAW" ((.Values.dependencies).securitycontext).allowedCapabilities)) (not ((.Values.dependencies).securitycontext).allowPrivilegeEscalation )  }}
+        {{- if or (not (has "CAP_NET_RAW" ((.Values.dependencies).securitycontext).allowedCapabilities)) (eq (.Values.dependencies).securitycontext.allowPrivilegeEscalation false)  }}
         - name: JAVA_HOME
           value: /usr/lib/jvm/java-nocap
         {{- end }}   
@@ -215,7 +207,7 @@ spec:
         {{- else }}
         - name: JAVA_OPTS
           value: {{ $opt }}
-        {{- end }} 
+        {{- end }}
         startupProbe:
           httpGet:
             path: /opennms/login.jsp
