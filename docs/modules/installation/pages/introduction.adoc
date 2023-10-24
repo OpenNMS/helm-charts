@@ -24,7 +24,6 @@ See the following for version compatibilty:
 Before you begin, ensure that you have a deep understanding of how Kubernetes and Helm work.
 
 The following describes the requirements for your local machine, Kubernetes, and additional external dependencies.
-We do not yet support cloud deployments.
 
 === Local
 
@@ -41,9 +40,7 @@ You must have the following installed on your machine:
 When using cloud resources, make sure you have https://learn.microsoft.com/en-us/cli/azure/reference-index?view=azure-cli-latest[az] for Azure or https://cloud.google.com/sdk/gcloud[gcloud] for Google Cloud.
 
 *OpenShift*
-You must have the following installed on your machine:
-
-* OpenShift 4.x
+We support OpenShift version 4.
 
 === Kubernetes
 
