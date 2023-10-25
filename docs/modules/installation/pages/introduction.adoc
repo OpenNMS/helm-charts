@@ -1,6 +1,7 @@
 = Introduction
 :imagesdir: ../assets/images
 :!sectids:
+:description: Review the system requirements to install OpenNMS Helm Charts so you can run OpenNMS Horizon locally in a Kubernetes cluster or Red Hat OpenShift.
 
 OpenNMS Helm Charts is based and tested against the latest Horizon.
 See the following for version compatibilty:
@@ -20,6 +21,7 @@ See the following for version compatibilty:
 
 [[requirements]]
 == Requirements
+:description: Review the requirements for running OpenNMS Helm Charts, which makes it easier to run OpenNMS Horizon locally in a Kubernetes cluster or Red Hat OpenShift.
 
 Before you begin, ensure that you have a deep understanding of how Kubernetes and Helm work.
 

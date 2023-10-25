@@ -1,5 +1,6 @@
 
 = Ingress
+:description: Learn how to use Ingress to access the OpenNMS UI and Grafana when running OpenNMS Helm Charts on Kubernetes.
 
 Using Ingress facilitates access to the OpenNMS UI and Grafana.
 Ingress is not required, although it is a good thing to have.

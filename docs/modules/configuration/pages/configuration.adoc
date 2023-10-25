@@ -3,6 +3,7 @@
 :!sectids:
 
 = Manual Configuration Changes
+:description: Learn how to make manual configuration changes to OpenNMS Helm Charts on Kubernetes.
 
 Either access the OpenNMS container via a remote shell through `kubectl`, and edit the file using vi (the only editor available within the OpenNMS container).
 

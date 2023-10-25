@@ -1,6 +1,7 @@
 = Basic Installation
 :imagesdir: ../assets/images
 :!sectids:
+:description: Learn how to install OpenNMS Helm Charts on Kubernetes so you can run OpenNMS Horizon locally in a Kubernetes cluster: Debian/Ubuntu, RHEL.
 
 Before installing OpenNMS Helm Charts, make sure your environment meets the xref:installation:introduction.adoc#requirements[minimum requirements].
 

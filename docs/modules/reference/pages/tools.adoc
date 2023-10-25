@@ -1,5 +1,6 @@
 
 = Useful tools and commands
+:description: View useful tools and commands for running OpenNMS Helm Charts on Kubernetes.
 
 == k9s
 https://k9scli.io/

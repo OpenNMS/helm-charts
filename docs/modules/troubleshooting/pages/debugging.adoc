@@ -1,5 +1,6 @@
 
 = Debugging
+:description: View debugging tips when running OpenNMS Helm Charts on Kubernetes.
 
 `Error: UPGRADE FAILED: cannot patch "onms-post-config" with kind Job`
 

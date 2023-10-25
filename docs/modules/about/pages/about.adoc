@@ -1,5 +1,6 @@
 :imagesdir: ..assets/images
 :!sectids:
+:description: Learn how OpenNMS Helm Charts makes it easier to run OpenNMS Horizon locally in a Kubernetes cluster or Red Hat OpenShift, including its architecture.
 
 = About OpenNMS Helm Charts
 

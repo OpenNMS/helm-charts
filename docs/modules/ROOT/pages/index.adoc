@@ -1,6 +1,7 @@
 = User's Guide to OpenNMS Helm Charts
 :imagesdir: ../assets/images
 :!sectids:
+:description: Overview of OpenNMS Helm Charts, a package that makes it easier to run OpenNMS Horizon locally in a Kubernetes cluster or Red Hat OpenShift.
 
 OpenNMS Helm Charts makes it easier for users to run OpenNMS Horizon locally in a https://kubernetes.io/[Kubernetes] cluster or Red Hat OpenShift.
 You can also run OpenNMS Helm Charts on an environment running in a cloud setting such as OpenShift on Azure.
