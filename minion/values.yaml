@@ -5,16 +5,14 @@ clusterRole: true
 clusterRoleBinding: true
 
 # Optionally specify an array of imagePullSecrets.
-# Secrets must be manually created in the namespace.
-# ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+# Secrets are created by templates/docker.secret.yaml
 imagePullSecrets: []
 # Example:
-# imagePullSecrets:
 # - name: customerRegistry
-#   dockerServer: registry.k8s.agalue.net
+#   dockerServer: registry.example.com
 #   dockerUsername: admin
 #   dockerPassword: admin
-#   dockerEmail: admin@agalue.net
+#   dockerEmail: admin@example.com
 
 minion:
  location: pod

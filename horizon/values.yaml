@@ -7,14 +7,14 @@ domain: example.com  # The common domain for the Ingress resource.
 createNamespace: false  # Whether to create the namespace for this deployment
 
 # Optionally specify an array of imagePullSecrets.
-# Secrets must be manually created in the namespace.
-# ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-#imagePullSecrets:
+# Secrets are created by templates/docker.secret.yaml
+imagePullSecrets: []
+# Example:
 # - name: customerRegistry
-#   dockerServer: registry.k8s.agalue.net
+#   dockerServer: registry.example.com
 #   dockerUsername: admin
 #   dockerPassword: admin
-#   dockerEmail: admin@agalue.net
+#   dockerEmail: admin@example.com
 
 dependencies:
  # Red Hat OpenShift related settings for creating Cluster Role and Binding
