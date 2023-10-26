@@ -21,6 +21,11 @@ jobs:
           python-version: '3.9'
           check-latest: true
 
+      - name: Check README.md is up-to-date
+        run: |
+          scripts/update-readme.sh
+          git diff --exit-code */README.md
+
       - name: Set up chart-testing
         uses: helm/chart-testing-action@v2.4.0
 
