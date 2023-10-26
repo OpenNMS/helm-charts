@@ -83,4 +83,4 @@ The following topics might be useful after installation:
 
 * xref:configuration:configuration.adoc[Manual configuration changes]
 * xref:troubleshooting:debugging.adoc[Troubleshooting]
-* xref:reference:reference.adoc[Useful tools and commands]
+* xref:reference:tools.adoc[Useful tools and commands]
