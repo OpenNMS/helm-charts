@@ -545,9 +545,9 @@ if [[ -v OPENNMS_RRAS ]]; then
   done
   echo "Configuring RRAs..."
   echo "  RRA config: ${RRACFG}"
-  for XML in $(find ${CONFIG_DIR} -name *datacollection*.xml -or -name *datacollection*.d); do
+  for XML in $(find ${CONFIG_DIR} -name '*datacollection*.xml' -or -name '*datacollection*.d'); do
     if [ -d $XML ]; then
-      for XML in $(find ${XML} -name *.xml); do
+      for XML in $(find ${XML} -name '*.xml'); do
         update_rras ${XML} ${RRACFG}
       done
     else
@@ -583,7 +583,7 @@ else
   echo "Grafana is not enabled, not running onms-grafana-init.sh"
   if [[ -e "${CONFIG_DIR}/opennms.properties.d/grafana.properties" ]];then
    echo "Found ${CONFIG_DIR}/opennms.properties.d/grafana.properties, we are going to remove it."
-   rm "${CONFIG_DIR}/opennms.properties.d/grafana.properties"  >/dev/null 2>&1;
+   rm "${CONFIG_DIR}/opennms.properties.d/grafana.properties"
   fi
 fi
 
