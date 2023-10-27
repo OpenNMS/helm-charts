@@ -61,7 +61,7 @@ function wait_for {
 
 function update_rras {
   if grep -q "[<]rrd" $1; then
-    echo "Processing $1"
+    echo "  Updating RRAS in $1"
     sed -i -r "/[<]rra/d" $1
     sed -i -r "/[<]rrd/a $2" $1
   fi
@@ -151,7 +151,7 @@ KARAF_FILES=( \
 )
 
 # Show permissions (debug purposes)
-echo "Configuration directory:"
+echo -n "Configuration directory permissions: "
 ls -ld ${CONFIG_DIR}
 
 ### Initialize etc directory
@@ -161,7 +161,7 @@ ls -ld ${CONFIG_DIR}
 # OpenNMS' configured file. If configured exists, but no helm-chart-configured exists,
 # assume we are updating from an older Helm chart and create helm-chart-configured.
 if [ -f ${CONFIG_DIR}/configured ] && [ ! -f ${CONFIG_DIR}/helm-chart-configured ]; then
-  echo "Upgrading from older Helm chart that has already been configured: creating helm-chart-configured file."
+  echo "Upgrading from older Helm chart that has already been configured: creating ${CONFIG_DIR}/helm-chart-configured and ${CONFIG_DIR}/helm-chart-opennms-version."
   touch ${CONFIG_DIR}/helm-chart-configured
   echo "version not stored previously" > ${CONFIG_DIR}/helm-chart-opennms-version
 fi
@@ -169,9 +169,9 @@ fi
 # Include all the configuration files that must be added once but could change after the first run
 if [ ! -f ${CONFIG_DIR}/helm-chart-configured ]; then
   echo "Initializing configuration directory for the first time ..."
-  rsync -arO --no-perms --no-owner --no-group --out-format="%n %C" ${BACKUP_ETC}/ ${CONFIG_DIR}/
+  rsync -arO --no-perms --no-owner --no-group --out-format="%n %C" ${BACKUP_ETC}/ ${CONFIG_DIR}/ | sed 's/^/  /'
 
-  echo "Initialize default foreign source definition"
+  echo "Initialize default foreign source definition in ${CONFIG_DIR}/default-foreign-source.xml"
   cat <<EOF > ${CONFIG_DIR}/default-foreign-source.xml
 <foreign-source xmlns="http://xmlns.opennms.org/xsd/config/foreign-source" name="default" date-stamp="2018-01-01T00:00:00.000-05:00">
   <scan-interval>1d</scan-interval>
@@ -204,17 +204,18 @@ if [ ! -f ${CONFIG_DIR}/helm-chart-configured ]; then
   </policies>
 </foreign-source>
 EOF
+  echo "Touching ${CONFIG_DIR}/helm-chart-configured to indicate that the Helm chart has been configured for the first time"
   touch ${CONFIG_DIR}/helm-chart-configured
 else
-  echo -n "Previous configuration found. Updating per policy opennms.configuration.etcUpdatePolicy == ${OPENNMS_ETC_UPDATE_POLICY}. "
+  echo -n "Previous configuration found. Update policy opennms.configuration.etcUpdatePolicy == ${OPENNMS_ETC_UPDATE_POLICY}. "
   if [ "${OPENNMS_ETC_UPDATE_POLICY}" == "never" ]; then
      echo "Not updating etc files"
   elif [ "${OPENNMS_ETC_UPDATE_POLICY}" == "newer" ]; then
      echo "Synchronizing only newer files..."
-     rsync -aruO --no-perms --no-owner --no-group --out-format="%n %C" ${BACKUP_ETC}/ ${CONFIG_DIR}/
+     rsync -aruO --no-perms --no-owner --no-group --out-format="%n %C" ${BACKUP_ETC}/ ${CONFIG_DIR}/ | sed 's/^/  /'
   elif [ "${OPENNMS_ETC_UPDATE_POLICY}" == "new" ]; then
      echo "Synchronizing only new files..."
-     rsync -arO --ignore-existing --no-perms --no-owner --no-group --out-format="%n %C" ${BACKUP_ETC}/ ${CONFIG_DIR}/
+     rsync -arO --ignore-existing --no-perms --no-owner --no-group --out-format="%n %C" ${BACKUP_ETC}/ ${CONFIG_DIR}/ | sed 's/^/  /'
   else
      echo "Unsupported update policy '${OPENNMS_ETC_UPDATE_POLICY}'. Exiting." >&2
      exit 1
@@ -230,7 +231,7 @@ else
 fi
 current_opennms="${PKG}-${VERSION}"
 if [ "${previous_opennms}" != "${current_opennms}" ]; then
-  echo "OpenNMS version change detected from '${previous_opennms}' to '${current_opennms}': triggering installer to run by removing configured file."
+  echo "OpenNMS version change detected from '${previous_opennms}' to '${current_opennms}': triggering installer to run by removing ${CONFIG_DIR}/configured file. Also updating version in ${CONFIG_DIR}/helm-chart-opennms-version."
   rm -f ${CONFIG_DIR}/configured # it might not already exist
   echo "${current_opennms}" > ${CONFIG_DIR}/helm-chart-opennms-version
 else
@@ -240,13 +241,14 @@ fi
 # Guard against application upgrades
 MANDATORY=/tmp/opennms-mandatory
 mkdir -p ${MANDATORY}
+echo "Backing up mandatory files..."
 for file in "${KARAF_FILES[@]}"; do
-  echo "Backing up ${file} to ${MANDATORY}..."
+  echo "  Backing up ${file} to ${MANDATORY}..."
   cp --force ${BACKUP_ETC}/${file} ${MANDATORY}/
 done
 # WARNING: if the volume behind CONFIG_DIR doesn't have the right permissions, the following fails
-echo "Overriding mandatory files from ${MANDATORY}..."
-rsync -aO --no-perms --no-owner --no-group --out-format="%n %C" ${MANDATORY}/ ${CONFIG_DIR}/
+echo "Overriding mandatory files from ${MANDATORY} to ${CONFIG_DIR}..."
+rsync -aO --no-perms --no-owner --no-group --out-format="%n %C" ${MANDATORY}/ ${CONFIG_DIR}/ | sed 's/^/  /'
 
 # Initialize overlay
 mkdir -p ${CONFIG_DIR_OVERLAY}/opennms.properties.d ${CONFIG_DIR_OVERLAY}/featuresBoot.d
@@ -255,6 +257,7 @@ mkdir -p ${CONFIG_DIR_OVERLAY}/opennms.properties.d ${CONFIG_DIR_OVERLAY}/featur
 # Configure the instance ID
 # Required when having multiple OpenNMS backends sharing a Kafka cluster or an Elasticsearch cluster.
 if [[ ${OPENNMS_INSTANCE_ID} ]]; then
+  echo "Creating ${CONFIG_DIR_OVERLAY}/opennms.properties.d/instanceid.properties with our instance ID '${OPENNMS_INSTANCE_ID}'"
   cat <<EOF > ${CONFIG_DIR_OVERLAY}/opennms.properties.d/instanceid.properties
 # Used for Kafka Topics and Elasticsearch Index Prefixes
 org.opennms.instance.id=${OPENNMS_INSTANCE_ID}
@@ -264,6 +267,7 @@ else
 fi
 
 # Disable data choices (optional)
+echo "Creating ${CONFIG_DIR_OVERLAY}/org.opennms.features.datachoices.cfg to disable data choices"
 cat <<EOF > ${CONFIG_DIR_OVERLAY}/org.opennms.features.datachoices.cfg
 enabled=false
 acknowledged-by=admin
@@ -285,7 +289,7 @@ elif [ "${MAJOR}" -ge 33 ] && [ "${MAJOR}" -lt 2000 ]; then
 else
   USE_UPDATED_DATASOURCE=false
 fi
-echo "USE_UPDATED_DATASOURCE: $USE_UPDATED_DATASOURCE"
+echo "Creating datasource configuration in ${CONFIG_DIR_OVERLAY}/opennms-datasources.xml (USE_UPDATED_DATASOURCE: $USE_UPDATED_DATASOURCE)"
 cat <<EOF > ${CONFIG_DIR_OVERLAY}/opennms-datasources.xml
 <?xml version="1.0" encoding="UTF-8"?>
 <datasource-configuration xmlns:this="http://xmlns.opennms.org/xsd/config/opennms-datasources" 
@@ -349,12 +353,14 @@ fi
 
 # Enable storeByGroup to improve performance
 # RRD Strategy is enabled by default
+echo "Creating ${CONFIG_DIR_OVERLAY}/opennms.properties.d/rrd.properties to enable storeByGroup"
 cat <<EOF > ${CONFIG_DIR_OVERLAY}/opennms.properties.d/rrd.properties
 org.opennms.rrd.storeByGroup=true
 EOF
 
 # Configure Timeseries for Cortex if enabled
 if [[ ${ENABLE_CORTEX} == "true" ]]; then
+  echo "Creating ${CONFIG_DIR_OVERLAY}/opennms.properties.d/timeseries.properties"
   if [[ ${ENABLE_TSS_DUAL_WRITE} == "true" ]]; then
     # Do *not* set org.opennms.timeseries.strategy=integration but do make sure the file exists and is empty for later
     echo -n > ${CONFIG_DIR_OVERLAY}/opennms.properties.d/timeseries.properties
@@ -372,6 +378,7 @@ org.opennms.timeseries.tin.metatags.tag.ifDescr=\${interface:if-description}
 org.opennms.timeseries.tin.metatags.tag.label=\${resource:label}
 EOF
 
+  echo "Creating ${CONFIG_DIR_OVERLAY}/org.opennms.plugins.tss.cortex.cfg"
   cat <<EOF > ${CONFIG_DIR_OVERLAY}/org.opennms.plugins.tss.cortex.cfg
 writeUrl=${CORTEX_WRITE_URL}
 readUrl=${CORTEX_READ_URL}
@@ -386,11 +393,13 @@ EOF
 
   mkdir -p ${CONFIG_DIR_OVERLAY}/featuresBoot.d
 
+  echo "Creating ${CONFIG_DIR_OVERLAY}/featuresBoot.d/cortex.boot"
   cat <<EOF > ${CONFIG_DIR_OVERLAY}/featuresBoot.d/cortex.boot
 opennms-plugins-cortex-tss wait-for-kar=opennms-cortex-tss-plugin
 EOF
 
   if [[ ${ENABLE_TSS_DUAL_WRITE} == "true" ]]; then
+    echo "Creating ${CONFIG_DIR_OVERLAY}/featuresBoot.d/timeseries.boot"
     cat <<EOF > ${CONFIG_DIR_OVERLAY}/featuresBoot.d/timeseries.boot
 opennms-timeseries-api
 EOF
@@ -400,11 +409,13 @@ fi
   mkdir -p ${CONFIG_DIR_OVERLAY}/opennms.properties.d
 
 # Enable ACLs
+echo "Creating ${CONFIG_DIR_OVERLAY}/opennms.properties.d/acl.properties"
 cat <<EOF > ${CONFIG_DIR_OVERLAY}/opennms.properties.d/acl.properties
 org.opennms.web.aclsEnabled=${ENABLE_ACLS}
 EOF
 
 # Required changes in order to use HTTPS through Ingress
+echo "Creating ${CONFIG_DIR_OVERLAY}/opennms.properties.d/webui.properties"
 cat <<EOF > ${CONFIG_DIR_OVERLAY}/opennms.properties.d/webui.properties
 opennms.web.base-url=https://%x%c/
 org.opennms.security.disableLoginSuccessEvent=true
@@ -415,6 +426,7 @@ EOF
 if [[ -v ELASTICSEARCH_SERVER ]]; then
   echo "Configuring Elasticsearch for Flows..."
   PREFIX=$(echo ${OPENNMS_INSTANCE_ID} | tr '[:upper:]' '[:lower:]')-
+  echo "Creating ${CONFIG_DIR_OVERLAY}/org.opennms.features.flows.persistence.elastic.cfg"
   cat <<EOF > ${CONFIG_DIR_OVERLAY}/org.opennms.features.flows.persistence.elastic.cfg
 elasticUrl=https://${ELASTICSEARCH_SERVER}
 globalElasticUser=${ELASTICSEARCH_USER}
@@ -426,6 +438,7 @@ fi
 
 
 # Collectd Optimizations
+echo "Creating ${CONFIG_DIR_OVERLAY}/opennms.properties.d/collectd.properties"
 cat <<EOF > ${CONFIG_DIR_OVERLAY}/opennms.properties.d/collectd.properties
 # To get data as close as possible to PDP
 org.opennms.netmgt.collectd.strictInterval=true
@@ -437,6 +450,7 @@ fi
 
 # Enable ALEC standalone
 if [[ ${ENABLE_ALEC} == "true" ]]; then
+  echo "Creating ${CONFIG_DIR_OVERLAY}/featuresBoot.d/alec.boot"
   cat <<EOF > ${CONFIG_DIR_OVERLAY}/featuresBoot.d/alec.boot
 alec-opennms-standalone wait-for-kar=opennms-alec-plugin
 EOF
@@ -451,10 +465,12 @@ if [[ -v KAFKA_BOOTSTRAP_SERVER ]]; then
 
   echo "Configuring Kafka for IPC..."
 
+  echo "Creating ${CONFIG_DIR_OVERLAY}/opennms.properties.d/amq.properties"
   cat <<EOF > ${CONFIG_DIR_OVERLAY}/opennms.properties.d/amq.properties
 org.opennms.activemq.broker.disable=true
 EOF
 
+  echo "Creating ${CONFIG_DIR_OVERLAY}/opennms.properties.d/kafka.properties"
   cat <<EOF > ${CONFIG_DIR_OVERLAY}/opennms.properties.d/kafka.properties
 org.opennms.core.ipc.strategy=kafka
 EOF
@@ -522,16 +538,16 @@ fi
 
 # Configure RRAs
 if [[ -v OPENNMS_RRAS ]]; then
-  echo "Configuring RRAs..."
   IFS=';' read -a RRAS <<< ${OPENNMS_RRAS}
   RRACFG=""
   for RRA in ${RRAS[@]}; do
     RRACFG+="<rra>${RRA}</rra>"
   done
-  echo ${RRACFG}
-  for XML in $(find ${CONFIG_DIR} -name *datacollection*.xml -or -name *datacollection*.d); do
+  echo "Configuring RRAs..."
+  echo "  RRA config: ${RRACFG}"
+  for XML in $(find ${CONFIG_DIR} -name '*datacollection*.xml' -or -name '*datacollection*.d'); do
     if [ -d $XML ]; then
-      for XML in $(find ${XML} -name *.xml); do
+      for XML in $(find ${XML} -name '*.xml'); do
         update_rras ${XML} ${RRACFG}
       done
     else
@@ -541,15 +557,18 @@ if [[ -v OPENNMS_RRAS ]]; then
 fi
 
 # Enable Syslogd
+echo "Enabling syslogd in ${CONFIG_DIR}/service-configuration.xml"
 sed -r -i '/enabled="false"/{$!{N;s/ enabled="false"[>]\n(.*OpenNMS:Name=Syslogd.*)/>\n\1/}}' ${CONFIG_DIR}/service-configuration.xml
 
 # Disable Telemetryd
 if [[ ${ENABLE_TELEMETRYD} == "false" ]]; then
+  echo "Enabling telemetryd in ${CONFIG_DIR}/service-configuration.xml and ${CONFIG_DIR}/org.apache.karaf.features.cfg"
   sed -i -r '/opennms-flows/d' ${CONFIG_DIR}/org.apache.karaf.features.cfg
   sed -i 'N;s/service.*\n\(.*Telemetryd\)/service enabled="false">\n\1/;P;D' ${CONFIG_DIR}/service-configuration.xml
 fi
 
 # Cleanup temporary requisition files
+echo "Removing temporary requisition files in ${CONFIG_DIR}/imports/pending/*.xml.* and ${CONFIG_DIR}/foreign-sources/pending/*.xml.*"
 rm -f ${CONFIG_DIR}/imports/pending/*.xml.*
 rm -f ${CONFIG_DIR}/foreign-sources/pending/*.xml.*
 
@@ -564,11 +583,11 @@ else
   echo "Grafana is not enabled, not running onms-grafana-init.sh"
   if [[ -e "${CONFIG_DIR}/opennms.properties.d/grafana.properties" ]];then
    echo "Found ${CONFIG_DIR}/opennms.properties.d/grafana.properties, we are going to remove it."
-   rm "${CONFIG_DIR}/opennms.properties.d/grafana.properties"  >/dev/null 2>&1;
+   rm "${CONFIG_DIR}/opennms.properties.d/grafana.properties"
   fi
 fi
 
-echo "Updating admin password"
+echo "Updating admin password in ${CONFIG_DIR}/users.xml"
 if [[ -e "/opt/opennms/bin/password" ]];then 
    cp ${CONFIG_DIR}/users.xml /opt/opennms/etc/users.xml 
    echo "RUNAS=$(whoami)" > /opt/opennms/etc/opennms.conf

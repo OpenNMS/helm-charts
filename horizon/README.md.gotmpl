@@ -1,0 +1,41 @@
+# OpenNMS Helm Charts -- Horizon
+
+OpenNMS Helm Charts makes it easier for users to run OpenNMS Horizon locally in a Kubernetes cluster or Red Hat OpenShift.
+It is not yet available for a Cloud environment.
+
+Each deployment through OpenNMS Helm Charts has a single Core server, Grafana, and a custom Ingress that shares the RRD files and some configuration files, and multiple Sentinels for flow processing.
+
+Note that this is one way to approach the solution.
+We recommend that you study the content of the Helm chart and tune it for your needs.
+
+## Quick Start
+
+You can bring up an instance of OpenNMS for testing using the following commands:
+
+```
+helm upgrade --install ingress-nginx ingress-nginx \
+  --repo https://kubernetes.github.io/ingress-nginx \
+  --namespace ingress-nginx --create-namespace
+
+cd scripts
+
+./start-dependencies.sh
+
+helm repo add opennms https://opennms.github.io/helm-charts
+
+helm install monms opennms/horizon --set domain=domain1.com  --create-namespace
+```
+
+## Product documentation
+For information on requirements, installation, manual configuration, and troubleshooting tips, see the [product documentation](https://docs.opennms.com/opennmshelmcharts/latest/installation/introduction.html#requirements).
+
+## Version compatibility
+
+| Helm chart version | Horizon version(s) | Meridian version(s) |
+| ----------- | ----------- | ----------- |
+| 1.x | Horizon 32.x | Meridian 2023.x |
+
+
+{{ template "chart.valuesSection" . }}
+
+{{ template "helm-docs.versionFooter" . }}
