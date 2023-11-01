@@ -108,6 +108,7 @@ ingress:
 core:
  inspector:
   enabled: false
+ overlayConfigMaps: []
  terminationGracePeriodSeconds: 120
  image:
   repository: opennms/horizon

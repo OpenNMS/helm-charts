@@ -64,6 +64,7 @@ helm install monms opennms/horizon --set domain=domain1.com  --create-namespace
 | core.image.repository | string | `"opennms/horizon"` |  |
 | core.image.tag | string | `""` |  |
 | core.inspector.enabled | bool | `false` |  |
+| core.overlayConfigMaps | list | `[]` |  |
 | core.postConfigJob.ttlSecondsAfterFinished | int | `300` |  |
 | core.resources.limits.cpu | string | `"2"` |  |
 | core.resources.limits.memory | string | `"8Gi"` |  |

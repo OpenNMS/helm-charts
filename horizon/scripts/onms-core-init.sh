@@ -141,6 +141,8 @@ DEPLOY_DIR="/opennms-deploy"       # Mounted Externally
 
 CONFIG_DIR_OVERLAY=${OVERLAY_DIR}/etc
 
+OVERLAY_CONFIG_MAPS="/opennms-overlay-configmaps"          # Mounted externally
+
 KARAF_FILES=( \
 "config.properties" \
 "startup.properties" \
@@ -618,4 +620,22 @@ elif command -v perl   >/dev/null 2>&1; then
 else
  echo "We are unable to update Admin password. Exiting."
  exit 1
+fi
+
+if [ -d ${OVERLAY_CONFIG_MAPS} ]; then
+  echo "Processing overlay config maps ..."
+  # We need to make sure the directories are numerically sorted to match the configured configmap order.
+  for dir in $(ls -1d ${OVERLAY_CONFIG_MAPS}/* | sort -t/ -k3 -n); do
+    if [[ $(basename $dir) =~ .*-unzip ]]; then
+      for zip in $(ls -1 ${dir}/*.zip | sort); do
+        echo "  Extracting files from $zip to ${OVERLAY_DIR}/ ..."
+        unzip -o -d ${OVERLAY_DIR} ${zip} | sed 's/^/    /'
+      done
+    else
+      # When we first copy off of the configmap volume, we copy symlinks as files and ignore Kubernetes configmap volume ".." files.
+      # See: https://github.com/spring-projects/spring-boot/issues/23232
+      echo "  Copying files from $dir to ${OVERLAY_DIR}/ ..."
+      rsync -arO -L --exclude='..*' --no-perms --no-owner --no-group --out-format="%n %C" $dir/ ${OVERLAY_DIR}/ | sed 's/^/    /'
+    fi
+  done
 fi
