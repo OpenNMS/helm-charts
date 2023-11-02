@@ -151,14 +151,20 @@ spec:
         args:
         - -s
         ports:
+        {{- if .Values.core.configuration.ports.syslog.enabled }}
         - containerPort: 8101
           name: karaf
+        {{- end}}
         - containerPort: 8980
           name: http
+        {{- if .Values.core.configuration.ports.trapd.enabled }}
         - containerPort: 1162
           name: trapd
+        {{- end}}
+        {{- if .Values.core.configuration.ports.syslog.enabled }}
         - containerPort: 10514
           name: syslog
+        {{- end}}
         envFrom:
         - configMapRef:
             name: app-settings

@@ -12,14 +12,23 @@ spec:
   ports:
   - port: 8980
     name: http
-  - port: 8101
+  {{- if .Values.core.configuration.ports.karaf.enabled }}
+  - port: {{ .Values.core.configuration.ports.karaf.externalPort | default 8101 }}
     name: karaf
-  - port: 1162
+    targetPort: 8101
+  {{- end }}
+  {{- if .Values.core.configuration.ports.trapd.enabled }}
+  - port: {{ .Values.core.configuration.ports.trapd.externalPort | default 1162 }}
     name: trapd
     protocol: UDP
-  - port: 10514
+    targetPort: 1162
+  {{- end }}
+  {{- if .Values.core.configuration.ports.syslog.enabled }}
+  - port: {{ .Values.core.configuration.ports.syslog.externalPort | default 10514 }}
     name: syslog
     protocol: UDP
+    targetPort: 10514
+  {{- end }}
   selector:
     app: onms-core
     {{- include "core.selectorLabels" . | nindent 4 }}
