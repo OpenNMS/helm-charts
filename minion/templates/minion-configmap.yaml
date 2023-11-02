@@ -15,7 +15,7 @@ data:
     ipc:
      kafka:
       bootstrap.servers: {{ .Values.minion.kafkaBroker.address }}
-      {{- if .Values.truststore.content }}
+      {{- if or (.Values.truststore.content) (and .Values.minion.kafkaBroker.username .Values.minion.kafkaBroker.password) }}
       security.protocol: SASL_SSL
       sasl.mechanism: SCRAM-SHA-512
       sasl.jaas.config: org.apache.kafka.common.security.scram.ScramLoginModule required username="{{.Values.minion.kafkaBroker.username}}" password="{{.Values.minion.kafkaBroker.password}}";
