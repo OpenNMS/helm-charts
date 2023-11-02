@@ -39,7 +39,7 @@ spec:
       securityContext:
           sysctls:
             - name: net.ipv4.ping_group_range
-              value: "0           429496729"
+              value: "0           2147483647"
          {{- if eq (include "onOpenShift" .) "true" }}
           {{- if eq ((.Values.dependencies.securitycontext).allowPrivilegeEscalation) true }}
           fsGroup: 10001
@@ -155,6 +155,10 @@ spec:
           name: karaf
         - containerPort: 8980
           name: http
+        - containerPort: 1162
+          name: trapd
+        - containerPort: 10514
+          name: syslog
         envFrom:
         - configMapRef:
             name: app-settings

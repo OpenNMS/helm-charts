@@ -14,7 +14,7 @@ spec:
     name: http
   - port: 8101
     name: karaf
-  - port: 1116
+  - port: 1162
     name: trapd
     protocol: UDP
   - port: 10514
