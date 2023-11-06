@@ -19,7 +19,7 @@ helm upgrade --install ingress-nginx ingress-nginx \
 
 cd scripts
 
-./start-dependencies.sh        
+./start-dependencies.sh
 
 helm repo add opennms https://opennms.github.io/helm-charts
 
@@ -43,16 +43,16 @@ For information on requirements, installation, manual configuration, and trouble
 | core.configuration.alecImage | object | `{}` |  |
 | core.configuration.alwaysRollDeployment | bool | `true` |  |
 | core.configuration.cortexTssImage | object | `{}` |  |
-| core.configuration.database.password | string | `"` |  |
+| core.configuration.database.password | string | `"0p3nNM5"` |  |
 | core.configuration.database.poolSize | int | `50` |  |
 | core.configuration.database.username | string | `"opennms"` |  |
 | core.configuration.enableAcls | bool | `false` |  |
 | core.configuration.enableAlec | bool | `false` |  |
 | core.configuration.enableCortex | bool | `false` |  |
 | core.configuration.enableTssDualWrite | bool | `false` |  |
-| core.configuration.etcUpdatePolicy | string | `"newer"` |  |
-| core.configuration.http.adminPassword | string | `""` |  |
-| core.configuration.http.restPassword | string | `""` |  |
+| core.configuration.etcUpdatePolicy | string | `"never"` |  |
+| core.configuration.http.adminPassword | string | `"admin"` |  |
+| core.configuration.http.restPassword | string | `"admin"` |  |
 | core.configuration.http.restUsername | string | `"opennms"` |  |
 | core.configuration.nodeSelector | string | `nil` |  |
 | core.configuration.ports.karaf.enabled | bool | `true` |  |
@@ -80,7 +80,9 @@ For information on requirements, installation, manual configuration, and trouble
 | core.resources.requests.cpu | string | `"2"` |  |
 | core.resources.requests.memory | string | `"4Gi"` |  |
 | core.terminationGracePeriodSeconds | int | `120` |  |
-| createNamespace | bool | `true` |  |
+| createNamespace | bool | `false` |  |
+| dependencies.clusterRole | bool | `true` |  |
+| dependencies.clusterRoleBinding | bool | `true` |  |
 | dependencies.cortex.bulkheadMaxWaitDuration | string | `"9223372036854775807"` |  |
 | dependencies.cortex.externalTagsCacheSize | int | `1000` |  |
 | dependencies.cortex.maxConcurrentHttpConnections | int | `100` |  |
@@ -93,13 +95,13 @@ For information on requirements, installation, manual configuration, and trouble
 | dependencies.elasticsearch.configuration.flows.numShards | int | `1` |  |
 | dependencies.elasticsearch.configuration.flows.replicationFactor | int | `0` |  |
 | dependencies.elasticsearch.hostname | string | `""` |  |
-| dependencies.elasticsearch.password | string | `""` |  |
+| dependencies.elasticsearch.password | string | `"31@st1c"` |  |
 | dependencies.elasticsearch.port | int | `9200` |  |
 | dependencies.elasticsearch.username | string | `"elastic"` |  |
 | dependencies.kafka.configuration.saslMechanism | string | `"SCRAM-SHA-512"` |  |
 | dependencies.kafka.configuration.securityProtocol | string | `"SASL_SSL"` |  |
 | dependencies.kafka.hostname | string | `""` |  |
-| dependencies.kafka.password | string | `""` |  |
+| dependencies.kafka.password | string | `"0p3nNM5"` |  |
 | dependencies.kafka.port | int | `9093` |  |
 | dependencies.kafka.username | string | `"opennms"` |  |
 | dependencies.loki.caCert | string | `""` |  |
@@ -109,24 +111,32 @@ For information on requirements, installation, manual configuration, and trouble
 | dependencies.loki.username | string | `""` |  |
 | dependencies.postgresql.caCert | string | `""` |  |
 | dependencies.postgresql.hostname | string | `"onms-db.shared.svc"` |  |
-| dependencies.postgresql.password | string | `""` |  |
+| dependencies.postgresql.password | string | `"P0stgr3s"` |  |
 | dependencies.postgresql.port | int | `5432` |  |
 | dependencies.postgresql.sslfactory | string | `"org.postgresql.ssl.LibPQFactory"` |  |
 | dependencies.postgresql.sslmode | string | `"require"` |  |
 | dependencies.postgresql.username | string | `"postgres"` |  |
+| dependencies.route | bool | `true` |  |
+| dependencies.securitycontext.allowPrivilegeEscalation | bool | `true` |  |
+| dependencies.securitycontext.allowedCapabilities[0] | string | `"NET_BIND_SERVICE"` |  |
+| dependencies.securitycontext.allowedCapabilities[1] | string | `"CAP_NET_RAW"` |  |
+| dependencies.securitycontext.securitycontextconstraints.enabled | bool | `true` |  |
+| dependencies.securitycontext.securitycontextconstraints.name | string | `"opennms-scc"` |  |
+| dependencies.securitycontext.serviceaccount.enabled | bool | `true` |  |
+| dependencies.securitycontext.serviceaccount.name | string | `"opennms-sa"` |  |
 | dependencies.truststore.content | string | `""` |  |
-| dependencies.truststore.password | string | `""` |  |
+| dependencies.truststore.password | string | `"0p3nNM5"` |  |
 | domain | string | `"example.com"` |  |
 | grafana.configuration.database.image.pullPolicy | string | `"IfNotPresent"` |  |
 | grafana.configuration.database.image.repository | string | `"postgres"` |  |
 | grafana.configuration.database.image.tag | string | `"13"` |  |
-| grafana.configuration.database.password | string | `""` |  |
+| grafana.configuration.database.password | string | `"Gr@f@n@"` |  |
 | grafana.configuration.database.sslmode | string | `"require"` |  |
 | grafana.configuration.database.username | string | `"grafana"` |  |
-| grafana.configuration.ui.adminPassword | string | `""` |  |
+| grafana.configuration.ui.adminPassword | string | `"admin"` |  |
 | grafana.image.pullPolicy | string | `"IfNotPresent"` |  |
 | grafana.image.repository | string | `"opennms/helm"` |  |
-| grafana.image.tag | string | `"9.0.4"` |  |
+| grafana.image.tag | string | `"9.0.10"` |  |
 | grafana.imageRenderer.image.pullPolicy | string | `"IfNotPresent"` |  |
 | grafana.imageRenderer.image.repository | string | `"grafana/grafana-image-renderer"` |  |
 | grafana.imageRenderer.image.tag | string | `"latest"` |  |
@@ -137,9 +147,9 @@ For information on requirements, installation, manual configuration, and trouble
 | grafana.imageRenderer.resources.requests.memory | string | `"128Mi"` |  |
 | grafana.replicaCount | int | `0` |  |
 | grafana.resources.limits.cpu | string | `"200m"` |  |
-| grafana.resources.limits.memory | string | `"256Mi"` |  |
+| grafana.resources.limits.memory | string | `"1Gi"` |  |
 | grafana.resources.requests.cpu | string | `"100m"` |  |
-| grafana.resources.requests.memory | string | `"128Mi"` |  |
+| grafana.resources.requests.memory | string | `"1Gi"` |  |
 | imagePullSecrets | list | `[]` |  |
 | ingress.annotations | object | `{}` |  |
 | ingress.certManager.clusterIssuer | string | `"opennms-issuer"` |  |
@@ -160,3 +170,6 @@ For information on requirements, installation, manual configuration, and trouble
 | sentinel.resources.requests.memory | string | `"2Gi"` |  |
 | sentinel.terminationGracePeriodSeconds | int | `60` |  |
 | timezone | string | `"America/New_York"` |  |
+
+----------------------------------------------
+Autogenerated from chart metadata using [helm-docs v1.11.3](https://github.com/norwoodj/helm-docs/releases/v1.11.3)

@@ -57,7 +57,7 @@ if [[ ${ENABLE_GRAFANA} == "true" ]]; then
 fi
 
 # Add user to access ReST API for Grafana, Sentinels and Minions
-echo "Adding user ${OPENNMS_HTTP_USER} (for Grafana and Sentinels)"
+echo "Adding user ${OPENNMS_HTTP_USER} (for Grafana, Sentinels, and Minions)"
 curl -sSf -u "${ONMS_AUTH}" -X POST \
   -H "Content-Type: application/xml" \
   -d "<user><user-id>${OPENNMS_HTTP_USER}</user-id><password>${OPENNMS_HTTP_PASS}</password><role>ROLE_REST</role><role>ROLE_MINION</role></user>" \
