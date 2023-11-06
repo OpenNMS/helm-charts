@@ -25,7 +25,7 @@ minion:
   storage:
    dataFolder: 5Gi
   ports:
-   trapd: 
+   trapd:
     enabled: true
     externalPort: 1162
    syslog:
@@ -67,4 +67,3 @@ securitycontext:
  serviceaccount:
   enabled: true
   name: minion-sa
-

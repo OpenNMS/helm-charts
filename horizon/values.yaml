@@ -159,7 +159,7 @@ core:
   affinity: null
   tolerations: null
   ports:
-   trapd: 
+   trapd:
     enabled: true
     externalPort: 1162
    syslog:
