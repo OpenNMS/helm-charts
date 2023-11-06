@@ -55,6 +55,12 @@ For information on requirements, installation, manual configuration, and trouble
 | core.configuration.http.restPassword | string | `""` |  |
 | core.configuration.http.restUsername | string | `"opennms"` |  |
 | core.configuration.nodeSelector | string | `nil` |  |
+| core.configuration.ports.karaf.enabled | bool | `true` |  |
+| core.configuration.ports.karaf.externalPort | int | `8101` |  |
+| core.configuration.ports.syslog.enabled | bool | `true` |  |
+| core.configuration.ports.syslog.externalPort | int | `10514` |  |
+| core.configuration.ports.trapd.enabled | bool | `true` |  |
+| core.configuration.ports.trapd.externalPort | int | `1162` |  |
 | core.configuration.rras[0] | string | `"RRA:AVERAGE:0.5:1:2016"` |  |
 | core.configuration.rras[1] | string | `"RRA:AVERAGE:0.5:12:1488"` |  |
 | core.configuration.rras[2] | string | `"RRA:AVERAGE:0.5:288:366"` |  |

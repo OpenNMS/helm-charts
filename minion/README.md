@@ -14,6 +14,12 @@ This template can be used to bring up a minion and connect it to a OpenNMS core.
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | core.instanceID | string | `"monms"` |  |
+| minion.configuration.ports.karaf.enabled | bool | `true` |  |
+| minion.configuration.ports.karaf.externalPort | int | `8201` |  |
+| minion.configuration.ports.syslog.enabled | bool | `true` |  |
+| minion.configuration.ports.syslog.externalPort | int | `1514` |  |
+| minion.configuration.ports.trapd.enabled | bool | `true` |  |
+| minion.configuration.ports.trapd.externalPort | int | `1162` |  |
 | minion.configuration.storage.dataFolder | string | `"5Gi"` |  |
 | minion.image.pullPolicy | string | `"IfNotPresent"` |  |
 | minion.image.repository | string | `"opennms/minion"` |  |
@@ -23,5 +29,9 @@ This template can be used to bring up a minion and connect it to a OpenNMS core.
 | minion.kafkaBroker.username | string | `""` |  |
 | minion.location | string | `"pod"` |  |
 | minion.name | string | `"myminion"` |  |
+| minion.resources.limits.cpu | string | `"2"` |  |
+| minion.resources.limits.memory | string | `"8Gi"` |  |
+| minion.resources.requests.cpu | string | `"2"` |  |
+| minion.resources.requests.memory | string | `"4Gi"` |  |
 | truststore.content | string | `""` |  |
 | truststore.password | string | `""` |  |
