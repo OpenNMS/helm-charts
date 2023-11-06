@@ -28,13 +28,13 @@ minion:
    dataFolder: 5Gi
   ports:
    trapd: 
-    enabled: false
+    enabled: true
     externalPort: 1162
    syslog:
-    enabled: false
+    enabled: true
     externalPort: 1514
    karaf:
-    enabled: false
+    enabled: true
     externalPort: 8201
  image:
   repository: opennms/minion
