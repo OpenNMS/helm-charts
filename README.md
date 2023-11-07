@@ -6,5 +6,5 @@ Note that this is one way to approach the solution.
 We recommend that you study the content of the Helm chart and tune it for your needs.
 
 ## Charts
-* [Core](horizon/README.md)
+* [Horizon](horizon/README.md)
 * [Minion](minion/README.md). This is an experimental chart.
