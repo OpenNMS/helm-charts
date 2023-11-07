@@ -1,4 +1,4 @@
-# OpenNMS Helm Charts
+# OpenNMS Helm Charts -- Horizon
 
 If your organization uses Kubernetes or Red Hat OpenShift, OpenNMS makes a Helm chart available to simplify deployment of Horizon and Meridian.
 
@@ -18,7 +18,6 @@ helm repo add opennms https://opennms.github.io/helm-charts
 
 helm install monms opennms/horizon --set domain=domain1.com  --create-namespace
 ```
-NOTE: For Meridian, repalce "horizon" in the second command with "meridian".
 
 ## Version compatibility
 
