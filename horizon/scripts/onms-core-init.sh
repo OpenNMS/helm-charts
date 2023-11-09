@@ -333,7 +333,7 @@ cat <<EOF >> ${CONFIG_DIR_OVERLAY}/opennms-datasources.xml
                     database-name="postgres" 
                     class-name="org.postgresql.Driver" 
                     url="jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/postgres?sslmode=${POSTGRES_SSL_MODE}&amp;sslfactory=${POSTGRES_SSL_FACTORY}"
-                    user-name="${POSTGRES_PASSWORD}"
+                    user-name="${POSTGRES_USER}"
                     password="${POSTGRES_PASSWORD}">
     <connection-pool idleTimeout="600"
                      minPool="0"
