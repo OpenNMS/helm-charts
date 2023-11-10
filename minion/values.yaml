@@ -24,10 +24,27 @@ minion:
  configuration:
   storage:
    dataFolder: 5Gi
+  ports:
+   trapd:
+    enabled: true
+    externalPort: 1162
+   syslog:
+    enabled: true
+    externalPort: 1514
+   karaf:
+    enabled: true
+    externalPort: 8201
  image:
   repository: opennms/minion
   pullPolicy: IfNotPresent
   tag: ''  # Defaults to the chart appVersion
+ resources:
+  limits:
+   cpu: '2'
+   memory: 8Gi
+  requests:
+   cpu: '2'
+   memory: 4Gi
 
 
 core:

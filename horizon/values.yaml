@@ -158,6 +158,16 @@ core:
   nodeSelector: null
   affinity: null
   tolerations: null
+  ports:
+   trapd:
+    enabled: true
+    externalPort: 1162
+   syslog:
+    enabled: true
+    externalPort: 10514
+   karaf:
+    enabled: true
+    externalPort: 8101
  postConfigJob:
   ttlSecondsAfterFinished: 300
 

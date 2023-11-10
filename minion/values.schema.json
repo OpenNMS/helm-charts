@@ -78,6 +78,50 @@
                                     "default": "5Gi"
                                 }
                             }
+                        },
+                        "ports": {
+                            "type": "object",
+                            "properties": {
+                                "trapd": {
+                                    "type": "object",
+                                    "properties": {
+                                        "enabled": {
+                                            "type": "boolean",
+                                            "default": false
+                                        },
+                                        "externalPort": {
+                                            "type": "integer",
+                                            "default": 1162
+                                        }
+                                    }
+                                },
+                                "syslog": {
+                                    "type": "object",
+                                    "properties": {
+                                        "enabled": {
+                                            "type": "boolean",
+                                            "default": false
+                                        },
+                                        "externalPort": {
+                                            "type": "integer",
+                                            "default": 10514
+                                        }
+                                    }
+                                },
+                                "karaf": {
+                                    "type": "object",
+                                    "properties": {
+                                        "enabled": {
+                                            "type": "boolean",
+                                            "default": false
+                                        },
+                                        "externalPort": {
+                                            "type": "integer",
+                                            "default": 8101
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 },
@@ -146,9 +190,9 @@
             "form": true,
             "title": "Security Context",
             "properties": {
-                "allowedCapabilities":{
+                "allowedCapabilities": {
                     "type": "array",
-                    "description": "(Red Hat OpenShift only) Capabilities a container is allowed to use " ,
+                    "description": "(Red Hat OpenShift only) Capabilities a container is allowed to use ",
                     "items": {
                         "type": "string",
                         "default": [
@@ -157,10 +201,10 @@
                         ]
                     }
                 },
-                "allowPrivilegeEscalation":{
+                "allowPrivilegeEscalation": {
                     "type": "boolean",
                     "default": true,
-                    "description": "(Red Hat OpenShift only) Controls whether a process can gain more privileges than its parent process " 
+                    "description": "(Red Hat OpenShift only) Controls whether a process can gain more privileges than its parent process "
                 },
                 "securitycontextconstraints": {
                     "type": "object",

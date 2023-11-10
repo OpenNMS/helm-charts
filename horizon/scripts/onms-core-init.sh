@@ -117,6 +117,9 @@ if [[ "$PKG" == *"meridian"* ]]; then
   if (( $MAJOR > 2021 )); then
     USE_TWIN=true
   fi
+elif [[ "$PKG" == *"opennms"* ]] && [[ $MAJOR > 2021 ]];then
+  echo "OpenNMS Core $MAJOR detected"
+  USE_TWIN=true
 else
   echo "OpenNMS Core $MAJOR detected"
   if (( $MAJOR > 28 )); then
@@ -330,7 +333,7 @@ cat <<EOF >> ${CONFIG_DIR_OVERLAY}/opennms-datasources.xml
                     database-name="postgres" 
                     class-name="org.postgresql.Driver" 
                     url="jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/postgres?sslmode=${POSTGRES_SSL_MODE}&amp;sslfactory=${POSTGRES_SSL_FACTORY}"
-                    user-name="${POSTGRES_PASSWORD}"
+                    user-name="${POSTGRES_USER}"
                     password="${POSTGRES_PASSWORD}">
     <connection-pool idleTimeout="600"
                      minPool="0"
