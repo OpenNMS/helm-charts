@@ -46,4 +46,6 @@ else
   psql -c "alter role ${GF_DATABASE_USER} with password '${GF_DATABASE_PASSWORD}';"
   psql -c "alter user ${GF_DATABASE_USER} set search_path to ${GF_DATABASE_NAME},public;"
   psql -c "grant all on database ${GF_DATABASE_NAME} to ${GF_DATABASE_USER};"
+  psql -c "ALTER DATABASE ${GF_DATABASE_NAME} OWNER TO ${GF_DATABASE_USER};"
+  psql -c "GRANT USAGE, CREATE ON SCHEMA PUBLIC TO ${GF_DATABASE_USER};"
 fi
