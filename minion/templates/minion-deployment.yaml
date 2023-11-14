@@ -2,21 +2,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: minion
+  name: {{ .Values.minion.name | default  .Release.Name }}
   labels:
-    app: minion
-  namespace: {{ .Release.Name }}
+    app: {{ .Values.minion.name | default  .Release.Name }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: minion
+      app: {{ .Values.minion.name | default  .Release.Name }}
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: minion
+        app: {{ .Values.minion.name | default  .Release.Name }}
     spec:
       {{- if and (eq (include "onOpenShift" .) "true") ((.Values.securitycontext).serviceaccount.enabled) }}
       serviceAccountName: {{ (.Values.securitycontext).serviceaccount.name | quote }} 
@@ -82,7 +81,7 @@ spec:
             failureThreshold: 3
             periodSeconds: 30
             timeoutSeconds: 20
-          name: minion
+          name: {{ .Values.minion.name | default  .Release.Name }}
           ports:
            {{- if .Values.minion.configuration.ports.karaf.enabled }}
             - containerPort: 8201
@@ -101,27 +100,27 @@ spec:
           resources: {}
           volumeMounts:
             - mountPath: /opt/minion/minion-config.yaml
-              name: minion-settings
+              name: {{ .Values.minion.name | default  .Release.Name }}-settings
               subPath: minion-config.yaml
             {{- if .Values.truststore.content }}
             - mountPath: /etc/java/jks
               name: jks
             {{- end }}
             - mountPath: /opt/minion/data
-              name: minion-data-folder
-      hostname: minion
+              name: {{ .Values.minion.name | default  .Release.Name }}-data-folder
+      hostname: {{ .Values.minion.name | default  .Release.Name }}
       restartPolicy: Always
       volumes:
-        - name: minion-data-folder
+        - name: {{ .Values.minion.name | default  .Release.Name }}-data-folder
           persistentVolumeClaim:
-            claimName: minion-data-folder
-        - name: minion-settings
+            claimName: {{ .Values.minion.name | default  .Release.Name }}-data-folder
+        - name: {{ .Values.minion.name | default  .Release.Name }}-settings
           configMap:
-            name: minion-settings
+            name: {{ .Values.minion.name | default  .Release.Name }}-settings
         {{- if .Values.truststore.content }}
         - name: jks
           secret:
             defaultMode: 420
-            secretName: minion-app-jks
+            secretName: {{ .Values.minion.name | default  .Release.Name }}-app-jks
         {{- end }}
 status: {}

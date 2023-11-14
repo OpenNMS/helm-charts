@@ -1,4 +1,6 @@
+{{ $name :=(printf "system:openshift:scc:%s" (.Values.securitycontext).securitycontextconstraints.name) }}
 {{- if and (eq (include "onOpenShift" .) "true") (.Values.clusterRole) }}
+{{- if not (lookup "rbac.authorization.k8s.io/v1" "ClusterRole" "" $name ) }}
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
@@ -12,4 +14,5 @@ rules:
       - securitycontextconstraints
     resourceNames:
       - {{ (.Values.securitycontext).securitycontextconstraints.name | quote }}
+{{- end }}
 {{- end }}

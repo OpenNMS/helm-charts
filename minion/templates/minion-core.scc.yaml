@@ -1,9 +1,9 @@
 {{- if and (eq (include "onOpenShift" .) "true") ((.Values.securitycontext).securitycontextconstraints.enabled) }}
+{{- if not (lookup "security.openshift.io/v1" "SecurityContextConstraints" "" (.Values.securitycontext).securitycontextconstraints.name) }}
 ---
 kind: SecurityContextConstraints
 metadata:
   name: {{ (.Values.securitycontext).securitycontextconstraints.name | quote }}
-  namespace: {{ .Release.Name }}
 allowHostDirVolumePlugin: false
 allowHostIPC: false
 allowHostNetwork: false
@@ -41,4 +41,5 @@ volumes:
 - persistentVolumeClaim
 - projected
 - secret
+{{- end }}
 {{- end }}

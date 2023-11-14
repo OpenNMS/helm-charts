@@ -2,11 +2,10 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: minion-settings
-  namespace: {{ .Release.Name }}
+  name: {{ .Values.minion.name | default  .Release.Name }}-settings
 data:
   minion-config.yaml: |
-    id: {{ .Values.minion.name }}
+    id: {{ .Values.minion.name | default .Release.Name }}
     location: {{ .Values.minion.location }}
 
     system:

@@ -1,8 +1,11 @@
+{{- $saname := (.Values.securitycontext).serviceaccount.name }}
+{{- $namespace := .Release.Namespace }}
 {{- if and (eq (include "onOpenShift" .) "true") ((.Values.securitycontext).serviceaccount.enabled) }}
+{{- if not (lookup "v1" "ServiceAccount" $namespace $saname) }}
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: {{ (.Values.securitycontext).serviceaccount.name | quote }}
-  namespace: {{ .Release.Name }}
+{{- end }}
 {{- end }}
