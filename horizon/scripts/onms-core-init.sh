@@ -407,6 +407,16 @@ EOF
 opennms-timeseries-api
 EOF
   fi
+else
+  if [[ -e "${CONFIG_DIR}/featuresBoot.d/cortex.boot" ]];then
+   echo "Found ${CONFIG_DIR}/featuresBoot.d/cortex.boot, we are going to remove it."
+   rm "${CONFIG_DIR}/featuresBoot.d/cortex.boot"
+  fi
+
+  if [[ -e "${CONFIG_DIR}/featuresBoot.d/timeseries.boot" ]];then
+   echo "Found ${CONFIG_DIR}/featuresBoot.d/timeseries.boot, we are going to remove it."
+   rm "${CONFIG_DIR}/featuresBoot.d/timeseries.boot"
+  fi
 fi
 
   mkdir -p ${CONFIG_DIR_OVERLAY}/opennms.properties.d
@@ -457,6 +467,11 @@ if [[ ${ENABLE_ALEC} == "true" ]]; then
   cat <<EOF > ${CONFIG_DIR_OVERLAY}/featuresBoot.d/alec.boot
 alec-opennms-standalone wait-for-kar=opennms-alec-plugin
 EOF
+else
+  if [[ -e "${CONFIG_DIR}/featuresBoot.d/alec.boot" ]];then
+   echo "Found ${CONFIG_DIR}/featuresBoot.d/alec.boot, we are going to remove it."
+   rm "${CONFIG_DIR}/featuresBoot.d/alec.boot"
+  fi
 fi
 
 # Configure Sink and RPC to use Kafka, and the Kafka Producer.
