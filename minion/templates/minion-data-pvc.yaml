@@ -2,7 +2,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   creationTimestamp: null
-  name: {{ .Values.minion.name | default  .Release.Name }}-data-folder
+  name: minion-data-folder
 spec:
   accessModes:
     - ReadWriteOnce

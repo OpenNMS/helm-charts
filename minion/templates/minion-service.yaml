@@ -3,8 +3,8 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: {{ .Values.minion.name | default  .Release.Name }}
-  name: {{ .Values.minion.name | default  .Release.Name }}
+    app: minion
+  name: minion
 spec:
   ports:
     {{- if .Values.minion.configuration.ports.karaf.enabled }}
@@ -25,7 +25,7 @@ spec:
       targetPort: 1514
     {{- end }}
   selector:
-    app: {{ .Values.minion.name | default  .Release.Name }}
+    app: minion
 status:
   loadBalancer: {}
 {{- end }}
