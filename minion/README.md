@@ -40,8 +40,10 @@ This template can be used to bring up a minion and connect it to a OpenNMS core.
 | securitycontext.allowPrivilegeEscalation | bool | `true` |  |
 | securitycontext.allowedCapabilities[0] | string | `"NET_BIND_SERVICE"` |  |
 | securitycontext.allowedCapabilities[1] | string | `"CAP_NET_RAW"` |  |
+| securitycontext.securitycontextconstraints.create | bool | `true` |  |
 | securitycontext.securitycontextconstraints.enabled | bool | `true` |  |
 | securitycontext.securitycontextconstraints.name | string | `"minion-scc"` |  |
+| securitycontext.serviceaccount.create | bool | `true` |  |
 | securitycontext.serviceaccount.enabled | bool | `true` |  |
 | securitycontext.serviceaccount.name | string | `"minion-sa"` |  |
 | truststore.content | string | `""` |  |
