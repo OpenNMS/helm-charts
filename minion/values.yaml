@@ -63,7 +63,9 @@ securitycontext:
  allowPrivilegeEscalation: true
  securitycontextconstraints:
   enabled: true
+  create: true
   name: minion-scc
  serviceaccount:
   enabled: true
+  create: true
   name: minion-sa
