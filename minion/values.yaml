@@ -1,5 +1,3 @@
-createNamespace: false  # Whether to create the namespace for this deployment
-
 # Red Hat OpenShift related settings for creating Cluster Role and Binding
 clusterRole: true
 clusterRoleBinding: true

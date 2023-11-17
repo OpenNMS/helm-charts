@@ -2,11 +2,6 @@
     "$schema": "http://json-schema.org/schema#",
     "type": "object",
     "properties": {
-        "createNamespace": {
-            "type": "boolean",
-            "title": "Create Namespace",
-            "default": false
-        },
         "imagePullSecrets": {
             "type": "array",
             "title": "Image Pull Secrets",

@@ -16,7 +16,6 @@ This template can be used to bring up a minion and connect it to a OpenNMS core.
 | clusterRole | bool | `true` |  |
 | clusterRoleBinding | bool | `true` |  |
 | core.instanceID | string | `"monms"` |  |
-| createNamespace | bool | `false` |  |
 | imagePullSecrets | list | `[]` |  |
 | minion.configuration.ports.karaf.enabled | bool | `true` |  |
 | minion.configuration.ports.karaf.externalPort | int | `8201` |  |
