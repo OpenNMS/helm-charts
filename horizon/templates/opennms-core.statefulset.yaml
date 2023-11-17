@@ -121,6 +121,20 @@ spec:
           mountPath: /opt/opennms-overlay # Required by the script - OVERLAY_DIR
         - name: scripts
           mountPath: /scripts # Required by the script
+        {{- range $k, $r := .Values.core.overlayConfigMaps }}
+        - name: overlay-configmap-{{ $k }}
+          {{- if $r.unzip }}
+            {{- if $r.path }}
+              {{- printf "path not allowed when unzip is true for core.overlayConfigMaps with name '%s'" $r.name | fail }}
+            {{- end }}
+          mountPath: /opennms-overlay-configmaps/{{ $k }}-unzip
+          {{- else }}
+            {{- if empty $r.path }}
+              {{- printf "path required for core.overlayConfigMaps with name '%s'" $r.name | fail }}
+            {{- end }}
+          mountPath: /opennms-overlay-configmaps/{{ $k }}/{{ $r.path }}
+          {{- end }}
+        {{- end }}
       nodeSelector:
         {{- toYaml .Values.core.configuration.nodeSelector | nindent 8 }}
       affinity:
@@ -289,4 +303,9 @@ spec:
         persistentVolumeClaim:
           claimName: onms-mibs-pvc
           readOnly: false
+      {{- end }}
+      {{- range $k, $r := .Values.core.overlayConfigMaps }}
+      - name: overlay-configmap-{{ $k }}
+        configMap:
+          name: {{ $r.name | quote }}
       {{- end }}
