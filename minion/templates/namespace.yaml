@@ -1,7 +1,0 @@
-{{- if and .Values.createNamespace (not (eq .Release.Name "default")) }}
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: {{ .Release.Name }}
-{{- end }}

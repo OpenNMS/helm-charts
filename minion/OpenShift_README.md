@@ -23,7 +23,6 @@ This documentation provides basic information on how to install Minion on Red Ha
 6. Under Repository, select the newly created repository entry.
 7. Click on Minion.
 8.	Make sure that the project name matches the name you set in step 2.
-    * Skip this step if you are setting “CreateNamespace” option to true.
 9.	Make the required modifications (for example, set the PostgreSQL information).
 10.	Click Create.
 11.	Wait for the pods to come up. This may take a few minutes.
