@@ -89,10 +89,6 @@
                                             "type": "boolean",
                                             "default": false
                                         },
-                                        "create": {
-                                            "type": "boolean",
-                                            "default": false
-                                        },
                                         "externalPort": {
                                             "type": "integer",
                                             "default": 1162
@@ -103,10 +99,6 @@
                                     "type": "object",
                                     "properties": {
                                         "enabled": {
-                                            "type": "boolean",
-                                            "default": false
-                                        },
-                                        "create": {
                                             "type": "boolean",
                                             "default": false
                                         },
@@ -222,6 +214,10 @@
                             "type": "boolean",
                             "default": true
                         },
+                        "create": {
+                            "type": "boolean",
+                            "default": true
+                        },
                         "name": {
                             "type": "string",
                             "default": "opennms-scc"
@@ -233,6 +229,10 @@
                     "title": "Service Account",
                     "properties": {
                         "enabled": {
+                            "type": "boolean",
+                            "default": true
+                        },
+                        "create": {
                             "type": "boolean",
                             "default": true
                         },
