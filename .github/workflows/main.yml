@@ -5,6 +5,9 @@ on:
   branches:
      - main
 
+# Make sure only one copy of this workflow can run at a time.
+concurrency: ${{ github.workflow }}
+
 jobs:
   release:
     runs-on: ubuntu-latest
