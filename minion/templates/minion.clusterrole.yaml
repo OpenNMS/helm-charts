@@ -1,0 +1,15 @@
+{{- if and (eq (include "onOpenShift" .) "true") (.Values.clusterRole) }}
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ printf "system:openshift:scc:%s" (.Values.securitycontext).securitycontextconstraints.name | quote }} 
+rules:
+  - verbs:
+      - use
+    apiGroups:
+      - security.openshift.io
+    resources:
+      - securitycontextconstraints
+    resourceNames:
+      - {{ (.Values.securitycontext).securitycontextconstraints.name | quote }}
+{{- end }}

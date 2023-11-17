@@ -1,0 +1,14 @@
+{{- if and (eq (include "onOpenShift" .) "true") (.Values.dependencies.clusterRole)  }}
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ printf "system:openshift:scc:%s" (.Values.dependencies.securitycontext).securitycontextconstraints.name | quote }} 
+subjects:
+  - kind: ServiceAccount
+    name: {{ (.Values.dependencies.securitycontext).serviceaccount.name | quote }}
+    namespace: {{ .Release.Name }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ printf "system:openshift:scc:%s" (.Values.dependencies.securitycontext).securitycontextconstraints.name | quote }} 
+{{- end }}

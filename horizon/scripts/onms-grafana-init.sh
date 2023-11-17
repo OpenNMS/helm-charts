@@ -8,6 +8,7 @@
 # GRAFANA_SERVER
 # GF_SERVER_DOMAIN
 # GF_SECURITY_ADMIN_PASSWORD
+# GF_SERVER_ROOT_URL
 
 set -euo pipefail
 trap 's=$?; echo >&2 "$0: Error on line "$LINENO": $BASH_COMMAND"; exit $s' ERR
@@ -41,6 +42,7 @@ echo "Flow Dashboard: ${FLOW_DASHBOARD}"
 if [ "${FLOW_DASHBOARD}" == "null" ]; then
   echo "WARNING: cannot get Dashboard URL for the Deep Dive Tool"
 else
+  echo "Creating ${CONFIG_DIR_OVERLAY}/org.opennms.netmgt.flows.rest.cfg"
   cat <<EOF > ${CONFIG_DIR_OVERLAY}/org.opennms.netmgt.flows.rest.cfg
 flowGraphUrl=https://${GF_SERVER_DOMAIN}${FLOW_DASHBOARD}?node=\$nodeId&interface=\$ifIndex
 EOF
@@ -60,6 +62,7 @@ if [ "${GRAFANA_KEY}" == "null" ]; then
   echo "WARNING: cannot get Grafana Key for $(hostname)"
 else
   echo "Configuring Grafana Box for $(hostname)"
+  echo Creating ${CONFIG_DIR_OVERLAY}/opennms.properties.d/grafana.properties"
   cat <<EOF > ${CONFIG_DIR_OVERLAY}/opennms.properties.d/grafana.properties
 org.opennms.grafanaBox.show=true
 org.opennms.grafanaBox.hostname=${GRAFANA_SERVER}
@@ -71,7 +74,7 @@ org.opennms.grafanaBox.apiKey=${GRAFANA_KEY}
 org.opennms.grafanaBox.link.protocol=https
 org.opennms.grafanaBox.link.hostname=${GF_SERVER_DOMAIN}
 org.opennms.grafanaBox.link.port=443
-org.opennms.grafanaBox.link.basePath=/
+org.opennms.grafanaBox.link.basePath=${GF_SERVER_ROOT_URL}
 
 EOF
 fi

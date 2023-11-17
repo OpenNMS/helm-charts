@@ -1,0 +1,35 @@
+{{- if and (eq (include "onOpenShift" .) "true") ((.Values.dependencies).route) }}
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: {{ include "core.name" . }}
+  namespace: {{ .Release.Name }}
+  labels:
+    app: {{ include "core.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/name: {{ include "core.name" . }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+    helm.sh/chart: {{ include "core.chart" . }}
+spec:
+  host: {{ printf "onms-core.%s" (include "core.domain" .) | quote }}
+  to:
+    kind: Service
+    name: onms-core
+    weight: 100
+  port:
+    targetPort: http
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+  wildcardPolicy: None
+status:
+  ingress:
+    - host: {{ printf "onms-core.%s.svc" .Release.Name | quote }}
+      routerName: default
+      conditions:
+        - type: Admitted
+          status: 'True'
+      wildcardPolicy: None
+      #routerCanonicalHostname: router-default.apps-crc.testing
+{{- end }}

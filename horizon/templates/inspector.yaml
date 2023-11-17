@@ -17,7 +17,7 @@ spec:
     volumeMounts:
     - name: etc
       mountPath: /opt/opennms/etc
-    {{- if (include "core.enable_tss_rrd" .) }}
+    {{- if (include "core.enableTssDualWrite" .) }}
     - name: rrd
       mountPath: /opennms-data/rrd
     {{- end }}      
@@ -30,7 +30,7 @@ spec:
   - name: etc
     persistentVolumeClaim:
       claimName: onms-etc-pvc
-  {{- if (include "core.enable_tss_rrd" .) }}
+  {{- if (include "core.enableTssDualWrite" .) }}
   - name: rrd
     persistentVolumeClaim:
       claimName: onms-rrd-pvc

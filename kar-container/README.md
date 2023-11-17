@@ -31,7 +31,7 @@ metadata:
       ...
         volumeMounts:
         - name: deploy
-          mountPath: /opt/opennms/deploy
+          mountPath: /opennms-deploy
 ...
       volumes:
       - name: deploy

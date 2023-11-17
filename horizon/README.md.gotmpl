@@ -1,0 +1,31 @@
+# OpenNMS Helm Charts -- Horizon
+
+If your organization uses Kubernetes or Red Hat OpenShift, OpenNMS makes a Helm chart available to simplify deployment of Horizon and Meridian.
+
+Note that this is one way to approach the solution.
+We recommend that you study the content of the Helm chart and tune it for your needs.
+
+For more information about deploying in a containerized environment, including requirements and external dependencies, refer to [Containerized Deployment](https://docs.opennms.com/horizon/latest/deployment/core/containers.html) in the main product documentation.
+
+If you are not already familiar with Horizon or Meridian, we recommend reviewing our product documentation ([Horizon](https://docs.opennms.com/horizon/latest/deployment/core/introduction.html), [Meridian](https://docs.opennms.com/meridian/latest/deployment/core/introduction.html)) and our [Horizon](https://www.opennms.com/horizon/) or [Meridian](https://www.opennms.com/meridian/) websites.
+
+## Quick Start
+
+Use the following commands to bring up an instance of Horizon for testing:
+
+```
+helm repo add opennms https://opennms.github.io/helm-charts
+
+helm install monms opennms/horizon --set domain=domain1.com  --create-namespace
+```
+
+## Version compatibility
+
+| Helm chart version | Horizon version(s) | Meridian version(s) |
+| ----------- | ----------- | ----------- |
+| 1.x | Horizon 32.x | Meridian 2023.x |
+
+
+{{ template "chart.valuesSection" . }}
+
+{{ template "helm-docs.versionFooter" . }}

@@ -1,24 +1,32 @@
+{{- if or .Values.minion.configuration.ports.karaf.enabled .Values.minion.configuration.ports.trapd.enabled .Values.minion.configuration.ports.syslog.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
   labels:
     app: minion
   name: minion
-  namespace: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
 spec:
   ports:
-    - name: "8201"
-      port: 8201
+    {{- if .Values.minion.configuration.ports.karaf.enabled }}
+    - name: "karaf"
+      port: {{ .Values.minion.configuration.ports.karaf.externalPort | default 8201 }}
       targetPort: 8201
-    - name: "1162"
-      port: 1162
+    {{- end }}
+    {{- if .Values.minion.configuration.ports.trapd.enabled }}
+    - name: "trapd"
+      port: {{ .Values.minion.configuration.ports.trapd.externalPort | default 1162 }}
       protocol: UDP
       targetPort: 1162
-    - name: "1514"
-      port: 1514
+    {{- end }}
+    {{- if .Values.minion.configuration.ports.syslog.enabled }}
+    - name: "syslog"
+      port: {{ .Values.minion.configuration.ports.syslog.externalPort | default 1514 }}
       protocol: UDP
       targetPort: 1514
+    {{- end }}
   selector:
     app: minion
 status:
   loadBalancer: {}
+{{- end }}

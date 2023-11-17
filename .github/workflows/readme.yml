@@ -29,6 +29,6 @@ jobs:
            cp -f ${{ runner.temp }}/horizon/README.md ./horizon/README.md
            git config user.name "$GITHUB_ACTOR"
            git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
-           git add README.md
+           git add -A
            git commit -m "Sync README from main"
            git push

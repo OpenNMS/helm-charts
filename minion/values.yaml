@@ -1,3 +1,19 @@
+createNamespace: false  # Whether to create the namespace for this deployment
+
+# Red Hat OpenShift related settings for creating Cluster Role and Binding
+clusterRole: true
+clusterRoleBinding: true
+
+# Optionally specify an array of imagePullSecrets.
+# Secrets are created by templates/docker.secret.yaml
+imagePullSecrets: []
+# Example:
+# - name: customerRegistry
+#   dockerServer: registry.example.com
+#   dockerUsername: admin
+#   dockerPassword: admin
+#   dockerEmail: admin@example.com
+
 minion:
  location: pod
  name: myminion
@@ -8,10 +24,27 @@ minion:
  configuration:
   storage:
    dataFolder: 5Gi
+  ports:
+   trapd:
+    enabled: true
+    externalPort: 1162
+   syslog:
+    enabled: true
+    externalPort: 1514
+   karaf:
+    enabled: true
+    externalPort: 8201
  image:
   repository: opennms/minion
   pullPolicy: IfNotPresent
   tag: ''  # Defaults to the chart appVersion
+ resources:
+  limits:
+   cpu: '2'
+   memory: 8Gi
+  requests:
+   cpu: '2'
+   memory: 4Gi
 
 
 core:
@@ -21,3 +54,16 @@ core:
 truststore:
  content: ''  # A base64 encoded content of the JKS Truststore file.
  password: ''
+
+# Red Hat OpenShift related settings for creating the required security context for OpenNMS Minion
+securitycontext:
+ allowedCapabilities:
+  - NET_BIND_SERVICE
+  - CAP_NET_RAW
+ allowPrivilegeEscalation: true
+ securitycontextconstraints:
+  enabled: true
+  name: minion-scc
+ serviceaccount:
+  enabled: true
+  name: minion-sa

@@ -81,8 +81,8 @@ Define custom content for JVM_OPTS to conditionally handle Truststores
 {{/*
 Define whether RRD is enabled
 */}}
-{{- define "core.enable_tss_rrd" -}}
-  {{ or (not .Values.core.configuration.enable_cortex) .Values.core.configuration.enable_tss_dual_write -}}
+{{- define "core.enableTssDualWrite" -}}
+  {{ or (not .Values.core.configuration.enableCortex) .Values.core.configuration.enableTssDualWrite -}}
 {{- end }}
 
 {{/*
@@ -90,7 +90,7 @@ Define common content for Grafana Promtail
 */}}
 {{- define "core.promtailBaseConfig" -}}
 {{- $scheme := "http" -}}
-{{- if ((.Values.dependencies).loki).ca_cert -}}
+{{- if ((.Values.dependencies).loki).caCert -}}
   {{- $scheme := "https" -}}
 {{- end -}}
 server:
@@ -104,7 +104,7 @@ clients:
     username: {{ .Values.dependencies.loki.username }}
     password: {{ .Values.dependencies.loki.password }}
   {{- end }}
-  {{- if ((.Values.dependencies).loki).ca_cert }}
+  {{- if ((.Values.dependencies).loki).caCert }}
   tls_config:
     ca_file: /etc/jks/loki-ca.cert
   {{- end }}
@@ -126,4 +126,25 @@ Define Customer/Environment Domain
 */}}
 {{- define "core.domain" -}}
 {{- printf "%s.%s" .Release.Name .Values.domain -}}
+{{- end }}
+
+{{/*
+SecurityContextConstraints apiVersion
+*/}}
+{{- define "scc.apiVersion" -}}
+{{- if .Capabilities.APIVersions.Has "security.openshift.io/v1" -}}
+security.openshift.io/v1
+{{- end }}
+{{- end }}
+
+{{/*
+Are we running in an Red Hat OpenShift cluster?
+*/}}
+{{- define "onOpenShift" -}}
+{{- $sccApiVersion := include "scc.apiVersion" . -}}
+{{- if not (empty $sccApiVersion) }}
+{{- printf "true" -}}
+{{- else }}
+{{- printf "false" -}}
+{{- end }}
 {{- end }}

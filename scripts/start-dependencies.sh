@@ -38,8 +38,10 @@ TRUSTSTORE_PASSWORD="0p3nNM5" # Must match dependencies.kafka.truststore.passwor
 CLUSTER_NAME="onms" # Must match the name of the cluster inside dependencies/kafka.yaml and dependencies/elasticsearch.yaml
 
 # Patch NGinx to allow SSL Passthrough for Strimzi
-kubectl patch deployment ingress-nginx-controller -n ingress-nginx --type json -p \
-  '[{"op":"add","path":"/spec/template/spec/containers/0/args/-","value":"--enable-ssl-passthrough"}]'
+if [ "$INSTALL_KAFKA" == "true" ]; then
+  kubectl patch deployment ingress-nginx-controller -n ingress-nginx --type json -p \
+    '[{"op":"add","path":"/spec/template/spec/containers/0/args/-","value":"--enable-ssl-passthrough"}]'
+fi
 
 # Update Helm Repositories
 helm repo add jetstack https://charts.jetstack.io
@@ -81,11 +83,15 @@ fi
 
 # Install PostgreSQL
 if [ "$INSTALL_POSTGRESQL" == "true" ]; then
-  kubectl apply -f https://raw.githubusercontent.com/zalando/postgres-operator/master/manifests/postgresql.crd.yaml
-  kubectl wait --for condition=established crd postgresqls.acid.zalan.do --timeout=10s
-  kubectl apply -k github.com/zalando/postgres-operator/manifests
-  kubectl create secret generic $PG_USER.onms-db.credentials.postgresql.acid.zalan.do --from-literal="username=$PG_USER" --from-literal="password=$PG_PASSWORD" -n $NAMESPACE --dry-run=client -o yaml | kubectl apply -f -
-  kubectl create secret generic $PG_ONMS_USER.onms-db.credentials.postgresql.acid.zalan.do --from-literal="username=$PG_ONMS_USER" --from-literal="password=$PG_ONMS_PASSWORD" -n $NAMESPACE --dry-run=client -o yaml | kubectl apply -f -
+  helm repo add postgres-operator-charts https://opensource.zalando.com/postgres-operator/charts/postgres-operator
+  # The default image repo at registry.opensource.zalan.do doesn't support multi-arch images yet,
+  # so use the ghcr repo which has multi-arch images for the operator.
+  helm upgrade --install \
+    --set image.registry=ghcr.io \
+    --set image.repository=zalando/postgres-operator \
+    postgres-operator postgres-operator-charts/postgres-operator
+  kubectl create secret generic "$PG_USER.onms-db.credentials.postgresql.acid.zalan.do" --from-literal="username=$PG_USER" --from-literal="password=$PG_PASSWORD" -n $NAMESPACE --dry-run=client -o yaml | kubectl apply -f -
+  kubectl create secret generic "$PG_ONMS_USER.onms-db.credentials.postgresql.acid.zalan.do" --from-literal="username=$PG_ONMS_USER" --from-literal="password=$PG_ONMS_PASSWORD" -n $NAMESPACE --dry-run=client -o yaml | kubectl apply -f -
   kubectl apply -f dependencies/postgresql.yaml -n $NAMESPACE
 fi
 
@@ -119,7 +125,7 @@ if [ "$INSTALL_KAFKA" == "true" ]; then
   kubectl wait kafka/$CLUSTER_NAME --for=condition=Ready --timeout=300s -n $NAMESPACE
 fi
 if [ "$INSTALL_ELASTIC" == "true" ]; then
-  kubectl wait pod -l elasticsearch.k8s.elastic.co/cluster-name=$CLUSTER_NAME --for=condition=Ready --timeout=300s -n $NAMESPACE
+  kubectl wait elasticsearch/$CLUSTER_NAME --for='jsonpath={.status.phase}=Ready' --timeout=300s -n $NAMESPACE
 fi
 
 # Prepare target directory for the Truststores

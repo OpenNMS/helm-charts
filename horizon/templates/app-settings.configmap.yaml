@@ -49,10 +49,16 @@ data:
   KAFKA_SECURITY_PROTOCOL: {{ .Values.dependencies.kafka.configuration.securityProtocol | quote }}
   {{- end }}
   GRAFANA_SERVER: {{ printf "grafana.%s.svc" .Release.Name | quote }}
+  {{- if eq (include "onOpenShift" .) "true" }}
+  GF_SERVER_DOMAIN: {{ printf "grafana-%s" (include "core.domain" .) | quote }} # Should match FQDN on the Ingress
+  GF_SERVER_ROOT_URL: ""
+  {{- else }}
   GF_SERVER_DOMAIN: {{ printf "grafana.%s" (include "core.domain" .) | quote }} # Should match FQDN on the Ingress
   GF_SERVER_ROOT_URL: "/"
+  {{- end }}
   GF_DATABASE_TYPE: "postgres"
   GF_DATABASE_NAME: {{ printf "%s_grafana" .Release.Name | quote }}
   GF_DATABASE_SSL_MODE: {{ (((.Values.grafana).configuration).database).sslmode | default "disable" | quote }}
   GF_DATABASE_CA_CERT_PATH: "/etc/java/jks/postgresql-ca.crt"
   GF_SESSION_PROVIDER: "postgres"
+  ON_OPENSHIFT: {{ if eq (include "onOpenShift" .) "true" }}"true"{{ else }}"false"{{ end }}

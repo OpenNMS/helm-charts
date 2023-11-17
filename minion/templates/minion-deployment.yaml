@@ -18,10 +18,38 @@ spec:
       labels:
         app: minion
     spec:
+      {{- if and (eq (include "onOpenShift" .) "true") ((.Values.securitycontext).serviceaccount.enabled) }}
+      serviceAccountName: {{ (.Values.securitycontext).serviceaccount.name | quote }} 
+      {{- end }}
+      securityContext:
+      {{- if eq (include "onOpenShift" .) "true" }}
+          {{- if (.Values.securitycontext).allowPrivilegeEscalation }}
+          runAsUser: 10001
+          runAsGroup: 10001
+          fsGroup: 10001
+          {{- end }}
+          runAsNonRoot: true
+          seccompProfile:
+            type: RuntimeDefault
+      {{- else }}
+          fsGroup: 10001
+      {{- end }}
+      {{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- range $k, $r := .Values.imagePullSecrets }}
+        - name: {{ $r.name }}
+        {{- end }}
+      {{- end }}
       containers:
         - args:
             - -f
           env:
+            {{- if eq (include "onOpenShift" .) "true" }}
+            {{- if or (not (has "CAP_NET_RAW" (.Values.securitycontext).allowedCapabilities)) (not ((.Valuessecuritycontext).allowPrivilegeEscalation ))  }}
+            - name: JAVA_HOME
+              value: /usr/lib/jvm/java-nocap
+            {{- end }}   
+            {{- end }}
             - name: JAVA_MAX_MEM
               value: 2048M
             - name: JAVA_MIN_MEM
@@ -34,6 +62,19 @@ spec:
               value: America/New_York
           image: {{ $image }}
           imagePullPolicy: {{ .Values.minion.image.pullPolicy }}
+          {{- if .Values.minion.resources }}
+          resources:
+           {{- toYaml . | nindent 11 }}
+          {{- end }}
+          securityContext:
+           capabilities:
+           {{- if and (has "CAP_NET_RAW" ((.Values.securitycontext).allowedCapabilities)) ((.Values.securitycontext).allowPrivilegeEscalation) }}
+            add:
+             - CAP_NET_RAW
+           {{- else }}
+            drop:
+             - ALL
+           {{- end }}
           livenessProbe:
             exec:
               command:
@@ -43,11 +84,20 @@ spec:
             timeoutSeconds: 20
           name: minion
           ports:
+           {{- if .Values.minion.configuration.ports.karaf.enabled }}
             - containerPort: 8201
+              name: karaf
+           {{- end }}
+           {{- if .Values.minion.configuration.ports.trapd.enabled }}
             - containerPort: 1162
               protocol: UDP
+              name: trapd
+           {{- end }}
+           {{- if .Values.minion.configuration.ports.syslog.enabled }}
             - containerPort: 1514
               protocol: UDP
+              name: syslog
+           {{- end }}
           resources: {}
           volumeMounts:
             - mountPath: /opt/minion/minion-config.yaml

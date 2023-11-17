@@ -116,7 +116,7 @@ echo ""
 
 if $domain_defined; then
  printf "\033[36m%s\033[0m:\033[0m\033[33m %s\n\033[0m" "Step 6" "Waiting for OpenNMS instance url to be accessible"
- curl -k -s --retry 50 -f --retry-all-errors --retry-delay 5 -o /dev/null "https://onms-core.$our_namespace.$our_domain/opennms/login.jsp"
+ curl -k -sSf --retry 50 -f --retry-all-errors --retry-delay 5 -o /dev/null "https://onms-core.$our_namespace.$our_domain/opennms/login.jsp"
 else 
  printf "\033[36m%s\033[0m:\033[0m\033[33m %s\n\033[0m" "Reminder" "It is recommended to add the following line to /etc/hosts."
  printf "\t%s\n" "127.0.0.1 onms-core.$our_namespace.$our_domain"

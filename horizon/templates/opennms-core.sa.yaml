@@ -1,0 +1,8 @@
+{{- if and (eq (include "onOpenShift" .) "true") ((.Values.dependencies.securitycontext).serviceaccount.enabled) }}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ (.Values.dependencies.securitycontext).serviceaccount.name | quote }}
+  namespace: {{ .Release.Name }}
+{{- end }}
