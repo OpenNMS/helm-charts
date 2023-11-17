@@ -82,17 +82,6 @@ printf "\033[36m%s\033[0m:\033[0m\033[33m %s\n\033[0m" "Step 1" "Modifying depen
 sed -rie 's/(host: kafka(-0)?).*/\1'$our_kafka_domain'/g' "${root_path}dependencies/kafka.yaml"
 echo ""
 
-# Ingress is not really active/installed, lets install it
-printf "\033[36m%s\033[0m:\033[0m\033[33m %s\n\033[0m" "Step 2" "Check/Install Ingress"
-helm upgrade --install ingress-nginx ingress-nginx \
-  --repo https://kubernetes.github.io/ingress-nginx \
-  --namespace ingress-nginx --create-namespace >> $log_file 2>&1
-checkRC
-
-sleep 10
-
-echo ""
-
 # Start the dependencies
 printf "\033[36m%s\033[0m:\033[0m\033[33m %s\n\033[0m" "Step 3" "Starting Dependencies"
 ${root_path}scripts/start-dependencies.sh  >> $log_file 2>&1

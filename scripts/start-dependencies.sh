@@ -22,6 +22,8 @@ INSTALL_MIMIR=${INSTALL_MIMIR:-false} # needed for Cortex testing
 INSTALL_LOKI=${INSTALL_LOKI:-false} # needed for log aggregation together with promtail in containers; make sure dependencies.loki.hostname='' for the helm chart if this is disabled
 
 # Required dependencies (if you don't install them here, they need to be running somewhere else)
+INSTALL_CERT_MANAGER=${INSTALL_CERT_MANAGER:-true}
+INSTALL_INGRESS_NGINX=${INSTALL_INGRESS_NGINX:-true}
 INSTALL_POSTGRESQL=${INSTALL_POSTGRESQL:-true}
 
 NAMESPACE="shared"
@@ -49,11 +51,21 @@ helm repo add grafana https://grafana.github.io/helm-charts
 helm repo update
 
 # Install Cert-Manager
-helm upgrade --install cert-manager jetstack/cert-manager --version v1.10.1 \
-  --namespace cert-manager --create-namespace --set installCRDs=true --wait
-kubectl apply -f ca -n cert-manager
+if [ "$INSTALL_CERT_MANAGER" == "true" ]; then
+  helm upgrade --install cert-manager jetstack/cert-manager --version v1.10.1 \
+    --namespace cert-manager --create-namespace --set installCRDs=true --wait
+  kubectl apply -f ca -n cert-manager
+fi
 
-# Create a namespace for most of the dependencies except for cert-manager (above), and the postgres and elastic operators (added below).
+# Install ingress-nginx
+if [ "$INSTALL_INGRESS_NGINX" == "true" ]; then
+  helm upgrade --install ingress-nginx ingress-nginx \
+    --repo https://kubernetes.github.io/ingress-nginx \
+    --version 4.8.3 \
+    --namespace ingress-nginx --create-namespace
+fi
+
+# Create a namespace for most of the dependencies except for cert-manager and ingress-nginx (above), and the postgres and elastic operators (added below).
 kubectl create namespace $NAMESPACE --dry-run=client -o yaml | kubectl apply -f -
 
 # Install Grafana Loki
