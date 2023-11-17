@@ -3,6 +3,22 @@ entries:
   horizon:
   - apiVersion: v2
     appVersion: 32.0.5
+    created: "2023-11-17T20:09:35.97582987Z"
+    description: A Helm chart for running OpenNMS Horizon in Kubernetes and Red Hat
+      OpenShift
+    digest: 8045ccac554b0969a0f01db4c3142cf038b198f79082ce35ff1b658c7eb4e001
+    home: https://github.com/OpenNMS/helm-charts
+    icon: https://www.opennms.com/wp-content/uploads/2021/04/OpenNMS_Favicon_36px.png
+    maintainers:
+    - name: The OpenNMS Group Inc.
+      url: https://www.opennms.com
+    name: horizon
+    type: application
+    urls:
+    - https://github.com/OpenNMS/helm-charts/releases/download/horizon-1.1.4/horizon-1.1.4.tgz
+    version: 1.1.4
+  - apiVersion: v2
+    appVersion: 32.0.5
     created: "2023-11-10T14:28:58.127303039Z"
     description: A Helm chart for running OpenNMS Horizon in Kubernetes and Red Hat
       OpenShift
@@ -117,6 +133,22 @@ entries:
     - https://github.com/OpenNMS/helm-charts/releases/download/horizon-0.0.7/horizon-0.0.7.tgz
     version: 0.0.7
   minion:
+  - apiVersion: v2
+    appVersion: 32.0.5
+    created: "2023-11-17T20:09:36.166695365Z"
+    description: A Helm chart for running OpenNMS Minion in Kubernetes and Red Hat
+      OpenShift
+    digest: 43ccd9466197f4b7cad9ae17a7cfbdb48d07fe65e83b14d9c398468a58b075cd
+    home: https://github.com/OpenNMS/helm-charts
+    icon: https://www.opennms.com/wp-content/uploads/2021/04/OpenNMS_Favicon_36px.png
+    maintainers:
+    - name: The OpenNMS Group Inc.
+      url: https://www.opennms.com
+    name: minion
+    type: application
+    urls:
+    - https://github.com/OpenNMS/helm-charts/releases/download/minion-1.1.4/minion-1.1.4.tgz
+    version: 1.1.4
   - apiVersion: v2
     appVersion: 32.0.5
     created: "2023-11-17T16:38:48.009933085Z"
@@ -248,4 +280,4 @@ entries:
     urls:
     - https://github.com/OpenNMS/helm-charts/releases/download/minion-0.0.7/minion-0.0.7.tgz
     version: 0.0.7
-generated: "2023-11-17T16:38:48.009985814Z"
+generated: "2023-11-17T20:09:36.166797295Z"
