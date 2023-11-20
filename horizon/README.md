@@ -128,6 +128,7 @@ kubectl create configmap -n $instance $configmap --from-file=lots-of-zeros.zip
 | core.image.pullPolicy | string | `"IfNotPresent"` |  |
 | core.image.repository | string | `"opennms/horizon"` |  |
 | core.image.tag | string | `""` |  |
+| core.initContainers | list | `[]` | Experimental: a list of additional init containers |
 | core.inspector.enabled | bool | `false` |  |
 | core.overlayConfigMaps | list | `[]` |  |
 | core.postConfigJob.ttlSecondsAfterFinished | int | `300` |  |

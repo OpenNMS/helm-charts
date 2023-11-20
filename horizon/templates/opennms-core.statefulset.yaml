@@ -135,6 +135,9 @@ spec:
           mountPath: /opennms-overlay-configmaps/{{ $k }}/{{ $r.path }}
           {{- end }}
         {{- end }}
+      {{- with .Values.core.initContainers }}
+      {{- toYaml . | nindent 6 }}
+      {{- end }}
       nodeSelector:
         {{- toYaml .Values.core.configuration.nodeSelector | nindent 8 }}
       affinity:

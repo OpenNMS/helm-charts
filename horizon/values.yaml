@@ -171,6 +171,8 @@ core:
     externalPort: 8101
  postConfigJob:
   ttlSecondsAfterFinished: 300
+ # -- Experimental: a list of additional init containers
+ initContainers: []
 
 # OpenNMS Sentinel for flow processing (Optional)
 sentinel:
