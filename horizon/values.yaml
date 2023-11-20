@@ -5,6 +5,9 @@
 timezone: America/New_York
 domain: example.com  # The common domain for the Ingress resource.
 
+# -- Enable multi-tenant mode. This will use the release name as the per-tenant identifier for the OpenNMS instance ID, databases, Kakfa topics, ElasticSearch indices, and Prometheus organization ID.
+multiTenant: false
+
 # -- Install resource objects into namespace named for the Helm release. See also createNamespace.
 releaseNamespace: false
 

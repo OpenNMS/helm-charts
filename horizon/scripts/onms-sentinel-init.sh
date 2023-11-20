@@ -66,16 +66,12 @@ OVERLAY_DIR=/opt/sentinel-etc-overlay
 
 # Configure the instance ID and Interface-to-Node cache
 # Required when having multiple OpenNMS backends sharing a Kafka cluster or an Elasticsearch cluster.
-CUSTOM_PROPERTIES=${OVERLAY_DIR}/custom.system.properties
-if [[ ${OPENNMS_INSTANCE_ID} ]]; then
-  cat <<EOF >> ${CUSTOM_PROPERTIES}
+if [ -n "${OPENNMS_INSTANCE_ID}" ]; then
+  cat <<EOF >> ${OVERLAY_DIR}/custom.system.properties
 # Used for Kafka Topics
 org.opennms.instance.id=${OPENNMS_INSTANCE_ID}
 # Refresh Interface-to-Node cache every 2 hours
 org.opennms.interface-node-cache.refresh-timer=7200000
-EOF
-else
-  OPENNMS_INSTANCE_ID="OpenNMS"
 fi
 
 cat <<EOF > ${OVERLAY_DIR}/org.opennms.netmgt.distributed.datasource.cfg
@@ -122,17 +118,22 @@ adapters.0.class-name=org.opennms.netmgt.telemetry.protocols.netflow.adapter.net
 queue.threads=${NUM_LISTENER_THREADS}
 EOF
 
-  PREFIX=$(echo ${OPENNMS_INSTANCE_ID} | tr '[:upper:]' '[:lower:]')-
   cat <<EOF > ${OVERLAY_DIR}/org.opennms.features.flows.persistence.elastic.cfg
 elasticUrl=https://${ELASTICSEARCH_SERVER}
 globalElasticUser=${ELASTICSEARCH_USER}
 globalElasticPassword=${ELASTICSEARCH_PASSWORD}
 elasticIndexStrategy=${ELASTICSEARCH_INDEX_STRATEGY_FLOWS}
-indexPrefix=${PREFIX}
 # The following settings should be consistent with your ES cluster
 settings.index.number_of_shards=${ELASTICSEARCH_NUM_SHARDS}
 settings.index.number_of_replicas=${ELASTICSEARCH_REPLICATION_FACTOR}
 EOF
+
+  if [ -n "${OPENNMS_INSTANCE_ID}" ]; then
+    PREFIX=$(echo ${OPENNMS_INSTANCE_ID} | tr '[:upper:]' '[:lower:]')-
+    cat <<EOF >> ${OVERLAY_DIR}/org.opennms.features.flows.persistence.elastic.cfg
+indexPrefix=${PREFIX}
+EOF
+  fi
 fi
 
 if [[ -v KAFKA_BOOTSTRAP_SERVER ]]; then
@@ -149,10 +150,15 @@ EOF
 
   cat <<EOF > ${FILE_PREFIX}.consumer.cfg
 # Consumers
-group.id=${OPENNMS_INSTANCE_ID}_Sentinel
 bootstrap.servers=${KAFKA_BOOTSTRAP_SERVER}
 max.partition.fetch.bytes=5000000
 EOF
+
+  if [ -n "${OPENNMS_INSTANCE_ID}" ]; then
+    cat <<EOF >> ${FILE_PREFIX}.consumer.cfg
+group.id=${OPENNMS_INSTANCE_ID}_Sentinel
+EOF
+  fi
 
   for f in ${FILE_PREFIX}.cfg ${FILE_PREFIX}.consumer.cfg; do
     cat <<EOF >> $f

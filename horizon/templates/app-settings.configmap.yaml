@@ -19,9 +19,17 @@ data:
   ENABLE_CORTEX: {{ ((.Values.core).configuration).enableCortex | quote }}
   ENABLE_TSS_DUAL_WRITE: {{ ((.Values.core).configuration).enableTssDualWrite | quote }}
   ENABLE_GRAFANA: {{ if gt ((.Values.grafana).replicaCount|int) 0 }}"true"{{ else }}"false"{{ end }}
+  {{- if .Values.multiTenant }}
   OPENNMS_INSTANCE_ID: {{ .Release.Name | quote }}
+  {{- else }}
+  OPENNMS_INSTANCE_ID: ""
+  {{- end }}
   OPENNMS_SERVER: {{ include "namespace" . | printf "onms-core.%s.svc" | quote }}
+  {{- if .Values.multiTenant }}
   OPENNMS_DBNAME: {{ printf "%s_opennms" .Release.Name | quote }}
+  {{- else }}
+  OPENNMS_DBNAME: "opennms"
+  {{- end }}
   {{- if ((.Values.core).configuration).rras }}
   OPENNMS_RRAS: {{ join ";" .Values.core.configuration.rras }}
   {{- end }}
@@ -56,7 +64,11 @@ data:
   GF_SERVER_ROOT_URL: "/"
   {{- end }}
   GF_DATABASE_TYPE: "postgres"
+  {{- if .Values.multiTenant }}
   GF_DATABASE_NAME: {{ printf "%s_grafana" .Release.Name | quote }}
+  {{- else }}
+  GF_DATABASE_NAME: "grafana"
+  {{- end }}
   GF_DATABASE_SSL_MODE: {{ (((.Values.grafana).configuration).database).sslmode | default "disable" | quote }}
   GF_DATABASE_CA_CERT_PATH: "/etc/java/jks/postgresql-ca.crt"
   GF_SESSION_PROVIDER: "postgres"

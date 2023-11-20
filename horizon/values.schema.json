@@ -284,6 +284,11 @@
             "title": "Install resource objects into namespace named for the Helm release",
             "default": false
         },
+        "multiTenant": {
+            "type": "boolean",
+            "title": "Enable multi-tenant mode",
+            "default": false
+        },
         "imagePullSecrets": {
             "type": "array",
             "title": "Image Pull Secrets",

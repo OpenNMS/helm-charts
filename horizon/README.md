@@ -211,6 +211,7 @@ kubectl create configmap -n $instance $configmap --from-file=lots-of-zeros.zip
 | ingress.annotations | object | `{}` |  |
 | ingress.certManager.clusterIssuer | string | `"opennms-issuer"` |  |
 | ingress.className | string | `"nginx"` |  |
+| multiTenant | bool | `false` | Enable multi-tenant mode. This will use the release name as the per-tenant identifier for the OpenNMS instance ID, databases, Kakfa topics, ElasticSearch indices, and Prometheus organization ID. |
 | promtail.image.pullPolicy | string | `"IfNotPresent"` |  |
 | promtail.image.repository | string | `"grafana/promtail"` |  |
 | promtail.image.tag | string | `"latest"` |  |
