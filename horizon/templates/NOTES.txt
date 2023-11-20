@@ -1,13 +1,40 @@
+{{/*
+Define namespace option for Helm commands
+*/}}
+{{- define "helm.namespace" -}}
+{{- if ne .Release.Namespace "default" }}
+{{- printf " -n %s" .Release.Namespace }}
+{{- else }}
+{{- printf "" }}
+{{- end }}
+{{- end }}
+
+{{/*
+Define namespace option for kubectl commands
+*/}}
+{{- define "kubectl.namespace" -}}
+{{- if ne (include "namespace" .) "default" }}
+{{- printf " -n %s" (include "namespace" .) }}
+{{- else }}
+{{- printf "" }}
+{{- end }}
+{{- end }}
+
 Thank you for installing OpenNMS {{ .Values.core.image.tag | default .Chart.AppVersion }}.
 
-Your release is named "{{ .Release.Name }}", used for:
+Your release is named "{{ .Release.Name }}" and is installed into the
+"{{ include "namespace" . }}" namespace. The release name is used as
+the sub-domain for the ingress controller.
+{{- if .Values.multiTenant }}
+
+Multi-tenant mode is enabled, so the release name "{{ .Release.Name }}"
+is also used for:
 - Customer/Deployment identifier.
-- The namespace for all the resources.
-- The sub-domain for the ingress controller.
+- Prefix for PostgreSQL database names.
 - The OpenNMS instance ID for your Minions (prefix for Kafka topics).
 - Prefix for Elasticsearch indices.
-- Prefix for PostgreSQL database names.
 - Prefix for Kafka consumer groups.
+{{- end }}
 
 {{- if eq (include "onOpenShift" .) "true" }}
 
@@ -36,16 +63,16 @@ Resources URLs:
 
 To learn more about the release, try:
 
-$ helm status {{ .Release.Name }}
-$ helm get all {{ .Release.Name }}
-$ kubectl get all -n {{ .Release.Name }}
+$ helm status {{ .Release.Name }}{{ include "helm.namespace" . }}
+$ helm get all {{ .Release.Name }}{{ include "helm.namespace" . }}
+$ kubectl get all -l app.kubernetes.io/name={{ .Release.Name }},app.kubernetes.io/instance={{ .Release.Name }}{{ include "kubectl.namespace" . }}
 {{- end }}
 
 {{- if not .Values.core.configuration.alwaysRollDeployment }}
 
 If OpenNMS needs to be restarted to apply configuration changes, you'll need to restart it, e.g.:
 
-$ kubectl rollout restart -n {{ .Release.Name }} statefulset/onms-core
+$ kubectl rollout restart{{ include "kubectl.namespace" . }} statefulset/onms-core
 {{- end }}
 
 {{- if .Values.core.inspector.enabled }}
@@ -54,5 +81,5 @@ The inspector pod is enabled and OpenNMS pod is not running.
 
 This is how you can connect to the inspector pod:
 
-$ kubectl exec -it -n {{ .Release.Name }} pods/inspector -- /bin/bash
+$ kubectl exec -it{{ include "kubectl.namespace" . }} pods/inspector -- /bin/bash
 {{- end }}
