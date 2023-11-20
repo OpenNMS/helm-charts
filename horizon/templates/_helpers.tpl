@@ -109,7 +109,7 @@ clients:
     ca_file: /etc/jks/loki-ca.cert
   {{- end }}
   external_labels:
-    namespace: {{ .Release.Name }}
+    namespace: {{ include "namespace" . }}
 scrape_configs:
 - job_name: system
   pipeline_stages:
@@ -146,5 +146,16 @@ Are we running in an Red Hat OpenShift cluster?
 {{- printf "true" -}}
 {{- else }}
 {{- printf "false" -}}
+{{- end }}
+{{- end }}
+
+{{/*
+Define Namespace
+*/}}
+{{- define "namespace" -}}
+{{- if .Values.releaseNamespace }}
+{{- printf "%s" .Release.Name -}}
+{{- else }}
+{{- printf "%s" .Release.Namespace -}}
 {{- end }}
 {{- end }}

@@ -3,7 +3,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: app-settings
-  namespace: {{ .Release.Name }}
+  namespace: {{ include "namespace" . }}
   labels:
     {{- include "core.labels" . | nindent 4 }}
 data:
@@ -20,7 +20,7 @@ data:
   ENABLE_TSS_DUAL_WRITE: {{ ((.Values.core).configuration).enableTssDualWrite | quote }}
   ENABLE_GRAFANA: {{ if gt ((.Values.grafana).replicaCount|int) 0 }}"true"{{ else }}"false"{{ end }}
   OPENNMS_INSTANCE_ID: {{ .Release.Name | quote }}
-  OPENNMS_SERVER: {{ printf "onms-core.%s.svc" .Release.Name | quote }}
+  OPENNMS_SERVER: {{ include "namespace" . | printf "onms-core.%s.svc" | quote }}
   OPENNMS_DBNAME: {{ printf "%s_opennms" .Release.Name | quote }}
   {{- if ((.Values.core).configuration).rras }}
   OPENNMS_RRAS: {{ join ";" .Values.core.configuration.rras }}
@@ -47,7 +47,7 @@ data:
   KAFKA_SASL_MECHANISM: {{ .Values.dependencies.kafka.configuration.saslMechanism | quote }}
   KAFKA_SECURITY_PROTOCOL: {{ .Values.dependencies.kafka.configuration.securityProtocol | quote }}
   {{- end }}
-  GRAFANA_SERVER: {{ printf "grafana.%s.svc" .Release.Name | quote }}
+  GRAFANA_SERVER: {{ include "namespace" . | printf "grafana.%s.svc" | quote }}
   {{- if eq (include "onOpenShift" .) "true" }}
   GF_SERVER_DOMAIN: {{ printf "grafana-%s" (include "core.domain" .) | quote }} # Should match FQDN on the Ingress
   GF_SERVER_ROOT_URL: ""

@@ -276,7 +276,12 @@
         },
         "createNamespace": {
             "type": "boolean",
-            "title": "Create Namespace",
+            "title": "Whether to create the namespace when releaseNamespace=true",
+            "default": false
+        },
+        "releaseNamespace": {
+            "type": "boolean",
+            "title": "Install resource objects into namespace named for the Helm release",
             "default": false
         },
         "imagePullSecrets": {

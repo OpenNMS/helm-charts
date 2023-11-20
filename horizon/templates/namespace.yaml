@@ -1,9 +1,9 @@
-{{- if and .Values.createNamespace (not (eq .Release.Name "default")) }}
+{{- if and .Values.releaseNamespace .Values.createNamespace }}
 ---
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: {{ .Release.Name }}
+  name: {{ include "namespace" . }}
   labels:
     {{- include "core.labels" . | nindent 4 }}
 {{- end }}

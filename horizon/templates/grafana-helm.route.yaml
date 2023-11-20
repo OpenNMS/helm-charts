@@ -3,7 +3,7 @@ kind: Route
 apiVersion: route.openshift.io/v1
 metadata:
   name: grafana
-  namespace: {{ .Release.Name }}
+  namespace: {{ include "namespace" . }}
   labels:
     app: grafana
     app.kubernetes.io/instance: {{ .Release.Name }}
