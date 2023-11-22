@@ -261,14 +261,17 @@ mkdir -p ${CONFIG_DIR_OVERLAY}/opennms.properties.d ${CONFIG_DIR_OVERLAY}/featur
 # Apply common OpenNMS configuration settings
 # Configure the instance ID
 # Required when having multiple OpenNMS backends sharing a Kafka cluster or an Elasticsearch cluster.
-if [[ ${OPENNMS_INSTANCE_ID} ]]; then
+if [ -n "${OPENNMS_INSTANCE_ID}" ]; then
   echo "Creating ${CONFIG_DIR_OVERLAY}/opennms.properties.d/instanceid.properties with our instance ID '${OPENNMS_INSTANCE_ID}'"
   cat <<EOF > ${CONFIG_DIR_OVERLAY}/opennms.properties.d/instanceid.properties
 # Used for Kafka Topics and Elasticsearch Index Prefixes
 org.opennms.instance.id=${OPENNMS_INSTANCE_ID}
 EOF
 else
-  OPENNMS_INSTANCE_ID="OpenNMS"
+  if [[ -e "${CONFIG_DIR}/opennms.properties.d/instanceid.properties" ]]; then
+    echo "Found ${CONFIG_DIR}/opennms.properties.d/instanceid.properties, we are going to remove it."
+    rm "${CONFIG_DIR}/opennms.properties.d/instanceid.properties"
+  fi
 fi
 
 # Disable data choices (optional)
@@ -393,8 +396,10 @@ readTimeoutInMs=${CORTEX_READ_TIMEOUT}
 metricCacheSize=${CORTEX_METRIC_CACHE_SIZE}
 externalTagsCacheSize=${CORTEX_EXTERNAL_TAGS_CACHE_SIZE}
 bulkheadMaxWaitDuration=${CORTEX_BULKHEAD_MAX_WAIT_DURATION}
-organizationId=${OPENNMS_INSTANCE_ID}
 EOF
+  if [ -n "${OPENNMS_INSTANCE_ID}" ]; then
+    echo "organizationId=${OPENNMS_INSTANCE_ID}" >> ${CONFIG_DIR_OVERLAY}/org.opennms.plugins.tss.cortex.cfg
+  fi
 
   mkdir -p ${CONFIG_DIR_OVERLAY}/featuresBoot.d
 
@@ -440,15 +445,19 @@ EOF
 # Configure Elasticsearch to allow Helm/Grafana to access Flow data
 if [[ -v ELASTICSEARCH_SERVER ]]; then
   echo "Configuring Elasticsearch for Flows..."
-  PREFIX=$(echo ${OPENNMS_INSTANCE_ID} | tr '[:upper:]' '[:lower:]')-
   echo "Creating ${CONFIG_DIR_OVERLAY}/org.opennms.features.flows.persistence.elastic.cfg"
   cat <<EOF > ${CONFIG_DIR_OVERLAY}/org.opennms.features.flows.persistence.elastic.cfg
 elasticUrl=https://${ELASTICSEARCH_SERVER}
 globalElasticUser=${ELASTICSEARCH_USER}
 globalElasticPassword=${ELASTICSEARCH_PASSWORD}
 elasticIndexStrategy=${ELASTICSEARCH_INDEX_STRATEGY_FLOWS}
+EOF
+  if [ -n "${OPENNMS_INSTANCE_ID}" ]; then
+    PREFIX=$(echo ${OPENNMS_INSTANCE_ID} | tr '[:upper:]' '[:lower:]')-
+    cat <<EOF >> ${CONFIG_DIR_OVERLAY}/org.opennms.features.flows.persistence.elastic.cfg
 indexPrefix=${PREFIX}
 EOF
+  fi
 fi
 
 
@@ -478,11 +487,6 @@ fi
 
 # Configure Sink and RPC to use Kafka, and the Kafka Producer.
 if [[ -v KAFKA_BOOTSTRAP_SERVER ]]; then
-  if [[ ${OPENNMS_INSTANCE_ID} == "" ]]; then
-    echo >&2 "OPENNMS_INSTANCE_ID cannot be empty. Aborting."
-    exit 1
-  fi
-
   echo "Configuring Kafka for IPC..."
 
   echo "Creating ${CONFIG_DIR_OVERLAY}/opennms.properties.d/amq.properties"
@@ -500,8 +504,12 @@ EOF
 
 # TWIN
 org.opennms.core.ipc.twin.kafka.bootstrap.servers=${KAFKA_BOOTSTRAP_SERVER}
+EOF
+    if [ -n "${OPENNMS_INSTANCE_ID}" ]; then
+      cat <<EOF >> ${CONFIG_DIR_OVERLAY}/opennms.properties.d/kafka.properties
 org.opennms.core.ipc.twin.kafka.group.id=${OPENNMS_INSTANCE_ID}-Core-Twin
 EOF
+    fi
   fi
 
   cat <<EOF >> ${CONFIG_DIR_OVERLAY}/opennms.properties.d/kafka.properties
@@ -509,7 +517,6 @@ EOF
 # SINK
 org.opennms.core.ipc.sink.initialSleepTime=60000
 org.opennms.core.ipc.sink.kafka.bootstrap.servers=${KAFKA_BOOTSTRAP_SERVER}
-org.opennms.core.ipc.sink.kafka.group.id=${OPENNMS_INSTANCE_ID}-Core-Sink
 
 # SINK Consumer (verify Kafka broker configuration)
 org.opennms.core.ipc.sink.kafka.session.timeout.ms=30000
@@ -519,7 +526,6 @@ org.opennms.core.ipc.sink.kafka.max.poll.records=50
 org.opennms.core.ipc.rpc.kafka.bootstrap.servers=${KAFKA_BOOTSTRAP_SERVER}
 org.opennms.core.ipc.rpc.kafka.ttl=30000
 org.opennms.core.ipc.rpc.kafka.single-topic=true
-org.opennms.core.ipc.rpc.kafka.group.id=${OPENNMS_INSTANCE_ID}-Core-RPC
 
 # RPC Consumer (verify Kafka broker configuration)
 org.opennms.core.ipc.rpc.kafka.request.timeout.ms=30000
@@ -531,6 +537,15 @@ org.opennms.core.ipc.rpc.kafka.auto.offset.reset=latest
 org.opennms.core.ipc.rpc.kafka.acks=0
 org.opennms.core.ipc.rpc.kafka.linger.ms=5
 EOF
+
+  if [ -n "${OPENNMS_INSTANCE_ID}" ]; then
+    cat <<EOF >> ${CONFIG_DIR_OVERLAY}/opennms.properties.d/kafka.properties
+
+# org.opennms.instance.id-prefixed groups for multi-tenant operation
+org.opennms.core.ipc.sink.kafka.group.id=${OPENNMS_INSTANCE_ID}-Core-Sink
+org.opennms.core.ipc.rpc.kafka.group.id=${OPENNMS_INSTANCE_ID}-Core-RPC
+EOF
+  fi
 
   MODULES="rpc sink"
   if [[ "$USE_TWIN" == "true" ]]; then

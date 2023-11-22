@@ -10,7 +10,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: onms-sentinel
-  namespace: {{ .Release.Name }}
+  namespace: {{ include "namespace" . }}
   labels:
     app: onms-sentinel
     {{- include "core.labels" . | nindent 4 }}

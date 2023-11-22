@@ -3,7 +3,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: onms-core
-  namespace: {{ .Release.Name }}
+  namespace: {{ include "namespace" . }}
   labels:
     app: onms-core
     {{- include "core.labels" . | nindent 4 }}

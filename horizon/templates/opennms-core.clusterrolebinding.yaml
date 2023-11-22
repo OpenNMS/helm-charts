@@ -6,7 +6,7 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: {{ (.Values.dependencies.securitycontext).serviceaccount.name | quote }}
-    namespace: {{ .Release.Name }}
+    namespace: {{ include "namespace" . }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole

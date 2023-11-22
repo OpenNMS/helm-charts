@@ -137,7 +137,7 @@ kubectl create configmap -n $instance $configmap --from-file=lots-of-zeros.zip
 | core.resources.requests.cpu | string | `"2"` |  |
 | core.resources.requests.memory | string | `"4Gi"` |  |
 | core.terminationGracePeriodSeconds | int | `120` |  |
-| createNamespace | bool | `false` |  |
+| createNamespace | bool | `false` | Whether to create the namespace when releaseNamespace=true. Has no effect otherwise. |
 | dependencies.clusterRole | bool | `true` |  |
 | dependencies.clusterRoleBinding | bool | `true` |  |
 | dependencies.cortex.bulkheadMaxWaitDuration | string | `"9223372036854775807"` |  |
@@ -211,11 +211,13 @@ kubectl create configmap -n $instance $configmap --from-file=lots-of-zeros.zip
 | ingress.annotations | object | `{}` |  |
 | ingress.certManager.clusterIssuer | string | `"opennms-issuer"` |  |
 | ingress.className | string | `"nginx"` |  |
+| multiTenant | bool | `false` | Enable multi-tenant mode. This will use the release name as the per-tenant identifier for the OpenNMS instance ID, databases, Kakfa topics, ElasticSearch indices, and Prometheus organization ID. |
 | promtail.image.pullPolicy | string | `"IfNotPresent"` |  |
 | promtail.image.repository | string | `"grafana/promtail"` |  |
 | promtail.image.tag | string | `"latest"` |  |
 | promtail.resources.limits.cpu | string | `"50m"` |  |
 | promtail.resources.limits.memory | string | `"64Mi"` |  |
+| releaseNamespace | bool | `false` | Install resource objects into namespace named for the Helm release. See also createNamespace. |
 | sentinel.configuration.database.poolSize | int | `25` |  |
 | sentinel.image.pullPolicy | string | `"IfNotPresent"` |  |
 | sentinel.image.repository | string | `"opennms/sentinel"` |  |

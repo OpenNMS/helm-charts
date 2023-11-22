@@ -4,7 +4,7 @@ kind: Job
 metadata:
   creationTimestamp: null
   name: onms-post-config
-  namespace: {{ .Release.Name }}
+  namespace: {{ include "namespace" . }}
   labels:
     app: onms-core
     {{- include "core.labels" . | nindent 4 }}

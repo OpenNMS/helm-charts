@@ -97,8 +97,7 @@ server:
   http_listen_port: 9080
   grpc_listen_port: 0
 clients:
-- tenant_id: {{ .Release.Name }}
-  url: {{ printf "%s://%s:%d/loki/api/v1/push" $scheme ((.Values.dependencies).loki).hostname (((.Values.dependencies).loki).port | int) }}
+- url: {{ printf "%s://%s:%d/loki/api/v1/push" $scheme ((.Values.dependencies).loki).hostname (((.Values.dependencies).loki).port | int) }}
   {{- if and ((.Values.dependencies).loki).username ((.Values.dependencies).loki).password }}
   basic_auth:
     username: {{ .Values.dependencies.loki.username }}
@@ -108,8 +107,11 @@ clients:
   tls_config:
     ca_file: /etc/jks/loki-ca.cert
   {{- end }}
+  {{- if .Values.multiTenant }}
+  tenant_id: {{ .Release.Name }}
+  {{- end }}
   external_labels:
-    namespace: {{ .Release.Name }}
+    namespace: {{ include "namespace" . }}
 scrape_configs:
 - job_name: system
   pipeline_stages:
@@ -146,5 +148,16 @@ Are we running in an Red Hat OpenShift cluster?
 {{- printf "true" -}}
 {{- else }}
 {{- printf "false" -}}
+{{- end }}
+{{- end }}
+
+{{/*
+Define Namespace
+*/}}
+{{- define "namespace" -}}
+{{- if .Values.releaseNamespace }}
+{{- printf "%s" .Release.Name -}}
+{{- else }}
+{{- printf "%s" .Release.Namespace -}}
 {{- end }}
 {{- end }}

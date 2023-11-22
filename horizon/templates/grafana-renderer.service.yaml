@@ -4,7 +4,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: grafana-renderer
-  namespace: {{ .Release.Name }}
+  namespace: {{ include "namespace" . }}
   labels:
     app: grafana-renderer
     {{- include "core.labels" . | nindent 4 }}

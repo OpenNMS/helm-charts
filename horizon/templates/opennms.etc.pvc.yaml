@@ -3,7 +3,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: onms-etc-pvc
-  namespace: {{ .Release.Name }}
+  namespace: {{ include "namespace" . }}
   labels:
     app: onms-core
     tier: storage
