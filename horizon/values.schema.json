@@ -262,6 +262,11 @@
                             }
                         }
                     }
+                },
+                "env": {
+                    "type": "object",
+                    "default": "{}",
+                    "description": "Environment variables to set on the onms container."
                 }
             }
         },

@@ -125,6 +125,7 @@ kubectl create configmap -n $instance $configmap --from-file=lots-of-zeros.zip
 | core.configuration.storage.mibs | string | `nil` |  |
 | core.configuration.storage.rrd | string | `"1000Gi"` |  |
 | core.configuration.tolerations | string | `nil` |  |
+| core.env | object | `{}` | Environment variables to set on the onms container. |
 | core.image.pullPolicy | string | `"IfNotPresent"` |  |
 | core.image.repository | string | `"opennms/horizon"` |  |
 | core.image.tag | string | `""` |  |
