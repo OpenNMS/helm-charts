@@ -43,6 +43,9 @@ data:
   CORTEX_METRIC_CACHE_SIZE: {{ .Values.dependencies.cortex.metricCacheSize | quote }}
   CORTEX_EXTERNAL_TAGS_CACHE_SIZE: {{ .Values.dependencies.cortex.externalTagsCacheSize | quote }}
   CORTEX_BULKHEAD_MAX_WAIT_DURATION: {{ .Values.dependencies.cortex.bulkheadMaxWaitDuration | quote }}
+  {{- if .Values.dependencies.cortex.organizationId }}
+  CORTEX_ORGANIZATION_ID: {{ .Values.dependencies.cortex.organizationId | quote }}
+  {{- end }}
   {{- end }}
   {{- if ((.Values.dependencies).elasticsearch).hostname }}
   ELASTICSEARCH_SERVER: {{ printf "%s:%d" .Values.dependencies.elasticsearch.hostname (.Values.dependencies.elasticsearch.port | int) | quote }}

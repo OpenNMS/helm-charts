@@ -569,6 +569,11 @@
                         "bulkheadMaxWaitDuration": {
                             "type": "string",
                             "default": "9223372036854775807"
+                        },
+                        "organizationId": {
+                            "type": "string",
+                            "default": "",
+                            "description": "Specify the `X-Scope-OrgID` header. This will override the tenant name when multiTenant=true."
                         }
                     }
                 }

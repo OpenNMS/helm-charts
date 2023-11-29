@@ -9,6 +9,7 @@
 # CORTEX_EXTERNAL_TAGS_CACHE_SIZE
 # CORTEX_MAX_CONCURRENT_HTTP_CONNECTIONS
 # CORTEX_METRIC_CACHE_SIZE
+# CORTEX_ORGANIZATION_ID
 # CORTEX_READ_TIMEOUT
 # CORTEX_READ_URL
 # CORTEX_WRITE_TIMEOUT
@@ -397,7 +398,9 @@ metricCacheSize=${CORTEX_METRIC_CACHE_SIZE}
 externalTagsCacheSize=${CORTEX_EXTERNAL_TAGS_CACHE_SIZE}
 bulkheadMaxWaitDuration=${CORTEX_BULKHEAD_MAX_WAIT_DURATION}
 EOF
-  if [ -n "${OPENNMS_INSTANCE_ID}" ]; then
+  if [[ -v CORTEX_ORGANIZATION_ID ]] && [ -n "${CORTEX_ORGANIZATION_ID}" ]; then
+    echo "organizationId=${CORTEX_ORGANIZATION_ID}" >> ${CONFIG_DIR_OVERLAY}/org.opennms.plugins.tss.cortex.cfg
+  elif [ -n "${OPENNMS_INSTANCE_ID}" ]; then
     echo "organizationId=${OPENNMS_INSTANCE_ID}" >> ${CONFIG_DIR_OVERLAY}/org.opennms.plugins.tss.cortex.cfg
   fi
 

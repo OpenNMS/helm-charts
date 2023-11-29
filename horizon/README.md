@@ -144,6 +144,7 @@ kubectl create configmap -n $instance $configmap --from-file=lots-of-zeros.zip
 | dependencies.cortex.externalTagsCacheSize | int | `1000` |  |
 | dependencies.cortex.maxConcurrentHttpConnections | int | `100` |  |
 | dependencies.cortex.metricCacheSize | int | `1000` |  |
+| dependencies.cortex.organizationId | string | `""` | Specify the `X-Scope-OrgID` header. This will override the tenant name when multiTenant=true. |
 | dependencies.cortex.readTimeoutInMs | int | `1000` |  |
 | dependencies.cortex.readUrl | string | `"http://cortex-query-frontend.shared.svc.cluster.local:8080/prometheus/api/v1"` |  |
 | dependencies.cortex.writeTimeoutInMs | int | `1000` |  |
