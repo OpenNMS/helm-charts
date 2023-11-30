@@ -210,6 +210,12 @@ spec:
           mountPath: /opt/opennms/.postgresql/root.crt
           subPath: postgresql-ca.crt
         env:
+        {{- if .Values.core.env }}
+        {{- range $key, $val := .Values.core.env }}
+        - name: {{ $key }}
+          value: {{ $val | quote }}
+        {{- end }}
+        {{- end }}
         {{- if eq (include "onOpenShift" .) "true" }}
         {{- if or (not (has "CAP_NET_RAW" ((.Values.dependencies).securitycontext).allowedCapabilities)) (eq (.Values.dependencies).securitycontext.allowPrivilegeEscalation false)  }}
         - name: JAVA_HOME

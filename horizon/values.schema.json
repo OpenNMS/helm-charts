@@ -262,6 +262,11 @@
                             }
                         }
                     }
+                },
+                "env": {
+                    "type": "object",
+                    "default": "{}",
+                    "description": "Environment variables to set on the onms container."
                 }
             }
         },
@@ -569,6 +574,11 @@
                         "bulkheadMaxWaitDuration": {
                             "type": "string",
                             "default": "9223372036854775807"
+                        },
+                        "organizationId": {
+                            "type": "string",
+                            "default": "",
+                            "description": "Specify the `X-Scope-OrgID` header. This will override the tenant name when multiTenant=true."
                         }
                     }
                 }

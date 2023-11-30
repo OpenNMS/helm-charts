@@ -104,6 +104,8 @@ dependencies:
   metricCacheSize: 1000
   externalTagsCacheSize: 1000
   bulkheadMaxWaitDuration: '9223372036854775807'  # this is set as a string so it doesn't end up in scientific notation along the way which causes problems later
+  # -- Specify the `X-Scope-OrgID` header. This will override the tenant name when multiTenant=true.
+  organizationId: ''
 
 # The Ingress to expose the OpenNMS and Grafana.
 ingress:
@@ -181,6 +183,8 @@ core:
   ttlSecondsAfterFinished: 300
  # -- Experimental: a list of additional init containers
  initContainers: []
+ # -- Environment variables to set on the onms container.
+ env: {}
 
 # OpenNMS Sentinel for flow processing (Optional)
 sentinel:

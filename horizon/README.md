@@ -125,6 +125,7 @@ kubectl create configmap -n $instance $configmap --from-file=lots-of-zeros.zip
 | core.configuration.storage.mibs | string | `nil` |  |
 | core.configuration.storage.rrd | string | `"1000Gi"` |  |
 | core.configuration.tolerations | string | `nil` |  |
+| core.env | object | `{}` | Environment variables to set on the onms container. |
 | core.image.pullPolicy | string | `"IfNotPresent"` |  |
 | core.image.repository | string | `"opennms/horizon"` |  |
 | core.image.tag | string | `""` |  |
@@ -144,6 +145,7 @@ kubectl create configmap -n $instance $configmap --from-file=lots-of-zeros.zip
 | dependencies.cortex.externalTagsCacheSize | int | `1000` |  |
 | dependencies.cortex.maxConcurrentHttpConnections | int | `100` |  |
 | dependencies.cortex.metricCacheSize | int | `1000` |  |
+| dependencies.cortex.organizationId | string | `""` | Specify the `X-Scope-OrgID` header. This will override the tenant name when multiTenant=true. |
 | dependencies.cortex.readTimeoutInMs | int | `1000` |  |
 | dependencies.cortex.readUrl | string | `"http://cortex-query-frontend.shared.svc.cluster.local:8080/prometheus/api/v1"` |  |
 | dependencies.cortex.writeTimeoutInMs | int | `1000` |  |
