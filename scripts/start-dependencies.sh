@@ -58,7 +58,7 @@ if [ "$INSTALL_INGRESS_NGINX" == "true" ]; then
   declare -a ingress_nginx_helm_args # Make old bash 3.x 3.x on macOS happy
   if [ "$INSTALL_KAFKA" == "true" ]; then
     # Patch NGinx to allow SSL Passthrough for Strimzi
-    ingress_nginx_helm_args=('--set' 'ingress-nginx.params=["--enable-leader-election=false", "--enable-ssl-passthrough"]')
+    ingress_nginx_helm_args=('--set' 'ingress-nginx.params=["--enable-leader-election=false", "--enable-ssl-passthrough=true"]')
   else
     ingress_nginx_helm_args=('--set' 'ingress-nginx.params=["--enable-leader-election=false"]')
   fi
@@ -110,7 +110,8 @@ if [ "$INSTALL_POSTGRESQL" == "true" ]; then
   helm repo add postgres-operator-charts https://opensource.zalando.com/postgres-operator/charts/postgres-operator
   # The default image repo at registry.opensource.zalan.do doesn't support multi-arch images yet,
   # so use the ghcr repo which has multi-arch images for the operator.
-  helm upgrade --install \
+  helm upgrade -n $NAMESPACE \
+    --install \
     --set image.registry=ghcr.io \
     --set image.repository=zalando/postgres-operator \
     postgres-operator postgres-operator-charts/postgres-operator
