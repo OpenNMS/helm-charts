@@ -65,6 +65,7 @@ spec:
           resources:
            {{- toYaml . | nindent 11 }}
           {{- end }}
+          {{- if eq (include "onOpenShift" .) "true" }}
           securityContext:
            capabilities:
            {{- if and (has "CAP_NET_RAW" ((.Values.securitycontext).allowedCapabilities)) ((.Values.securitycontext).allowPrivilegeEscalation) }}
@@ -74,6 +75,7 @@ spec:
             drop:
              - ALL
            {{- end }}
+          {{- end }}
           livenessProbe:
             exec:
               command:
