@@ -5,7 +5,7 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: inspector
-  namespace: {{ .Release.Name }}
+  namespace: {{ include "namespace" . }}
   labels:
     app: onms-inspector
     {{- include "core.labels" . | nindent 4 }}  

@@ -4,7 +4,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: onms-core
-  namespace: {{ .Release.Name }}
+  namespace: {{ include "namespace" . }}
   labels:
     app: onms-core
     {{- include "core.labels" . | nindent 4 }}
@@ -121,6 +121,23 @@ spec:
           mountPath: /opt/opennms-overlay # Required by the script - OVERLAY_DIR
         - name: scripts
           mountPath: /scripts # Required by the script
+        {{- range $k, $r := .Values.core.overlayConfigMaps }}
+        - name: overlay-configmap-{{ $k }}
+          {{- if $r.unzip }}
+            {{- if $r.path }}
+              {{- printf "path not allowed when unzip is true for core.overlayConfigMaps with name '%s'" $r.name | fail }}
+            {{- end }}
+          mountPath: /opennms-overlay-configmaps/{{ $k }}-unzip
+          {{- else }}
+            {{- if empty $r.path }}
+              {{- printf "path required for core.overlayConfigMaps with name '%s'" $r.name | fail }}
+            {{- end }}
+          mountPath: /opennms-overlay-configmaps/{{ $k }}/{{ $r.path }}
+          {{- end }}
+        {{- end }}
+      {{- with .Values.core.initContainers }}
+      {{- toYaml . | nindent 6 }}
+      {{- end }}
       nodeSelector:
         {{- toYaml .Values.core.configuration.nodeSelector | nindent 8 }}
       affinity:
@@ -193,6 +210,12 @@ spec:
           mountPath: /opt/opennms/.postgresql/root.crt
           subPath: postgresql-ca.crt
         env:
+        {{- if .Values.core.env }}
+        {{- range $key, $val := .Values.core.env }}
+        - name: {{ $key }}
+          value: {{ $val | quote }}
+        {{- end }}
+        {{- end }}
         {{- if eq (include "onOpenShift" .) "true" }}
         {{- if or (not (has "CAP_NET_RAW" ((.Values.dependencies).securitycontext).allowedCapabilities)) (eq (.Values.dependencies).securitycontext.allowPrivilegeEscalation false)  }}
         - name: JAVA_HOME
@@ -289,4 +312,9 @@ spec:
         persistentVolumeClaim:
           claimName: onms-mibs-pvc
           readOnly: false
+      {{- end }}
+      {{- range $k, $r := .Values.core.overlayConfigMaps }}
+      - name: overlay-configmap-{{ $k }}
+        configMap:
+          name: {{ $r.name | quote }}
       {{- end }}

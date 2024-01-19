@@ -22,6 +22,8 @@ INSTALL_MIMIR=${INSTALL_MIMIR:-false} # needed for Cortex testing
 INSTALL_LOKI=${INSTALL_LOKI:-false} # needed for log aggregation together with promtail in containers; make sure dependencies.loki.hostname='' for the helm chart if this is disabled
 
 # Required dependencies (if you don't install them here, they need to be running somewhere else)
+INSTALL_CERT_MANAGER=${INSTALL_CERT_MANAGER:-true}
+INSTALL_INGRESS_NGINX=${INSTALL_INGRESS_NGINX:-true}
 INSTALL_POSTGRESQL=${INSTALL_POSTGRESQL:-true}
 
 NAMESPACE="shared"
@@ -37,23 +39,45 @@ ELASTIC_PASSWORD="31@st1c" # Must match dependencies.elasticsearch.password from
 TRUSTSTORE_PASSWORD="0p3nNM5" # Must match dependencies.kafka.truststore.password from the Helm deployment
 CLUSTER_NAME="onms" # Must match the name of the cluster inside dependencies/kafka.yaml and dependencies/elasticsearch.yaml
 
-# Patch NGinx to allow SSL Passthrough for Strimzi
-if [ "$INSTALL_KAFKA" == "true" ]; then
-  kubectl patch deployment ingress-nginx-controller -n ingress-nginx --type json -p \
-    '[{"op":"add","path":"/spec/template/spec/containers/0/args/-","value":"--enable-ssl-passthrough"}]'
-fi
-
 # Update Helm Repositories
 helm repo add jetstack https://charts.jetstack.io
 helm repo add grafana https://grafana.github.io/helm-charts
 helm repo update
 
 # Install Cert-Manager
-helm upgrade --install cert-manager jetstack/cert-manager --version v1.10.1 \
-  --namespace cert-manager --create-namespace --set installCRDs=true --wait
-kubectl apply -f ca -n cert-manager
+if [ "$INSTALL_CERT_MANAGER" == "true" ]; then
+  # The --leader-elect=false significantly decreases startup time
+  helm upgrade --install cert-manager jetstack/cert-manager --version v1.10.1 \
+    --namespace cert-manager --create-namespace --set installCRDs=true \
+    --set 'cainjector.extraArgs={--leader-elect=false}'
+  kubectl apply -f ca -n cert-manager
+fi
 
-# Create a namespace for most of the dependencies except for cert-manager (above), and the postgres and elastic operators (added below).
+# Install ingress-nginx
+if [ "$INSTALL_INGRESS_NGINX" == "true" ]; then
+  declare -a ingress_nginx_helm_args # Make old bash 3.x 3.x on macOS happy
+  if [ "$INSTALL_KAFKA" == "true" ]; then
+    # Patch NGinx to allow SSL Passthrough for Strimzi
+    ingress_nginx_helm_args=('--set' 'ingress-nginx.params=["--enable-leader-election=false", "--enable-ssl-passthrough=true"]')
+  else
+    ingress_nginx_helm_args=('--set' 'ingress-nginx.params=["--enable-leader-election=false"]')
+  fi
+
+  # The controller.service.type=NodePort is because kind doesn't provide a LoadBalancer by default.
+  # https://github.com/fluxcd/flux2/issues/2476#issuecomment-1051275654
+  helm upgrade --install ingress-nginx ingress-nginx \
+    --repo https://kubernetes.github.io/ingress-nginx \
+    --version 4.8.3 \
+    --namespace ingress-nginx --create-namespace \
+    --set controller.service.type=NodePort \
+    "${ingress_nginx_helm_args[@]}"
+elif [ "$INSTALL_KAFKA" == "true" ]; then
+  # Patch NGinx to allow SSL Passthrough for Strimzi
+  kubectl patch deployment ingress-nginx-controller -n ingress-nginx --type json -p \
+    '[{"op":"add","path":"/spec/template/spec/containers/0/args/-","value":"--enable-ssl-passthrough"}]'
+fi
+
+# Create a namespace for most of the dependencies except for cert-manager and ingress-nginx (above), and the postgres and elastic operators (added below).
 kubectl create namespace $NAMESPACE --dry-run=client -o yaml | kubectl apply -f -
 
 # Install Grafana Loki
@@ -86,7 +110,8 @@ if [ "$INSTALL_POSTGRESQL" == "true" ]; then
   helm repo add postgres-operator-charts https://opensource.zalando.com/postgres-operator/charts/postgres-operator
   # The default image repo at registry.opensource.zalan.do doesn't support multi-arch images yet,
   # so use the ghcr repo which has multi-arch images for the operator.
-  helm upgrade --install \
+  helm upgrade -n $NAMESPACE \
+    --install \
     --set image.registry=ghcr.io \
     --set image.repository=zalando/postgres-operator \
     postgres-operator postgres-operator-charts/postgres-operator
@@ -120,7 +145,14 @@ if [ "$INSTALL_MIMIR" == "true" ]; then
     -f dependencies/values-mimir.yaml
 fi
 
-# Wait for the clusters
+# Wait for everything
+if [ "$INSTALL_INGRESS_NGINX" == "true" ]; then
+  # https://kind.sigs.k8s.io/docs/user/ingress/#ingress-nginx
+  kubectl wait --namespace ingress-nginx \
+    --for=condition=ready pod \
+    --selector=app.kubernetes.io/component=controller \
+    --timeout=90s
+fi
 if [ "$INSTALL_KAFKA" == "true" ]; then
   kubectl wait kafka/$CLUSTER_NAME --for=condition=Ready --timeout=300s -n $NAMESPACE
 fi

@@ -265,6 +265,11 @@
                             }
                         }
                     }
+                },
+                "env": {
+                    "type": "object",
+                    "default": "{}",
+                    "description": "Environment variables to set on the onms container."
                 }
             }
         },
@@ -279,7 +284,17 @@
         },
         "createNamespace": {
             "type": "boolean",
-            "title": "Create Namespace",
+            "title": "Whether to create the namespace when releaseNamespace=true",
+            "default": false
+        },
+        "releaseNamespace": {
+            "type": "boolean",
+            "title": "Install resource objects into namespace named for the Helm release",
+            "default": false
+        },
+        "multiTenant": {
+            "type": "boolean",
+            "title": "Enable multi-tenant mode",
             "default": false
         },
         "imagePullSecrets": {
@@ -562,6 +577,11 @@
                         "bulkheadMaxWaitDuration": {
                             "type": "string",
                             "default": "9223372036854775807"
+                        },
+                        "organizationId": {
+                            "type": "string",
+                            "default": "",
+                            "description": "Specify the `X-Scope-OrgID` header. This will override the tenant name when multiTenant=true."
                         }
                     }
                 }

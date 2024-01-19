@@ -3,7 +3,7 @@
 kind: SecurityContextConstraints
 metadata:
   name: {{ (.Values.dependencies.securitycontext).securitycontextconstraints.name | quote }}
-  namespace: {{ .Release.Name }}
+  namespace: {{ include "namespace" . }}
 allowHostDirVolumePlugin: false
 allowHostIPC: false
 allowHostNetwork: false

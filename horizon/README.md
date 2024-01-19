@@ -25,6 +25,71 @@ helm install monms opennms/horizon --set domain=domain1.com  --create-namespace
 | ----------- | ----------- | ----------- |
 | 1.x | Horizon 32.x | Meridian 2023.x |
 
+## Overlay ConfigMaps
+
+The chart supports specifying a list of ConfigMaps with `core.overlayConfigMaps` that will be copied to the OpenNMS container overlay directory in the init container. This can be used to provide configuration files for OpenNMS. There are two ways to provide content in each ConfigMap:
+
+### Plain files
+
+Provide one or more plain files (text and/or binary) in the ConfigMap and specify the directory where these files will be copied.
+
+Here is a configuration example:
+
+```
+core:
+  overlayConfigMaps:
+    - name: "my-etc-files"
+      path: "etc"
+```
+
+Here is an example of how to create the ConfigMap:
+
+```
+instance=<helm release name> # make sure to set to your Helm release name
+configmap=my-etc-files
+
+mkdir etc
+date > etc/testing-configmap
+
+kubectl create configmap -n $instance $configmap --from-file=etc
+```
+
+### ZIP files
+
+Provide one or more ZIP files in the ConfigMap, and each will be extracted in alphabetical order at the root of the overlay directory.
+
+Here is a configuration example:
+
+```
+core:
+  overlayConfigMaps:
+    - name: "my-zip-files"
+      unzip: true
+```
+
+Here is an example of how to create the ConfigMap:
+
+```
+instance=<helm release name> # make sure to set to your Helm release name
+configmap=my-zip-files
+
+mkdir -p zip/etc
+dd if=/dev/zero bs=1k count=5000 of=zip/etc/lots-of-zeros # make a 5 MB test file
+( cd zip && zip -r -o ../lots-of-zeros.zip . )
+
+kubectl create configmap -n $instance $configmap --from-file=lots-of-zeros.zip
+```
+
+### Overlay ConfigMap Notes
+
+1. This mechanism can be used only to *add* files. When `etc` files are copied into the `onms-etc-pvc` PVC, removing a file from the ConfigMap will not cause the file in the PVC to be deleted. In this case, you will need to delete the file manually after updating the ConfigMap to remove the file. You can do this with `kubectl exec -n $instance onms-core-0 -- rm etc/testing-configmap`.
+2. ConfigMaps cannot contain recursive directory structures--only files. If you need to put files into multiple directories, each directory will need to be its own ConfigMap. `kubectl create configmap` will silently ignore subdirectories.
+3. ConfigMaps can't be larger than 1 MB (see the note [here](https://kubernetes.io/docs/concepts/configuration/configmap/#motivation). If you have more content, you will need to split it across multiple ConfigMaps or compressed into ZIP files.
+4. Use `kubectl delete configmap -n $instance $configmap` to delete an existing ConfigMap before updating.
+5. After updating a ConfigMap, you will need to restart the pod; for example, `kubectl rollout restart -n $instance statefulset/onms-core`
+6. You can use `kubectl get configmap -n $instance $configmap -o yaml` to view the ConfigMap that is created.
+7. Due to file ownership, some files/directories might not be updatable in the container at runtime. A workaround is to build a modified container that updates permissions with `chmod -R g=u ...` on the affected files/directories. See the OpenNMS [core Dockerfile](https://github.com/OpenNMS/opennms/blob/develop/opennms-container/core/Dockerfile) for which directories have been updated to allow writes out of the box.
+
 ## Values
 
 | Key | Type | Default | Description |
@@ -61,23 +126,27 @@ helm install monms opennms/horizon --set domain=domain1.com  --create-namespace
 | core.configuration.storage.mibs | string | `nil` |  |
 | core.configuration.storage.rrd | string | `"1000Gi"` |  |
 | core.configuration.tolerations | string | `nil` |  |
+| core.env | object | `{}` | Environment variables to set on the onms container. |
 | core.image.pullPolicy | string | `"IfNotPresent"` |  |
 | core.image.repository | string | `"opennms/horizon"` |  |
 | core.image.tag | string | `""` |  |
+| core.initContainers | list | `[]` | Experimental: a list of additional init containers |
 | core.inspector.enabled | bool | `false` |  |
+| core.overlayConfigMaps | list | `[]` |  |
 | core.postConfigJob.ttlSecondsAfterFinished | int | `300` |  |
 | core.resources.limits.cpu | string | `"2"` |  |
 | core.resources.limits.memory | string | `"8Gi"` |  |
 | core.resources.requests.cpu | string | `"2"` |  |
 | core.resources.requests.memory | string | `"4Gi"` |  |
 | core.terminationGracePeriodSeconds | int | `120` |  |
-| createNamespace | bool | `false` |  |
+| createNamespace | bool | `false` | Whether to create the namespace when releaseNamespace=true. Has no effect otherwise. |
 | dependencies.clusterRole | bool | `true` |  |
 | dependencies.clusterRoleBinding | bool | `true` |  |
 | dependencies.cortex.bulkheadMaxWaitDuration | string | `"9223372036854775807"` |  |
 | dependencies.cortex.externalTagsCacheSize | int | `1000` |  |
 | dependencies.cortex.maxConcurrentHttpConnections | int | `100` |  |
 | dependencies.cortex.metricCacheSize | int | `1000` |  |
+| dependencies.cortex.organizationId | string | `""` | Specify the `X-Scope-OrgID` header. This will override the tenant name when multiTenant=true. |
 | dependencies.cortex.readTimeoutInMs | int | `1000` |  |
 | dependencies.cortex.readUrl | string | `"http://cortex-query-frontend.shared.svc.cluster.local:8080/prometheus/api/v1"` |  |
 | dependencies.cortex.writeTimeoutInMs | int | `1000` |  |
@@ -145,11 +214,13 @@ helm install monms opennms/horizon --set domain=domain1.com  --create-namespace
 | ingress.annotations | object | `{}` |  |
 | ingress.certManager.clusterIssuer | string | `"opennms-issuer"` |  |
 | ingress.className | string | `"nginx"` |  |
+| multiTenant | bool | `false` | Enable multi-tenant mode. This will use the release name as the per-tenant identifier for the OpenNMS instance ID, databases, Kakfa topics, ElasticSearch indices, and Prometheus organization ID. |
 | promtail.image.pullPolicy | string | `"IfNotPresent"` |  |
 | promtail.image.repository | string | `"grafana/promtail"` |  |
 | promtail.image.tag | string | `"latest"` |  |
 | promtail.resources.limits.cpu | string | `"50m"` |  |
 | promtail.resources.limits.memory | string | `"64Mi"` |  |
+| releaseNamespace | bool | `false` | Install resource objects into namespace named for the Helm release. See also createNamespace. |
 | sentinel.configuration.database.poolSize | int | `25` |  |
 | sentinel.image.pullPolicy | string | `"IfNotPresent"` |  |
 | sentinel.image.repository | string | `"opennms/sentinel"` |  |

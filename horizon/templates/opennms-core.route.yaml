@@ -3,7 +3,7 @@ kind: Route
 apiVersion: route.openshift.io/v1
 metadata:
   name: {{ include "core.name" . }}
-  namespace: {{ .Release.Name }}
+  namespace: {{ include "namespace" . }}
   labels:
     app: {{ include "core.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
@@ -25,7 +25,7 @@ spec:
   wildcardPolicy: None
 status:
   ingress:
-    - host: {{ printf "onms-core.%s.svc" .Release.Name | quote }}
+    - host: {{ include "namespace" . | printf "onms-core.%s.svc" | quote }}
       routerName: default
       conditions:
         - type: Admitted

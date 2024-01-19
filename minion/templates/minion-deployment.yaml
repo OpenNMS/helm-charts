@@ -5,7 +5,6 @@ metadata:
   name: minion
   labels:
     app: minion
-  namespace: {{ .Release.Name }}
 spec:
   replicas: 1
   selector:
@@ -66,6 +65,7 @@ spec:
           resources:
            {{- toYaml . | nindent 11 }}
           {{- end }}
+          {{- if eq (include "onOpenShift" .) "true" }}
           securityContext:
            capabilities:
            {{- if and (has "CAP_NET_RAW" ((.Values.securitycontext).allowedCapabilities)) ((.Values.securitycontext).allowPrivilegeEscalation) }}
@@ -75,6 +75,7 @@ spec:
             drop:
              - ALL
            {{- end }}
+          {{- end }}
           livenessProbe:
             exec:
               command:
