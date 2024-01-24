@@ -62,7 +62,7 @@ if [ "${GRAFANA_KEY}" == "null" ]; then
   echo "WARNING: cannot get Grafana Key for $(hostname)"
 else
   echo "Configuring Grafana Box for $(hostname)"
-  echo Creating ${CONFIG_DIR_OVERLAY}/opennms.properties.d/grafana.properties"
+  echo "Creating ${CONFIG_DIR_OVERLAY}/opennms.properties.d/grafana.properties"
   cat <<EOF > ${CONFIG_DIR_OVERLAY}/opennms.properties.d/grafana.properties
 org.opennms.grafanaBox.show=true
 org.opennms.grafanaBox.hostname=${GRAFANA_SERVER}
