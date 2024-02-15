@@ -104,6 +104,8 @@ spec:
             - mountPath: /opt/minion/minion-config.yaml
               name: minion-settings
               subPath: minion-config.yaml
+            - mountPath: "/opt/minion-etc-overlay"
+              name: minion-etc
             {{- if .Values.truststore.content }}
             - mountPath: /etc/java/jks
               name: jks
@@ -113,6 +115,9 @@ spec:
       hostname: minion
       restartPolicy: Always
       volumes:
+        - name: minion-etc
+          configMap:
+           name: minion-app-etc
         - name: minion-data-folder
           persistentVolumeClaim:
             claimName: minion-data-folder
