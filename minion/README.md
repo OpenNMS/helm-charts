@@ -16,7 +16,6 @@ This template can be used to bring up a minion and connect it to a OpenNMS core.
 ### Example:
 Adding a file called `hello.txt` to `etc` folder inside the minion container
 ```
-$ cd minion
 $ echo "Hello World" > etc/hello.txt
 ```
 
