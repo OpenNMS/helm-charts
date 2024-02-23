@@ -105,6 +105,7 @@ kubectl create configmap -n $instance $configmap --from-file=lots-of-zeros.zip
 | core.configuration.enableAlec | bool | `false` |  |
 | core.configuration.enableCortex | bool | `false` |  |
 | core.configuration.enableTssDualWrite | bool | `false` |  |
+| core.configuration.enableVelocloud | bool | `false` |  |
 | core.configuration.etcUpdatePolicy | string | `"never"` |  |
 | core.configuration.http.adminPassword | string | `"admin"` |  |
 | core.configuration.http.restPassword | string | `"admin"` |  |

@@ -488,6 +488,18 @@ else
   fi
 fi
 
+# Enable Velocloud
+if [[ ${ENABLE_VELOCLOUD} == "true" ]]; then
+  cat <<EOF > ${CONFIG_DIR_OVERLAY}/featuresBoot.d/plugin-velocloud.boot
+opennms-plugins-velocloud wait-for-kar=opennms-plugins-velocloud
+EOF
+else
+  if [[ -e "${CONFIG_DIR}/featuresBoot.d/plugin-velocloud.boot" ]];then
+     echo "Found ${CONFIG_DIR}/featfeaturesBoot.d/plugin-velocloud.boot, we are going to remove it."
+   rm "${CONFIG_DIR}/featuresBoot.d/plugin-velocloud.boot"
+  fi
+fi
+
 # Configure Sink and RPC to use Kafka, and the Kafka Producer.
 if [[ -v KAFKA_BOOTSTRAP_SERVER ]]; then
   echo "Configuring Kafka for IPC..."

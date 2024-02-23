@@ -98,6 +98,9 @@
                         "enableCortex": {
                             "type": "boolean"
                         },
+                        "enableVelocloud": {
+                            "type": "boolean"
+                        },
                         "enableTssDualWrite": {
                             "type": "boolean"
                         },

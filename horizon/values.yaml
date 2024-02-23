@@ -135,6 +135,7 @@ core:
   alwaysRollDeployment: true
   enableAlec: false  # See alecImage below for how the KAR is retrieved
   enableCortex: false  # See cortexTssImage below for how the KAR is retrieved
+  enableVelocloud: false
   enableTssDualWrite: false
   enableAcls: false
   rras:  # To optionally replace the RRDtool aggregations (pass [] to keep defaults). Affects Pollerd and Collectd
