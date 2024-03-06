@@ -33,8 +33,8 @@ echo "Hello World" > etc/hello.txt
 | minion.configuration.storage.dataFolder | string | `"5Gi"` |  |
 | minion.image.pullPolicy | string | `"IfNotPresent"` |  |
 | minion.image.repository | string | `"opennms/minion"` |  |
+| minion.image.tag | string | `""` |  |
 | minion.javaOpts | string | `""` |  |
-| minion.javaOpts  | string | `""` |  |
 | minion.kafkaBroker.address | string | `"onms-kafka-bootstrap.shared.svc:9093"` |  |
 | minion.kafkaBroker.password | string | `""` |  |
 | minion.kafkaBroker.username | string | `""` |  |
