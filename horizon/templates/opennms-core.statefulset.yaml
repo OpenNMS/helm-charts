@@ -100,8 +100,6 @@ spec:
           capabilities:
             drop:
              - ALL
-        {{- else }}
-          fsGroup: 10001
         {{- end }}
         command: [ bash, /scripts/onms-core-init.sh ]
         envFrom:
@@ -161,8 +159,6 @@ spec:
             drop:
              - ALL
           {{- end }}
-        {{- else }}
-          fsGroup: 10001
         {{- end }}
         imagePullPolicy: {{ .Values.core.image.pullPolicy }}
         args:
