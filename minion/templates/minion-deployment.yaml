@@ -61,9 +61,14 @@ spec:
               value: America/New_York
           image: {{ $image }}
           imagePullPolicy: {{ .Values.minion.image.pullPolicy }}
-          {{- if .Values.minion.resources }}
+          {{- with .Values.minion.resources }}
           resources:
-           {{- toYaml . | nindent 11 }}
+           limits:
+            cpu: {{ .limits.cpu }}
+            memory: {{ .limits.memory }}
+           requests:
+            cpu: {{ .requests.cpu }}
+            memory: {{ .requests.memory }}
           {{- end }}
           {{- if eq (include "onOpenShift" .) "true" }}
           securityContext:
@@ -99,7 +104,6 @@ spec:
               protocol: UDP
               name: syslog
            {{- end }}
-          resources: {}
           volumeMounts:
             - mountPath: /opt/minion/minion-config.yaml
               name: minion-settings
