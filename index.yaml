@@ -2,6 +2,22 @@ apiVersion: v1
 entries:
   horizon:
   - apiVersion: v2
+    appVersion: 33.0.1
+    created: "2024-03-11T15:11:17.693708042Z"
+    description: A Helm chart for running OpenNMS Horizon in Kubernetes and Red Hat
+      OpenShift
+    digest: 000eb0192f3c7e5951153c3f9f95aba2b967377b5d41ea60edb537b380badab7
+    home: https://github.com/OpenNMS/helm-charts
+    icon: https://www.opennms.com/wp-content/uploads/2021/04/OpenNMS_Favicon_36px.png
+    maintainers:
+    - name: The OpenNMS Group Inc.
+      url: https://www.opennms.com
+    name: horizon
+    type: application
+    urls:
+    - https://github.com/OpenNMS/helm-charts/releases/download/horizon-1.1.12/horizon-1.1.12.tgz
+    version: 1.1.12
+  - apiVersion: v2
     appVersion: 32.0.6
     created: "2024-01-24T18:53:18.469487225Z"
     description: A Helm chart for running OpenNMS Horizon in Kubernetes and Red Hat
@@ -198,6 +214,22 @@ entries:
     version: 0.0.7
   minion:
   - apiVersion: v2
+    appVersion: 33.0.1
+    created: "2024-03-11T15:11:17.854372558Z"
+    description: A Helm chart for running OpenNMS Minion in Kubernetes and Red Hat
+      OpenShift
+    digest: 40a4a4ff69b7520314ee216b17287b9a8aee216fa75c2f1f9f9b7161ab18522d
+    home: https://github.com/OpenNMS/helm-charts
+    icon: https://www.opennms.com/wp-content/uploads/2021/04/OpenNMS_Favicon_36px.png
+    maintainers:
+    - name: The OpenNMS Group Inc.
+      url: https://www.opennms.com
+    name: minion
+    type: application
+    urls:
+    - https://github.com/OpenNMS/helm-charts/releases/download/minion-1.1.12/minion-1.1.12.tgz
+    version: 1.1.12
+  - apiVersion: v2
     appVersion: 32.0.6
     created: "2024-01-24T18:53:18.588703494Z"
     description: A Helm chart for running OpenNMS Minion in Kubernetes and Red Hat
@@ -376,4 +408,4 @@ entries:
     urls:
     - https://github.com/OpenNMS/helm-charts/releases/download/minion-0.0.7/minion-0.0.7.tgz
     version: 0.0.7
-generated: "2024-01-24T18:53:18.588855157Z"
+generated: "2024-03-11T15:11:17.854542636Z"
