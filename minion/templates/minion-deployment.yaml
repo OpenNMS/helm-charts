@@ -49,13 +49,17 @@ spec:
               value: /usr/lib/jvm/java-nocap
             {{- end }}   
             {{- end }}
-            - name: JAVA_MAX_MEM
-              value: 2048M
-            - name: JAVA_MIN_MEM
-              value: 512M
-            {{- if .Values.truststore.content }}
+            {{- if or (.Values.minion.javaOpts) (.Values.truststore.content) }}
             - name: JAVA_OPTS
+             {{- if .Values.truststore.content }}
+              {{- if .Values.minion.javaOpts  }}
+              value: -Djavax.net.ssl.trustStore=/etc/java/jks/truststore.jks -Djavax.net.ssl.trustStorePassword={{ .Values.truststore.password }} {{ .Values.minion.javaOpts }}
+              {{- else }}
               value: -Djavax.net.ssl.trustStore=/etc/java/jks/truststore.jks -Djavax.net.ssl.trustStorePassword={{ .Values.truststore.password }}
+              {{- end }}
+             {{- else }}
+              value: {{ .Values.minion.javaOpts }}
+             {{- end }}
             {{- end }}
             - name: TZ
               value: America/New_York
