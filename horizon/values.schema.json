@@ -92,6 +92,9 @@
                         "alwaysRollDeployment": {
                             "type": "boolean"
                         },
+                        "timeSeriesStrategy": {
+                            "type": "string"
+                        },
                         "enableAlec": {
                             "type": "boolean"
                         },

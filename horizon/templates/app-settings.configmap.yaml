@@ -35,6 +35,7 @@ data:
   {{- end }}
   OPENNMS_ETC_UPDATE_POLICY: {{ .Values.core.configuration.etcUpdatePolicy }}
   {{- if ((.Values.core).configuration).enableCortex }}
+  OPENNMS_TIMESERIES_STRATEGY: {{ .Values.core.configuration.timeSeriesStrategy | quote }}
   CORTEX_WRITE_URL: {{ .Values.dependencies.cortex.writeUrl | quote }}
   CORTEX_READ_URL: {{ .Values.dependencies.cortex.readUrl | quote }}
   CORTEX_MAX_CONCURRENT_HTTP_CONNECTIONS: {{ .Values.dependencies.cortex.maxConcurrentHttpConnections | quote }}

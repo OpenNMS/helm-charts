@@ -133,6 +133,7 @@ core:
    memory: 4Gi
  configuration:
   alwaysRollDeployment: true
+  timeSeriesStrategy: rrd
   enableAlec: false  # See alecImage below for how the KAR is retrieved
   enableCortex: false  # See cortexTssImage below for how the KAR is retrieved
   enableTssDualWrite: false
