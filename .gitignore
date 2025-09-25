@@ -2,6 +2,7 @@
 NOTES.md
 log.txt
 .DS_Store
+.idea/
 
 # Antora artifacts
 /build/

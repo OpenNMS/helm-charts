@@ -85,7 +85,7 @@ spec:
              - ALL
            {{- end }}
           {{- end }}
-          livenessProbe:
+          readinessProbe:
             exec:
               command:
                 - /health.sh
