@@ -52,10 +52,13 @@ dependencies:
 
  # The main OpenNMS database requires PostgreSQL (this is mandatory).
  postgresql:
+  opennmsDBName: opennms
+  opennmsDBUser: opennms
+  opennmsDBPass: opennms
   hostname: onms-db.shared.svc  # IP or FQDN of the external PostgreSQL server
   port: 5432
-  username: postgres
-  password: P0stgr3s
+  postgresUsername: postgres
+  postgresPassword: P0stgr3s
   sslmode: require  # disable, allow, prefer, require, verify-ca, verify-full
   sslfactory: org.postgresql.ssl.LibPQFactory  # LibPQFactory, DefaultJavaSSLFactory, NonValidatingFactory
   caCert: ''  # A base64 encoded content of the CA Certificate

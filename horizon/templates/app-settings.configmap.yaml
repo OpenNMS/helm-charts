@@ -9,8 +9,13 @@ metadata:
 data:
   TZ: {{ .Values.timezone | quote }}
   DOMAIN: {{ include "core.domain" . | quote }}
+  OPENNMS_DBNAME: {{ .Values.dependencies.postgresql.opennmsDBName }}
+  OPENNMS_DBUSER: {{ .Values.dependencies.postgresql.opennmsDBUser }}
+  OPENNMS_DBPASS: {{ .Values.dependencies.postgresql.opennmsDBPass }}
   POSTGRES_HOST: {{ .Values.dependencies.postgresql.hostname | quote }}
   POSTGRES_PORT: {{ .Values.dependencies.postgresql.port | quote }}
+  POSTGRES_USER: {{ .Values.dependencies.postgresql.postgresUsername }}
+  POSTGRES_PASSWORD: {{ .Values.dependencies.postgresql.postgresPassword }}
   POSTGRES_SSL_MODE: {{ .Values.dependencies.postgresql.sslmode | quote }}
   POSTGRES_SSL_FACTORY: {{ .Values.dependencies.postgresql.sslfactory | quote }}
   ENABLE_ALEC: {{ ((.Values.core).configuration).enableAlec | default "false" | quote }}
