@@ -99,7 +99,11 @@ kubectl create configmap -n $instance $configmap --from-file=lots-of-zeros.zip
 | core.configuration.alwaysRollDeployment | bool | `true` |  |
 | core.configuration.cortexTssImage | object | `{}` |  |
 | core.configuration.database.password | string | `"0p3nNM5"` |  |
-| core.configuration.database.poolSize | int | `50` |  |
+| core.configuration.database.idleTimeout | int | `3` |  |
+| core.configuration.database.loginTimeout | int | `600` |  |
+| core.configuration.database.minPool | int | `25` |  |
+| core.configuration.database.maxPool | int | `50` |  |
+| core.configuration.database.maxSize | int | `50` |  |
 | core.configuration.database.username | string | `"opennms"` |  |
 | core.configuration.enableAcls | bool | `false` |  |
 | core.configuration.enableAlec | bool | `false` |  |

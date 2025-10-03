@@ -59,6 +59,11 @@ dependencies:
   sslmode: require  # disable, allow, prefer, require, verify-ca, verify-full
   sslfactory: org.postgresql.ssl.LibPQFactory  # LibPQFactory, DefaultJavaSSLFactory, NonValidatingFactory
   caCert: ''  # A base64 encoded content of the CA Certificate
+  idleTimeout: 600
+  loginTimeout: 3
+  minPool: 25
+  maxPool: 50
+  maxSize: 50
 
  # The chosen broker technology for the Minion-to-OpenNMS communication (this is mandatory).
  # For TLS with private CA, use the common Truststore.
@@ -157,7 +162,7 @@ core:
   database:  # Access to the OpenNMS database
    username: opennms
    password: 0p3nNM5
-   poolSize: 50
+   maxPool: 50
   storage:  # Sizes for RRDs and configuration
    etc: 1Gi  # Warning Google Filestore enforces 1TB at a minimum
    rrd: 1000Gi  # Depends on how many files you are planning to have (each installation is different)
@@ -204,7 +209,7 @@ sentinel:
    memory: 2Gi
  configuration:
   database:
-   poolSize: 25
+   maxPool: 25
 
 # OpenNMS Plugin for Grafana
 # Do not use Grafana images, or you'd have to manually install the OpenNMS Plugin for Grafana from Github every time the container starts.

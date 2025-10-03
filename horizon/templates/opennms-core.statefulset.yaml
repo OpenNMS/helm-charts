@@ -48,7 +48,7 @@ spec:
           seccompProfile:
             type: RuntimeDefault
          {{- else }}
-          fsGroup: 10001
+         fsGroup: 10001
          {{- end }}
       terminationGracePeriodSeconds: {{ .Values.core.terminationGracePeriodSeconds | default 120 }}
       {{- if .Values.imagePullSecrets }}
@@ -108,7 +108,15 @@ spec:
         - secretRef:
             name: app-credentials
         env:
+        - name: OPENNMS_DATABASE_CONNECTION_IDLETIMEOUT: 
+          value: {{ .Values.core.configuration.database.idleTimeout | default "3" | quote }}
+        - name: OPENNMS_DATABASE_CONNECTION_LOGINTIMEOUT: 
+          value: {{ .Values.core.configuration.database.loginTimeout | default "600" | quote }}
+        - name: OPENNMS_DATABASE_CONNECTION_MINPOOL: 
+          value: {{ .Values.core.configuration.database.minPool | default "25" | quote }}
         - name: OPENNMS_DATABASE_CONNECTION_MAXPOOL
+          value: {{ .Values.core.configuration.database.maxPool | default "50" | quote }}
+        - name: OPENNMS_DATABASE_CONNECTION_MAXSIZE: 
           value: {{ .Values.core.configuration.database.poolSize | default "50" | quote }}
         volumeMounts:
         - name: etc

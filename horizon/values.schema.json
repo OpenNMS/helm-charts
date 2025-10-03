@@ -431,6 +431,26 @@
                         "caCert": {
                             "type": "string",
                             "default": ""
+                        },
+                        "idleTimeout": {
+                            "type": "integer",
+                            "default": 600
+                        },
+                        "loginTimeout": {
+                            "type": "integer",
+                            "default": 3 
+                        },
+                        "minPool": {
+                            "type": "integer",
+                            "default": 25
+                        },
+                        "maxPool": {
+                            "type": "integer",
+                            "default": 50
+                        },
+                        "maxSize": {
+                            "type": "integer",
+                            "default": 50
                         }
                     }
                 },
