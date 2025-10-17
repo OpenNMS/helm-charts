@@ -59,11 +59,6 @@ dependencies:
   sslmode: require  # disable, allow, prefer, require, verify-ca, verify-full
   sslfactory: org.postgresql.ssl.LibPQFactory  # LibPQFactory, DefaultJavaSSLFactory, NonValidatingFactory
   caCert: ''  # A base64 encoded content of the CA Certificate
-  idleTimeout: 600
-  loginTimeout: 3
-  minPool: 25
-  maxPool: 50
-  maxSize: 50
 
  # The chosen broker technology for the Minion-to-OpenNMS communication (this is mandatory).
  # For TLS with private CA, use the common Truststore.
@@ -213,7 +208,7 @@ sentinel:
    memory: 2Gi
  configuration:
   database:
-   maxPool: 25
+   maxSize: 50
 
 # OpenNMS Plugin for Grafana
 # Do not use Grafana images, or you'd have to manually install the OpenNMS Plugin for Grafana from Github every time the container starts.
