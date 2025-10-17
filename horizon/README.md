@@ -98,12 +98,12 @@ kubectl create configmap -n $instance $configmap --from-file=lots-of-zeros.zip
 | core.configuration.alecImage | object | `{}` |  |
 | core.configuration.alwaysRollDeployment | bool | `true` |  |
 | core.configuration.cortexTssImage | object | `{}` |  |
-| core.configuration.database.password | string | `"0p3nNM5"` |  |
 | core.configuration.database.idleTimeout | int | `3` |  |
 | core.configuration.database.loginTimeout | int | `600` |  |
-| core.configuration.database.minPool | int | `25` |  |
 | core.configuration.database.maxPool | int | `50` |  |
 | core.configuration.database.maxSize | int | `50` |  |
+| core.configuration.database.minPool | int | `25` |  |
+| core.configuration.database.password | string | `"0p3nNM5"` |  |
 | core.configuration.database.username | string | `"opennms"` |  |
 | core.configuration.enableAcls | bool | `false` |  |
 | core.configuration.enableAlec | bool | `false` |  |
@@ -225,7 +225,7 @@ kubectl create configmap -n $instance $configmap --from-file=lots-of-zeros.zip
 | promtail.resources.limits.cpu | string | `"50m"` |  |
 | promtail.resources.limits.memory | string | `"64Mi"` |  |
 | releaseNamespace | bool | `false` | Install resource objects into namespace named for the Helm release. See also createNamespace. |
-| sentinel.configuration.database.poolSize | int | `25` |  |
+| sentinel.configuration.database.maxSize | int | `50` |  |
 | sentinel.image.pullPolicy | string | `"IfNotPresent"` |  |
 | sentinel.image.repository | string | `"opennms/sentinel"` |  |
 | sentinel.image.tag | string | `""` |  |

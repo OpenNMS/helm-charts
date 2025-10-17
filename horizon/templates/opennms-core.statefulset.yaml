@@ -29,26 +29,26 @@ spec:
         rollme: {{ randAlphaNum 5 | quote }}
       {{- end }}
       {{- if and (eq (include "onOpenShift" .) "true") ((.Values.dependencies.securitycontext).securitycontextconstraints.enabled) }}
-        openshift.io/scc: {{ (.Values.dependencies.securitycontext).securitycontextconstraints.name | quote }} 
+        openshift.io/scc: {{ (.Values.dependencies.securitycontext).securitycontextconstraints.name | quote }}
       {{- end }}
         kubectl.kubernetes.io/default-container: "onms"
     spec:
       {{- if and (eq (include "onOpenShift" .) "true") ((.Values.dependencies.securitycontext).serviceaccount.enabled) }}
-      serviceAccountName: {{ (.Values.dependencies.securitycontext).serviceaccount.name | quote }} 
+      serviceAccountName: {{ (.Values.dependencies.securitycontext).serviceaccount.name | quote }}
       {{- end }}
       securityContext:
-          sysctls:
-            - name: net.ipv4.ping_group_range
-              value: "0           2147483647"
+        sysctls:
+          - name: net.ipv4.ping_group_range
+            value: "0           2147483647"
          {{- if eq (include "onOpenShift" .) "true" }}
           {{- if eq ((.Values.dependencies.securitycontext).allowPrivilegeEscalation) true }}
-          fsGroup: 10001
+        fsGroup: 10001
           {{- end }}
-          runAsNonRoot: true
-          seccompProfile:
-            type: RuntimeDefault
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
          {{- else }}
-         fsGroup: 10001
+        fsGroup: 10001
          {{- end }}
       terminationGracePeriodSeconds: {{ .Values.core.terminationGracePeriodSeconds | default 120 }}
       {{- if .Values.imagePullSecrets }}
@@ -59,86 +59,86 @@ spec:
       {{- end }}
       initContainers:
       {{- if and (.Values.core.configuration.enableAlec) (.Values.core.configuration.alecImage) }}
-      - name: alec-kar
-        image: {{ .Values.core.configuration.alecImage.repository }}:{{ .Values.core.configuration.alecImage.tag }}
-        imagePullPolicy: {{ .Values.core.configuration.alecImage.pullPolicy }}
-        command: [ cp, /plugins/opennms-alec-plugin.kar, /opennms-deploy ]
+        - name: alec-kar
+          image: {{ .Values.core.configuration.alecImage.repository }}:{{ .Values.core.configuration.alecImage.tag }}
+          imagePullPolicy: {{ .Values.core.configuration.alecImage.pullPolicy }}
+          command: [ cp, /plugins/opennms-alec-plugin.kar, /opennms-deploy ]
         {{- if eq (include "onOpenShift" .) "false" }}
-        securityContext: # To guarantee ownership of the KAR file so that OpenNMS won't complain.
-          runAsUser: 10001
-          runAsGroup: 10001
+          securityContext: # To guarantee ownership of the KAR file so that OpenNMS won't complain.
+            runAsUser: 10001
+            runAsGroup: 10001
         {{- end }}
-        volumeMounts:
-        - name: deploy
-          mountPath: /opennms-deploy # Required by the init script - DEPLOY_DIR
+          volumeMounts:
+            - name: deploy
+              mountPath: /opennms-deploy # Required by the init script - DEPLOY_DIR
       {{- end }}
       {{- if and (.Values.core.configuration.enableCortex) (.Values.core.configuration.cortexTssImage) }}
-      - name: cortex-tss-kar
-        image: {{ .Values.core.configuration.cortexTssImage.repository }}:{{ .Values.core.configuration.cortexTssImage.tag }}
-        imagePullPolicy: {{ .Values.core.configuration.cortexTssImage.pullPolicy }}
-        command: [ cp, /plugins/opennms-cortex-tss-plugin.kar, /opennms-deploy ]
+        - name: cortex-tss-kar
+          image: {{ .Values.core.configuration.cortexTssImage.repository }}:{{ .Values.core.configuration.cortexTssImage.tag }}
+          imagePullPolicy: {{ .Values.core.configuration.cortexTssImage.pullPolicy }}
+          command: [ cp, /plugins/opennms-cortex-tss-plugin.kar, /opennms-deploy ]
         {{- if eq (include "onOpenShift" .) "false" }}
-        securityContext: # To guarantee ownership of the KAR file so that OpenNMS won't complain.
-          runAsUser: 10001
-          runAsGroup: 10001
+          securityContext: # To guarantee ownership of the KAR file so that OpenNMS won't complain.
+            runAsUser: 10001
+            runAsGroup: 10001
         {{- end }}
-        volumeMounts:
-        - name: deploy
-          mountPath: /opennms-deploy # Required by the init script - DEPLOY_DIR
+          volumeMounts:
+            - name: deploy
+              mountPath: /opennms-deploy # Required by the init script - DEPLOY_DIR
       {{- end }}
-      # Initializes/Updates OpenNMS Configuration
-      # Requires the same image/version used at runtime
-      - name: init
-        image: {{ $image }}
-        imagePullPolicy: {{ .Values.core.image.pullPolicy }}
-        securityContext:
+        # Initializes/Updates OpenNMS Configuration
+        # Requires the same image/version used at runtime
+        - name: init
+          image: {{ $image }}
+          imagePullPolicy: {{ .Values.core.image.pullPolicy }}
+          securityContext:
         {{- if eq (include "onOpenShift" .) "true" }}
-          runAsNonRoot: true
-          allowPrivilegeEscalation: false
-          seccompProfile:
-            type: RuntimeDefault
-          capabilities:
-            drop:
-             - ALL
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop:
+                - ALL
         {{- end }}
-        command: [ bash, /scripts/onms-core-init.sh ]
-        envFrom:
-        - configMapRef:
-            name: app-settings
-        - secretRef:
-            name: app-credentials
-        env:
-        - name: OPENNMS_DATABASE_CONNECTION_IDLETIMEOUT: 
-          value: {{ .Values.core.configuration.database.idleTimeout | default "3" | quote }}
-        - name: OPENNMS_DATABASE_CONNECTION_LOGINTIMEOUT: 
-          value: {{ .Values.core.configuration.database.loginTimeout | default "600" | quote }}
-        - name: OPENNMS_DATABASE_CONNECTION_MINPOOL: 
-          value: {{ .Values.core.configuration.database.minPool | default "25" | quote }}
-        - name: OPENNMS_DATABASE_CONNECTION_MAXPOOL
-          value: {{ .Values.core.configuration.database.maxPool | default "50" | quote }}
-        - name: OPENNMS_DATABASE_CONNECTION_MAXSIZE: 
-          value: {{ .Values.core.configuration.database.poolSize | default "50" | quote }}
-        volumeMounts:
-        - name: etc
-          mountPath: /opennms-etc # Required by the script - CONFIG_DIR
-        - name: deploy
-          mountPath: /opennms-deploy # Required by the script - DEPLOY_DIR
-        - name: overlay
-          mountPath: /opt/opennms-overlay # Required by the script - OVERLAY_DIR
-        - name: scripts
-          mountPath: /scripts # Required by the script
+          command: [ bash, /scripts/onms-core-init.sh ]
+          envFrom:
+            - configMapRef:
+                name: app-settings
+            - secretRef:
+                name: app-credentials
+          env:
+            - name: OPENNMS_DATABASE_CONNECTION_IDLETIMEOUT
+              value: {{ .Values.core.configuration.database.idleTimeout | default "3" | quote }}
+            - name: OPENNMS_DATABASE_CONNECTION_LOGINTIMEOUT
+              value: {{ .Values.core.configuration.database.loginTimeout | default "600" | quote }}
+            - name: OPENNMS_DATABASE_CONNECTION_MINPOOL
+              value: {{ .Values.core.configuration.database.minPool | default "25" | quote }}
+            - name: OPENNMS_DATABASE_CONNECTION_MAXPOOL
+              value: {{ .Values.core.configuration.database.maxPool | default "50" | quote }}
+            - name: OPENNMS_DATABASE_CONNECTION_MAXSIZE
+              value: {{ .Values.core.configuration.database.maxSize | default "50" | quote }}
+          volumeMounts:
+            - name: etc
+              mountPath: /opennms-etc # Required by the script - CONFIG_DIR
+            - name: deploy
+              mountPath: /opennms-deploy # Required by the script - DEPLOY_DIR
+            - name: overlay
+              mountPath: /opt/opennms-overlay # Required by the script - OVERLAY_DIR
+            - name: scripts
+              mountPath: /scripts # Required by the script
         {{- range $k, $r := .Values.core.overlayConfigMaps }}
-        - name: overlay-configmap-{{ $k }}
+            - name: overlay-configmap-{{ $k }}
           {{- if $r.unzip }}
             {{- if $r.path }}
               {{- printf "path not allowed when unzip is true for core.overlayConfigMaps with name '%s'" $r.name | fail }}
             {{- end }}
-          mountPath: /opennms-overlay-configmaps/{{ $k }}-unzip
+              mountPath: /opennms-overlay-configmaps/{{ $k }}-unzip
           {{- else }}
             {{- if empty $r.path }}
               {{- printf "path required for core.overlayConfigMaps with name '%s'" $r.name | fail }}
             {{- end }}
-          mountPath: /opennms-overlay-configmaps/{{ $k }}/{{ $r.path }}
+              mountPath: /opennms-overlay-configmaps/{{ $k }}/{{ $r.path }}
           {{- end }}
         {{- end }}
       {{- with .Values.core.initContainers }}
@@ -151,174 +151,174 @@ spec:
       tolerations:
         {{- toYaml .Values.core.configuration.tolerations | nindent 8 }}
       containers:
-      - name: onms
-        image: {{ $image }}
-        securityContext:
+        - name: onms
+          image: {{ $image }}
+          securityContext:
         {{- if eq (include "onOpenShift" .) "true" }}
-          runAsNonRoot: true
-          allowPrivilegeEscalation: {{ (.Values.dependencies.securitycontext).allowPrivilegeEscalation }}
-          seccompProfile:
-            type: RuntimeDefault
-          capabilities:
+            runAsNonRoot: true
+            allowPrivilegeEscalation: {{ (.Values.dependencies.securitycontext).allowPrivilegeEscalation }}
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
           {{- if has "CAP_NET_RAW" (.Values.dependencies.securitycontext).allowedCapabilities }}
-            add:
-             - CAP_NET_RAW
+              add:
+                - CAP_NET_RAW
           {{- else }}
-            drop:
-             - ALL
+              drop:
+                - ALL
           {{- end }}
         {{- end }}
-        imagePullPolicy: {{ .Values.core.image.pullPolicy }}
-        args:
-        - -s
-        ports:
+          imagePullPolicy: {{ .Values.core.image.pullPolicy }}
+          args:
+            - -s
+          ports:
         {{- if .Values.core.configuration.ports.syslog.enabled }}
-        - containerPort: 8101
-          name: karaf
+            - containerPort: 8101
+              name: karaf
         {{- end}}
-        - containerPort: 8980
-          name: http
+            - containerPort: 8980
+              name: http
         {{- if .Values.core.configuration.ports.trapd.enabled }}
-        - containerPort: 1162
-          name: trapd
+            - containerPort: 1162
+              name: trapd
         {{- end}}
         {{- if .Values.core.configuration.ports.syslog.enabled }}
-        - containerPort: 10514
-          name: syslog
+            - containerPort: 10514
+              name: syslog
         {{- end}}
-        envFrom:
-        - configMapRef:
-            name: app-settings
-        - secretRef:
-            name: app-credentials
-        volumeMounts:
+          envFrom:
+            - configMapRef:
+                name: app-settings
+            - secretRef:
+                name: app-credentials
+          volumeMounts:
         {{- if (include "core.enableTssDualWrite" .) }}
-        - name: rrd
-          mountPath: /opennms-data/rrd
+            - name: rrd
+              mountPath: /opennms-data/rrd
         {{- end }}
         {{- if .Values.core.configuration.storage.mibs }}
-        - name: mibs
-          mountPath: /opt/opennms/share/mibs
+            - name: mibs
+              mountPath: /opt/opennms/share/mibs
         {{- end }}
-        - name: etc
-          mountPath: /opt/opennms/etc
-        - name: deploy
-          mountPath: /opennms-deploy
-        - name: logs
-          mountPath: /opt/opennms/logs
-        - name: overlay
-          mountPath: /opt/opennms-overlay
-        - name: jks
-          mountPath: /etc/java/jks
-        - name: jks
-          mountPath: /opt/opennms/.postgresql/root.crt
-          subPath: postgresql-ca.crt
-        env:
+            - name: etc
+              mountPath: /opt/opennms/etc
+            - name: deploy
+              mountPath: /opennms-deploy
+            - name: logs
+              mountPath: /opt/opennms/logs
+            - name: overlay
+              mountPath: /opt/opennms-overlay
+            - name: jks
+              mountPath: /etc/java/jks
+            - name: jks
+              mountPath: /opt/opennms/.postgresql/root.crt
+              subPath: postgresql-ca.crt
+          env:
         {{- if .Values.core.env }}
         {{- range $key, $val := .Values.core.env }}
-        - name: {{ $key }}
-          value: {{ $val | quote }}
+            - name: {{ $key }}
+              value: {{ $val | quote }}
         {{- end }}
         {{- end }}
         {{- if eq (include "onOpenShift" .) "true" }}
         {{- if or (not (has "CAP_NET_RAW" ((.Values.dependencies).securitycontext).allowedCapabilities)) (eq (.Values.dependencies).securitycontext.allowPrivilegeEscalation false)  }}
-        - name: JAVA_HOME
-          value: /usr/lib/jvm/java-nocap
-        {{- end }}   
-        {{- end }}   
+            - name: JAVA_HOME
+              value: /usr/lib/jvm/java-nocap
+        {{- end }}
+        {{- end }}
         {{- $opt :=  include "core.jvmOptions" . }}
         {{- if .Values.core.resources }}
         {{- with .Values.core.resources }}
         {{- if ((.requests).memory) }}
-        - name: MEM_TOTAL_MB
-          valueFrom:
-            resourceFieldRef:
-              resource: requests.memory
-              divisor: 1Mi
-        - name: JAVA_OPTS
-          value: -Xms$(MEM_TOTAL_MB)m -Xmx$(MEM_TOTAL_MB)m {{ $opt }}
+            - name: MEM_TOTAL_MB
+              valueFrom:
+                resourceFieldRef:
+                  resource: requests.memory
+                  divisor: 1Mi
+            - name: JAVA_OPTS
+              value: -Xms$(MEM_TOTAL_MB)m -Xmx$(MEM_TOTAL_MB)m {{ $opt }}
         {{- end }}
-        resources:
+          resources:
           {{- toYaml . | nindent 10 }}
         {{- end }}
         {{- else }}
-        - name: JAVA_OPTS
-          value: {{ $opt }}
+            - name: JAVA_OPTS
+              value: {{ $opt }}
         {{- end }}
-        startupProbe:
-          httpGet:
-            path: /opennms/login.jsp
-            port: http
-          failureThreshold: 30
-          periodSeconds: 60
-          timeoutSeconds: 5
-        readinessProbe:
-          httpGet:
-            path: /opennms/login.jsp
-            port: http
-          periodSeconds: 15
-          timeoutSeconds: 5
-        livenessProbe:
-          httpGet:
-            path: /opennms/login.jsp
-            port: http
-          periodSeconds: 60
-          timeoutSeconds: 5
+          startupProbe:
+            httpGet:
+              path: /opennms/login.jsp
+              port: http
+            failureThreshold: 30
+            periodSeconds: 60
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /opennms/login.jsp
+              port: http
+            periodSeconds: 15
+            timeoutSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /opennms/login.jsp
+              port: http
+            periodSeconds: 60
+            timeoutSeconds: 5
       {{- if ((.Values.dependencies).loki).hostname }}
-      - name: promtail
-        image: {{ printf "%s:%s" .Values.promtail.image.repository (.Values.promtail.image.tag | default "latest") }}
-        imagePullPolicy: {{ .Values.promtail.image.pullPolicy }}
-        args:
-        - -config.file=/etc/promtail/promtail.yaml
-        volumeMounts:
-        - name: logs
-          mountPath: /opt/opennms/logs
-        - name: jks
-          mountPath: /etc/jks
         - name: promtail
-          mountPath: /etc/promtail/promtail.yaml
-          subPath: promtail.onms_core.config.yaml
+          image: {{ printf "%s:%s" .Values.promtail.image.repository (.Values.promtail.image.tag | default "latest") }}
+          imagePullPolicy: {{ .Values.promtail.image.pullPolicy }}
+          args:
+            - -config.file=/etc/promtail/promtail.yaml
+          volumeMounts:
+            - name: logs
+              mountPath: /opt/opennms/logs
+            - name: jks
+              mountPath: /etc/jks
+            - name: promtail
+              mountPath: /etc/promtail/promtail.yaml
+              subPath: promtail.onms_core.config.yaml
         {{- with .Values.promtail.resources }}
-        resources:
+          resources:
           {{- toYaml . | nindent 10 }}
         {{- end }}
       {{- end }}
       volumes:
-      - name: deploy
-        emptyDir: {}
-      - name: overlay
-        emptyDir: {}
-      - name: logs
-        emptyDir: {}
-      - name: scripts
-        configMap:
-          name: app-scripts
+        - name: deploy
+          emptyDir: { }
+        - name: overlay
+          emptyDir: { }
+        - name: logs
+          emptyDir: { }
+        - name: scripts
+          configMap:
+            name: app-scripts
       {{- if ((.Values.dependencies).loki).hostname }}
-      - name: promtail
-        configMap:
-          name: promtail-config
+        - name: promtail
+          configMap:
+            name: promtail-config
       {{- end }}
-      - name: jks
-        secret:
-          secretName: app-jks
-      - name: etc
-        persistentVolumeClaim:
-          claimName: onms-etc-pvc
-          readOnly: false
+        - name: jks
+          secret:
+            secretName: app-jks
+        - name: etc
+          persistentVolumeClaim:
+            claimName: onms-etc-pvc
+            readOnly: false
       {{- if (include "core.enableTssDualWrite" .) }}
-      - name: rrd
-        persistentVolumeClaim:
-          claimName: onms-rrd-pvc
-          readOnly: false
+        - name: rrd
+          persistentVolumeClaim:
+            claimName: onms-rrd-pvc
+            readOnly: false
       {{- end }}
       {{- if .Values.core.configuration.storage.mibs }}
-      - name: mibs
-        persistentVolumeClaim:
-          claimName: onms-mibs-pvc
-          readOnly: false
+        - name: mibs
+          persistentVolumeClaim:
+            claimName: onms-mibs-pvc
+            readOnly: false
       {{- end }}
       {{- range $k, $r := .Values.core.overlayConfigMaps }}
-      - name: overlay-configmap-{{ $k }}
-        configMap:
-          name: {{ $r.name | quote }}
+        - name: overlay-configmap-{{ $k }}
+          configMap:
+            name: {{ $r.name | quote }}
       {{- end }}
