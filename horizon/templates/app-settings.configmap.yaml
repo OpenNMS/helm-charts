@@ -17,7 +17,6 @@ data:
   OPENNMS_DATABASE_CONNECTION_LOGINTIMEOUT: {{ .Values.core.configuration.database.loginTimeout | default "600" | quote }}
   OPENNMS_DATABASE_CONNECTION_MINPOOL: {{ .Values.core.configuration.database.minPool | default "25" | quote }}
   OPENNMS_DATABASE_CONNECTION_MAXPOOL: {{ .Values.core.configuration.database.maxPool | default "50" | quote }}
-  OPENNMS_DATABASE_CONNECTION_MAXSIZE: {{ .Values.core.configuration.database.maxSize | default "50" | quote }}
   ENABLE_ALEC: {{ ((.Values.core).configuration).enableAlec | default "false" | quote }}
   ENABLE_ACLS: {{ ((.Values.core).configuration).enableAcls | default "false" | quote }}
   ENABLE_TELEMETRYD: {{ if gt ((.Values.sentinel).replicaCount|int) 0 }}"true"{{ else }}"false"{{ end }}
