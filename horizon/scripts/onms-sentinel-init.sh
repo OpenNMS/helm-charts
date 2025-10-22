@@ -79,7 +79,7 @@ datasource.url=jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${OPENNMS_DBN
 datasource.username=${OPENNMS_DBUSER}
 datasource.password=${OPENNMS_DBPASS}
 datasource.databaseName=${OPENNMS_DBNAME}
-connection.pool.maxSize=${OPENNMS_DATABASE_CONNECTION_MAXPOOL}
+connection.pool.maxPool=${OPENNMS_DATABASE_CONNECTION_MAXPOOL}
 EOF
 
 FEATURES_DIR=${OVERLAY_DIR}/featuresBoot.d
