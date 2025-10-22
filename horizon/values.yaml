@@ -157,8 +157,8 @@ core:
   database:  # Access to the OpenNMS database
    username: opennms
    password: 0p3nNM5
-   idleTimeout: 3
-   loginTimeout: 600
+   idleTimeout: 600
+   loginTimeout: 3
    minPool: 25
    maxPool: 50
   storage:  # Sizes for RRDs and configuration
