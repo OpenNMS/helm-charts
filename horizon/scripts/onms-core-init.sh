@@ -310,8 +310,8 @@ cat <<EOF > ${CONFIG_DIR_OVERLAY}/opennms-datasources.xml
     idleTimeout="600"
     loginTimeout="3"
     minPool="50"
-    maxPool="50"
-    maxSize="${OPENNMS_DATABASE_CONNECTION_MAXPOOL}" />
+    maxPool="${OPENNMS_DATABASE_CONNECTION_MAXPOOL}"
+    maxSize="50" />
 
   <jdbc-data-source name="opennms" 
                     database-name="${OPENNMS_DBNAME}" 
@@ -332,7 +332,7 @@ cat <<EOF >> ${CONFIG_DIR_OVERLAY}/opennms-datasources.xml
     <connection-pool idleTimeout="600"
                      minPool="0"
                      maxPool="10"
-                     maxSize="${OPENNMS_DATABASE_CONNECTION_MAXPOOL}" />
+                     maxSize="50" />
   </jdbc-data-source>
   
   <jdbc-data-source name="opennms-monitor" 
@@ -344,7 +344,7 @@ cat <<EOF >> ${CONFIG_DIR_OVERLAY}/opennms-datasources.xml
     <connection-pool idleTimeout="600"
                      minPool="0"
                      maxPool="10"
-                     maxSize="${OPENNMS_DATABASE_CONNECTION_MAXPOOL}" />
+                     maxSize="50" />
   </jdbc-data-source>
 </datasource-configuration>
 EOF
