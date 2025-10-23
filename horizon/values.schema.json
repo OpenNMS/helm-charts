@@ -269,10 +269,126 @@
                 "env": {
                     "type": "object",
                     "default": "{}",
-                    "description": "Environment variables to set on the onms container."
-                }
-            }
-        },
+                    "description": "Environment variables to set on the onms container.",
+                        "properties": {
+                            "CORE_SERVICE_ALARMD_ENABLED": {
+                                "type": "string",
+                                "default": "true"
+                            },
+                            "CORE_SERVICE_BSMD_ENABLED": {
+                                "type": "string",
+                                "default": "true"
+                            },
+                            "CORE_SERVICE_TICKETER_ENABLED": {
+                                "type": "string",
+                                "default": "true"
+                            },
+                            "CORE_SERVICE_CORRELATOR_ENABLED": {
+                                "type": "string",
+                                "default": "false"
+                            },
+                            "CORE_SERVICE_QUEUED_ENABLED": {
+                                "type": "string",
+                                "default": "true"
+                            },
+                            "CORE_SERVICE_ACTIOND_ENABLED": {
+                                "type": "string",
+                                "default": "true"
+                            },
+                            "CORE_SERVICE_NOTIFD_ENABLED": {
+                                "type": "string",
+                                "default": "true"
+                            },
+                            "CORE_SERVICE_SCRIPTD_ENABLED": {
+                                "type": "string",
+                                "default": "true"
+                            },
+                            "CORE_SERVICE_RTCD_ENABLED": {
+                                "type": "string",
+                                "default": "true"
+                            },
+                            "CORE_SERVICE_POLLERD_ENABLED": {
+                                "type": "string",
+                                "default": "true"
+                            },
+                            "CORE_SERVICE_SNMPPOLLER_ENABLED": {
+                                "type": "string",
+                                "default": "false"
+                            },
+                            "CORE_SERVICE_ENHANCEDLINKD_ENABLED": {
+                                "type": "string",
+                                "default": "true"
+                            },
+                            "CORE_SERVICE_COLLECTD_ENABLED": {
+                                "type": "string",
+                                "default": "true"
+                            },
+                            "CORE_SERVICE_DISCOVERY_ENABLED": {
+                                "type": "string",
+                                "default": "true"
+                            },
+                            "CORE_SERVICE_VACUUMD_ENABLED": {
+                                "type": "string",
+                                "default": "true"
+                            },
+                            "CORE_SERVICE_EVENTTRANSLATOR_ENABLED": {
+                                "type": "string",
+                                "default": "true"
+                            },
+                            "CORE_SERVICE_PASSIVESTATUSD_ENABLED": {
+                                "type": "string",
+                                "default": "true"
+                            },
+                            "CORE_SERVICE_STATSD_ENABLED": {
+                                "type": "string",
+                                "default": "true"
+                            },
+                            "CORE_SERVICE_PROVISIOND_ENABLED": {
+                                "type": "string",
+                                "default": "true"
+                            },
+                            "CORE_SERVICE_REPORTD_ENABLED": {
+                                "type": "string",
+                                "default": "true"
+                            },
+                            "CORE_SERVICE_ACKD_ENABLED": {
+                                "type": "string",
+                                "default": "true"
+                            },
+                            "CORE_SERVICE_JETTYSERVER_ENABLED": {
+                                "type": "string",
+                                "default": "true"
+                            },
+                            "CORE_SERVICE_KARAFSTARTMONITOR_ENABLED": {
+                                "type": "string",
+                                "default": "true"
+                            },
+                            "CORE_SERVICE_TL1D_ENABLED": {
+                                "type": "string",
+                                "default": "false"
+                            },
+                            "CORE_SERVICE_SYSLOGD_ENABLED": {
+                                "type": "string",
+                                "default": "false"
+                            },
+                            "CORE_SERVICE_ASTERISKGATEWAY_ENABLED": {
+                                "type": "string",
+                                "default": "false"
+                            },
+                            "CORE_SERVICE_TELEMETRYD_ENABLED": {
+                                "type": "string",
+                                "default": "true"
+                            },
+                            "CORE_SERVICE_TRAPD_ENABLED": {
+                                "type": "string",
+                                "default": "true"
+                            },
+                            "CORE_SERVICE_PERSPECTIVEPOLLER_ENABLED": {
+                                "type": "string",
+                                "default": "true"
+                            }
+                        }
+                },
         "timezone": {
             "type": "string",
             "title": "Timezone",
