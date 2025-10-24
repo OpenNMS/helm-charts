@@ -22,8 +22,8 @@ helm install monms opennms/horizon --set domain=domain1.com  --create-namespace
 ## Version compatibility
 
 | Helm chart version | Horizon version(s) | Meridian version(s) |
-| ----------- | ----------- | ----------- |
-| 1.x | Horizon 32.x | Meridian 2023.x |
+|--------------------|--------------------|---------------------|
+| 1.x                | Horizon 32.x       | Meridian 2023.x     |
 
 ## Overlay ConfigMaps
 
@@ -84,7 +84,7 @@ kubectl create configmap -n $instance $configmap --from-file=lots-of-zeros.zip
 
 1. This mechanism can be used only to *add* files. When `etc` files are copied into the `onms-etc-pvc` PVC, removing a file from the ConfigMap will not cause the file in the PVC to be deleted. In this case, you will need to delete the file manually after updating the ConfigMap to remove the file. You can do this with `kubectl exec -n $instance onms-core-0 -- rm etc/testing-configmap`.
 2. ConfigMaps cannot contain recursive directory structures--only files. If you need to put files into multiple directories, each directory will need to be its own ConfigMap. `kubectl create configmap` will silently ignore subdirectories.
-3. ConfigMaps can't be larger than 1 MB (see the note [here](https://kubernetes.io/docs/concepts/configuration/configmap/#motivation). If you have more content, you will need to split it across multiple ConfigMaps or compressed into ZIP files.
+3. ConfigMaps can't be larger than 1 MB (see the note [here](https://kubernetes.io/docs/concepts/configuration/configmap/#motivation)). If you have more content, you will need to split it across multiple ConfigMaps or compressed into ZIP files.
 4. Use `kubectl delete configmap -n $instance $configmap` to delete an existing ConfigMap before updating.
 5. After updating a ConfigMap, you will need to restart the pod; for example, `kubectl rollout restart -n $instance statefulset/onms-core`
 6. You can use `kubectl get configmap -n $instance $configmap -o yaml` to view the ConfigMap that is created.
