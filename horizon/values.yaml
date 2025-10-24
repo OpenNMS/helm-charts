@@ -188,7 +188,7 @@ core:
  # -- Experimental: a list of additional init containers
  initContainers: []
  # -- Environment variables to set on the onms container.
- env: 
+ env:
   CORE_SERVICE_ALARMD_ENABLED: "true"
   CORE_SERVICE_BSMD_ENABLED: "true"
   CORE_SERVICE_TICKETER_ENABLED: "true"
