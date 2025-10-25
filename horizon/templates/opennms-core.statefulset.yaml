@@ -189,10 +189,69 @@ spec:
                 name: app-settings
             - secretRef:
                 name: app-credentials
+          env:
+          - name: CORE_SERVICE_ALARMD_ENABLED
+            value: {{ .Values.core.env.CORE_SERVICE_ALARMD_ENABLED | default "true" | quote }}
+          - name: CORE_SERVICE_BSMD_ENABLED
+            value: {{ .Values.core.env.CORE_SERVICE_BSMD_ENABLED | default "true" | quote }}
+          - name: CORE_SERVICE_TICKETER_ENABLED
+            value: {{ .Values.core.env.CORE_SERVICE_TICKETER_ENABLED | default "true" | quote }}
+          - name: CORE_SERVICE_CORRELATOR_ENABLED
+            value: {{ .Values.core.env.CORE_SERVICE_CORRELATOR_ENABLED | default "false" | quote }}
+          - name: CORE_SERVICE_QUEUED_ENABLED
+            value: {{ .Values.core.env.CORE_SERVICE_QUEUED_ENABLED | default "true" | quote }}
+          - name: CORE_SERVICE_ACTIOND_ENABLED
+            value: {{ .Values.core.env.CORE_SERVICE_ACTIOND_ENABLED | default "true" | quote }}
+          - name: CORE_SERVICE_NOTIFD_ENABLED
+            value: {{ .Values.core.env.CORE_SERVICE_NOTIFD_ENABLED| default "true" | quote }}
+          - name: CORE_SERVICE_SCRIPTD_ENABLED
+            value: {{ .Values.core.env.CORE_SERVICE_SCRIPTD_ENABLED | default "true" | quote }}
+          - name: CORE_SERVICE_RTCD_ENABLED 
+            value: {{ .Values.core.env.CORE_SERVICE_RTCD_ENABLED | default "true" | quote }}
+          - name: CORE_SERVICE_POLLERD_ENABLED 
+            value: {{ .Values.core.env.CORE_SERVICE_POLLERD_ENABLED | default "true" | quote }}
+          - name: CORE_SERVICE_SNMPPOLLER_ENABLED
+            value: {{ .Values.core.env.CORE_SERVICE_SNMPPOLLER_ENABLED | default "false" | quote }}
+          - name: CORE_SERVICE_ENHANCEDLINKD_ENABLED
+            value: {{ .Values.core.env.CORE_SERVICE_ENHANCEDLINKD_ENABLED | default "true" | quote }}
+          - name: CORE_SERVICE_COLLECTD_ENABLED 
+            value: {{ .Values.core.env.CORE_SERVICE_COLLECTD_ENABLED | default "true" | quote }}
+          - name: CORE_SERVICE_DISCOVERY_ENABLED 
+            value: {{ .Values.core.env.CORE_SERVICE_DISCOVERY_ENABLED | default "true" | quote }}
+          - name: CORE_SERVICE_VACUUMD_ENABLED
+            value: {{ .Values.core.env.CORE_SERVICE_VACUUMD_ENABLED | default "true" | quote }}
+          - name: CORE_SERVICE_EVENTTRANSLATOR_ENABLED
+            value: {{ .Values.core.env.CORE_SERVICE_EVENTTRANSLATOR_ENABLED | default "true" | quote }}
+          - name: CORE_SERVICE_PASSIVESTATUSD_ENABLED
+            value: {{ .Values.core.env.CORE_SERVICE_PASSIVESTATUSD_ENABLED | default "true" | quote }}
+          - name: CORE_SERVICE_STATSD_ENABLED
+            value: {{ .Values.core.env.CORE_SERVICE_STATSD_ENABLED | default "true" | quote }}
+          - name: CORE_SERVICE_PROVISIOND_ENABLED
+            value: {{ .Values.core.env.CORE_SERVICE_PROVISIOND_ENABLED | default "true" | quote }}
+          - name: CORE_SERVICE_REPORTD_ENABLED
+            value: {{ .Values.core.env.CORE_SERVICE_REPORTD_ENABLED | default "true" | quote }}
+          - name: CORE_SERVICE_ACKD_ENABLED
+            value: {{ .Values.core.env.CORE_SERVICE_ACKD_ENABLED | default "true" | quote }}
+          - name: CORE_SERVICE_JETTYSERVER_ENABLED
+            value {{ .Values.core.env.CORE_SERVICE_JETTYSERVER_ENABLED | default "true" | quote }}
+          - name: CORE_SERVICE_KARAFSTARTUPMONITOR_ENABLED
+            value:{{ .Values.core.env.CORE_SERVICE_KARAFSTARTUPMONITOR_ENABLED | default "true" | quote }}
+          - name: CORE_SERVICE_TL1D_ENABLED
+            value: {{ .Values.core.env.CORE_SERVICE_TL1D_ENABLED| default "false" | quote }}
+          - name: CORE_SERVICE_SYSLOGD_ENABLED
+            value: {{ .Values.core.env.CORE_SERVICE_SYSLOGD_ENABLED | default "false" | quote }}
+          - name: CORE_SERVICE_ASTERISKGATEWAY_ENABLED
+            value: {{ .Values.core.env.CORE_SERVICE_ASTERISKGATEWAY_ENABLED | default "false" | quote }}
+          - name: CORE_SERVICE_TELEMETRYD_ENABLED
+            value: {{ .Values.core.env.CORE_SERVICE_TELEMETRYD_ENABLED | default "true" | quote }}
+          - name: CORE_SERVICE_TRAPD_ENABLED
+            value: {{ .Values.core.env.CORE_SERVICE_TRAPD_ENABLED | default "true" | quote }}
+          - name: CORE_SERVICE_PERSPECTIVEPOLLER_ENABLED
+            value: {{ .Values.core.env.CORE_SERVICE_PERSPECTIVEPOLLER_ENABLED | default "true" | quote }}
           volumeMounts:
         {{- if (include "core.enableTssDualWrite" .) }}
-            - name: rrd
-              mountPath: /opennms-data/rrd
+          - name: rrd
+            mountPath: /opennms-data/rrd
         {{- end }}
         {{- if .Values.core.configuration.storage.mibs }}
             - name: mibs
