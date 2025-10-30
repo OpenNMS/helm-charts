@@ -1,904 +1,904 @@
 {
-    "$schema": "http://json-schema.org/schema#",
-    "type": "object",
-    "properties": {
-        "core": {
-            "type": "object",
-            "title": "Core container",
-            "description": "Settings related to OpenNMS core container",
-            "form": true,
-            "properties": {
-                "inspector": {
-                    "type": "object",
-                    "form": true,
+  "$schema": "http://json-schema.org/schema#",
+  "type": "object",
+  "properties": {
+    "core": {
+      "type": "object",
+      "title": "Core container",
+      "description": "Settings related to OpenNMS core container",
+      "form": true,
+      "properties": {
+        "inspector": {
+          "type": "object",
+          "form": true,
+          "enabled": {
+            "type": "boolean"
+          },
+          "description": "inspector pod allows the user to verify and inspect OpenNMS configuration. Note: Core container is disabled if we enable inspector pod."
+        },
+        "terminationGracePeriodSeconds": {
+          "type": "integer",
+          "description": "How fast we should kill the pod"
+        },
+        "image": {
+          "type": "object",
+          "title": "Base Image",
+          "form": true,
+          "properties": {
+            "repository": {
+              "type": "string",
+              "default": "opennms/horizon"
+            },
+            "pullPolicy": {
+              "enum": [
+                "IfNotPresent",
+                "Always",
+                "Never"
+              ]
+            },
+            "tag": {
+              "type": "string"
+            }
+          }
+        },
+        "resources": {
+          "type": "object",
+          "title": "Container resources",
+          "description": "Configure the container resource limits and requests",
+          "form": true,
+          "properties": {
+            "limits": {
+              "type": "object",
+              "form": true,
+              "title": "Limits",
+              "properties": {
+                "cpu": {
+                  "type": "string",
+                  "form": true,
+                  "title": "CPU"
+                },
+                "memory": {
+                  "type": "string",
+                  "form": true,
+                  "title": "Memory"
+                }
+              }
+            },
+            "requests": {
+              "type": "object",
+              "form": true,
+              "title": "Requests",
+              "properties": {
+                "cpu": {
+                  "type": "string",
+                  "form": true,
+                  "title": "CPU",
+                  "default": "2"
+                },
+                "memory": {
+                  "type": "string",
+                  "title": "Memory",
+                  "default": "8Gi"
+                }
+              }
+            }
+          }
+        },
+        "configuration": {
+          "type": "object",
+          "title": "Configuration",
+          "form": true,
+          "properties": {
+            "alwaysRollDeployment": {
+              "type": "boolean"
+            },
+            "timeSeriesStrategy": {
+              "type": "string"
+            },
+            "enableAlec": {
+              "type": "boolean"
+            },
+            "enableCortex": {
+              "type": "boolean"
+            },
+            "enableTssDualWrite": {
+              "type": "boolean"
+            },
+            "enableAcls": {
+              "type": "boolean"
+            },
+            "rras": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "default": [
+                  "RRA:AVERAGE:0.5:1:2016",
+                  "RRA:AVERAGE:0.5:12:1488",
+                  "RRA:AVERAGE:0.5:288:366",
+                  "RRA:MAX:0.5:288:366",
+                  "RRA:MIN:0.5:288:366"
+                ]
+              }
+            },
+            "alecImage": {
+              "type": "object",
+              "properties": {}
+            },
+            "cortexTssImage": {
+              "type": "object",
+              "properties": {}
+            },
+            "database": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string",
+                  "default": "opennms"
+                },
+                "password": {
+                  "type": "string",
+                  "default": ""
+                },
+                "poolSize": {
+                  "type": "integer",
+                  "default": 50
+                }
+              }
+            },
+            "storage": {
+              "type": "object",
+              "properties": {
+                "etc": {
+                  "type": "string",
+                  "default": "1Gi"
+                },
+                "rrd": {
+                  "type": "string",
+                  "default": "1Gi"
+                },
+                "mibs": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "default": null
+                }
+              }
+            },
+            "http": {
+              "type": "object",
+              "properties": {
+                "restUsername": {
+                  "type": "string",
+                  "default": "opennms"
+                },
+                "restPassword": {
+                  "type": "string",
+                  "default": ""
+                },
+                "adminPassword": {
+                  "type": "string",
+                  "default": ""
+                }
+              }
+            },
+            "etcUpdatePolicy": {
+              "enum": [
+                "never",
+                "new",
+                "newer"
+              ],
+              "default": "newer"
+            },
+            "nodeSelector": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "default": null
+            },
+            "affinity": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "default": null
+            },
+            "tolerations": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "default": null
+            },
+            "ports": {
+              "type": "object",
+              "properties": {
+                "trapd": {
+                  "type": "object",
+                  "properties": {
                     "enabled": {
-                        "type": "boolean"
+                      "type": "boolean",
+                      "default": false
                     },
-                    "description": "inspector pod allows the user to verify and inspect OpenNMS configuration. Note: Core container is disabled if we enable inspector pod."
-                },
-                "terminationGracePeriodSeconds": {
-                    "type": "integer",
-                    "description": "How fast we should kill the pod"
-                },
-                "image": {
-                    "type": "object",
-                    "title": "Base Image",
-                    "form": true,
-                    "properties": {
-                        "repository": {
-                            "type": "string",
-                            "default": "opennms/horizon"
-                        },
-                        "pullPolicy": {
-                            "enum": [
-                                "IfNotPresent",
-                                "Always",
-                                "Never"
-                            ]
-                        },
-                        "tag": {
-                            "type": "string"
-                        }
+                    "externalPort": {
+                      "type": "integer",
+                      "default": 1162
                     }
+                  }
                 },
-                "resources": {
-                    "type": "object",
-                    "title": "Container resources",
-                    "description": "Configure the container resource limits and requests",
-                    "form": true,
-                    "properties": {
-                        "limits": {
-                            "type": "object",
-                            "form": true,
-                            "title": "Limits",
-                            "properties": {
-                                "cpu": {
-                                    "type": "string",
-                                    "form": true,
-                                    "title": "CPU"
-                                },
-                                "memory": {
-                                    "type": "string",
-                                    "form": true,
-                                    "title": "Memory"
-                                }
-                            }
-                        },
-                        "requests": {
-                            "type": "object",
-                            "form": true,
-                            "title": "Requests",
-                            "properties": {
-                                "cpu": {
-                                    "type": "string",
-                                    "form": true,
-                                    "title": "CPU",
-                                    "default": "2"
-                                },
-                                "memory": {
-                                    "type": "string",
-                                    "title": "Memory",
-                                    "default": "8Gi"
-                                }
-                            }
-                        }
-                    }
-                },
-                "configuration": {
-                    "type": "object",
-                    "title": "Configuration",
-                    "form": true,
-                    "properties": {
-                        "alwaysRollDeployment": {
-                            "type": "boolean"
-                        },
-                        "timeSeriesStrategy": {
-                            "type": "string"
-                        },
-                        "enableAlec": {
-                            "type": "boolean"
-                        },
-                        "enableCortex": {
-                            "type": "boolean"
-                        },
-                        "enableTssDualWrite": {
-                            "type": "boolean"
-                        },
-                        "enableAcls": {
-                            "type": "boolean"
-                        },
-                        "rras": {
-                            "type": "array",
-                            "items": {
-                                "type": "string",
-                                "default": [
-                                    "RRA:AVERAGE:0.5:1:2016",
-                                    "RRA:AVERAGE:0.5:12:1488",
-                                    "RRA:AVERAGE:0.5:288:366",
-                                    "RRA:MAX:0.5:288:366",
-                                    "RRA:MIN:0.5:288:366"
-                                ]
-                            }
-                        },
-                        "alecImage": {
-                            "type": "object",
-                            "properties": {}
-                        },
-                        "cortexTssImage": {
-                            "type": "object",
-                            "properties": {}
-                        },
-                        "database": {
-                            "type": "object",
-                            "properties": {
-                                "username": {
-                                    "type": "string",
-                                    "default": "opennms"
-                                },
-                                "password": {
-                                    "type": "string",
-                                    "default": ""
-                                },
-                                "poolSize": {
-                                    "type": "integer",
-                                    "default": 50
-                                }
-                            }
-                        },
-                        "storage": {
-                            "type": "object",
-                            "properties": {
-                                "etc": {
-                                    "type": "string",
-                                    "default": "1Gi"
-                                },
-                                "rrd": {
-                                    "type": "string",
-                                    "default": "1Gi"
-                                },
-                                "mibs": {
-                                    "type": [
-                                        "string",
-                                        "null"
-                                    ],
-                                    "default": null
-                                }
-                            }
-                        },
-                        "http": {
-                            "type": "object",
-                            "properties": {
-                                "restUsername": {
-                                    "type": "string",
-                                    "default": "opennms"
-                                },
-                                "restPassword": {
-                                    "type": "string",
-                                    "default": ""
-                                },
-                                "adminPassword": {
-                                    "type": "string",
-                                    "default": ""
-                                }
-                            }
-                        },
-                        "etcUpdatePolicy": {
-                            "enum": [
-                                "never",
-                                "new",
-                                "newer"
-                            ],
-                            "default": "newer"
-                        },
-                        "nodeSelector": {
-                            "type": [
-                                "string",
-                                "null"
-                            ],
-                            "default": null
-                        },
-                        "affinity": {
-                            "type": [
-                                "string",
-                                "null"
-                            ],
-                            "default": null
-                        },
-                        "tolerations": {
-                            "type": [
-                                "string",
-                                "null"
-                            ],
-                            "default": null
-                        },
-                        "ports": {
-                            "type": "object",
-                            "properties": {
-                                "trapd": {
-                                    "type": "object",
-                                    "properties": {
-                                        "enabled": {
-                                            "type": "boolean",
-                                            "default": false
-                                        },
-                                        "externalPort": {
-                                            "type": "integer",
-                                            "default": 1162
-                                        }
-                                    }
-                                },
-                                "syslog": {
-                                    "type": "object",
-                                    "properties": {
-                                        "enabled": {
-                                            "type": "boolean",
-                                            "default": false
-                                        },
-                                        "externalPort": {
-                                            "type": "integer",
-                                            "default": 10514
-                                        }
-                                    }
-                                },
-                                "karaf": {
-                                    "type": "object",
-                                    "properties": {
-                                        "enabled": {
-                                            "type": "boolean",
-                                            "default": false
-                                        },
-                                        "externalPort": {
-                                            "type": "integer",
-                                            "default": 8101
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                "syslog": {
+                  "type": "object",
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean",
+                      "default": false
                     },
-                    "postConfigJob": {
-                        "type": "object",
-                        "properties": {
-                            "ttlSecondsAfterFinished": {
-                                "type": "integer",
-                                "default": 300
-                            }
-                        }
+                    "externalPort": {
+                      "type": "integer",
+                      "default": 10514
                     }
+                  }
                 },
-                "env": {
-                    "type": "object",
-                    "default": "{}",
-                    "description": "Environment variables to set on the onms container."
+                "karaf": {
+                  "type": "object",
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "externalPort": {
+                      "type": "integer",
+                      "default": 8101
+                    }
+                  }
                 }
+              }
             }
+          },
+          "postConfigJob": {
+            "type": "object",
+            "properties": {
+              "ttlSecondsAfterFinished": {
+                "type": "integer",
+                "default": 300
+              }
+            }
+          }
         },
-        "timezone": {
+        "env": {
+          "type": "object",
+          "default": "{}",
+          "description": "Environment variables to set on the onms container."
+        }
+      }
+    },
+    "timezone": {
+      "type": "string",
+      "title": "Timezone",
+      "description": "Timezone used inside the containers"
+    },
+    "domain": {
+      "type": "string",
+      "title": "Domain"
+    },
+    "createNamespace": {
+      "type": "boolean",
+      "title": "Whether to create the namespace when releaseNamespace=true",
+      "default": false
+    },
+    "releaseNamespace": {
+      "type": "boolean",
+      "title": "Install resource objects into namespace named for the Helm release",
+      "default": false
+    },
+    "multiTenant": {
+      "type": "boolean",
+      "title": "Enable multi-tenant mode",
+      "default": false
+    },
+    "imagePullSecrets": {
+      "type": "array",
+      "title": "Image Pull Secrets",
+      "items": {
+        "type": "object",
+        "default": []
+      }
+    },
+    "dependencies": {
+      "type": "object",
+      "form": true,
+      "title": "Dependencies",
+      "properties": {
+        "clusterRole": {
+          "type": "boolean",
+          "title": "Create cluster role",
+          "default": true
+        },
+        "clusterRoleBinding": {
+          "type": "boolean",
+          "title": "Create cluster role binding",
+          "default": true
+        },
+        "securitycontext": {
+          "type": "object",
+          "form": true,
+          "title": "Security Context",
+          "properties": {
+            "allowedCapabilities": {
+              "type": "array",
+              "description": "(Red Hat OpenShift only) Capabilities a container is allowed to use ",
+              "items": {
+                "type": "string",
+                "default": [
+                  "NET_BIND_SERVICE",
+                  "CAP_NET_RAW"
+                ]
+              }
+            },
+            "allowPrivilegeEscalation": {
+              "type": "boolean",
+              "default": true,
+              "description": "(Red Hat OpenShift only) Controls whether a process can gain more privileges than its parent process "
+            },
+            "securitycontextconstraints": {
+              "type": "object",
+              "title": "Constraints",
+              "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "name": {
+                  "type": "string",
+                  "default": "opennms-scc"
+                }
+              }
+            },
+            "serviceaccount": {
+              "type": "object",
+              "title": "Service Account",
+              "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "name": {
+                  "type": "string",
+                  "default": "opennms-sa"
+                }
+              }
+            }
+          }
+        },
+        "route": {
+          "type": "boolean",
+          "default": true
+        },
+        "truststore": {
+          "type": "object",
+          "form": true,
+          "properties": {
+            "content": {
+              "type": "string"
+            },
+            "password": {
+              "type": "string",
+              "default": ""
+            }
+          }
+        },
+        "postgresql": {
+          "type": "object",
+          "form": true,
+          "properties": {
+            "hostname": {
+              "type": "string",
+              "default": "192.168.1.142"
+            },
+            "port": {
+              "type": "integer",
+              "default": "5432"
+            },
+            "username": {
+              "type": "string",
+              "default": "postgres"
+            },
+            "password": {
+              "type": "string",
+              "default": ""
+            },
+            "sslmode": {
+              "enum": [
+                "disable",
+                "allow",
+                "prefer",
+                "require",
+                "verify-ca",
+                "verify-full"
+              ],
+              "default": "disable"
+            },
+            "sslfactory": {
+              "enum": [
+                "org.postgresql.ssl.LibPQFactory",
+                "LibPQFactory",
+                "DefaultJavaSSLFactory",
+                "NonValidatingFactory"
+              ],
+              "default": "org.postgresql.ssl.LibPQFactory"
+            },
+            "caCert": {
+              "type": "string",
+              "default": ""
+            },
+            "idleTimeout": {
+              "type": "integer",
+              "default": 600
+            },
+            "loginTimeout": {
+              "type": "integer",
+              "default": 3
+            },
+            "minPool": {
+              "type": "integer",
+              "default": 25
+            },
+            "maxPool": {
+              "type": "integer",
+              "default": 50
+            }
+          }
+        },
+        "kafka": {
+          "type": "object",
+          "form": true,
+          "properties": {
+            "hostname": {
+              "type": "string",
+              "default": ""
+            },
+            "port": {
+              "type": "integer",
+              "default": 9093
+            },
+            "username": {
+              "type": "string",
+              "default": "opennms"
+            },
+            "password": {
+              "type": "string",
+              "default": ""
+            },
+            "configuration": {
+              "type": "object",
+              "form": true,
+              "properties": {
+                "saslMechanism": {
+                  "type": "string",
+                  "default": "SCRAM-SHA-512"
+                },
+                "securityProtocol": {
+                  "type": "string",
+                  "default": "SASL_SSL"
+                }
+              }
+            }
+          }
+        },
+        "elasticsearch": {
+          "type": "object",
+          "form": true,
+          "properties": {
+            "hostname": {
+              "type": "string",
+              "default": ""
+            },
+            "port": {
+              "type": "integer",
+              "default": 9200
+            },
+            "username": {
+              "type": "string",
+              "default": "elastic"
+            },
+            "password": {
+              "type": "string",
+              "default": ""
+            },
+            "configuration": {
+              "type": "object",
+              "form": true,
+              "properties": {
+                "flows": {
+                  "type": "object",
+                  "form": true,
+                  "properties": {
+                    "indexStrategy": {
+                      "type": "string",
+                      "default": "daily"
+                    },
+                    "replicationFactor": {
+                      "type": "integer",
+                      "default": 0
+                    },
+                    "numShards": {
+                      "type": "integer",
+                      "default": 1
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "loki": {
+          "type": "object",
+          "form": true,
+          "properties": {
+            "hostname": {
+              "type": "string",
+              "default": ""
+            },
+            "username": {
+              "type": "string",
+              "default": ""
+            },
+            "password": {
+              "type": "string",
+              "default": ""
+            },
+            "caCert": {
+              "type": "string",
+              "default": ""
+            },
+            "port": {
+              "type": "integer",
+              "default": 3100
+            }
+          }
+        },
+        "cortex": {
+          "type": "object",
+          "form": true,
+          "properties": {
+            "writeUrl": {
+              "type": "string",
+              "default": "http://cortex-distributor.shared.svc.cluster.local:8080/api/v1/push"
+            },
+            "readUrl": {
+              "type": "string",
+              "default": "http://cortex-query-frontend.shared.svc.cluster.local:8080/prometheus/api/v1"
+            },
+            "maxConcurrentHttpConnections": {
+              "type": "integer",
+              "default": 100
+            },
+            "writeTimeoutInMs": {
+              "type": "integer",
+              "default": 1000
+            },
+            "readTimeoutInMs": {
+              "type": "integer",
+              "default": 1000
+            },
+            "metricCacheSize": {
+              "type": "integer",
+              "default": 1000
+            },
+            "externalTagsCacheSize": {
+              "type": "integer",
+              "default": 1000
+            },
+            "bulkheadMaxWaitDuration": {
+              "type": "string",
+              "default": "9223372036854775807"
+            },
+            "organizationId": {
+              "type": "string",
+              "default": "",
+              "description": "Specify the `X-Scope-OrgID` header. This will override the tenant name when multiTenant=true."
+            }
+          }
+        }
+      }
+    },
+    "ingress": {
+      "type": "object",
+      "form": true,
+      "title": "Ingress",
+      "properties": {
+        "className": {
+          "type": "string",
+          "default": "nginx"
+        },
+        "annotations": {
+          "type": "object",
+          "default": {}
+        },
+        "certManager": {
+          "type": "object",
+          "form": true,
+          "properties": {
+            "clusterIssuer": {
+              "type": "string",
+              "default": "opennms-issuer"
+            }
+          }
+        }
+      }
+    },
+    "sentinel": {
+      "type": "object",
+      "form": true,
+      "title": "Sentinel",
+      "properties": {
+        "replicaCount": {
+          "type": "integer",
+          "default": 0
+        },
+        "terminationGracePeriodSeconds": {
+          "type": "integer",
+          "default": 60
+        },
+        "image": {
+          "type": "object",
+          "form": true,
+          "properties": {
+            "repository": {
+              "type": "string",
+              "default": "opennms/sentinel"
+            },
+            "pullPolicy": {
+              "enum": [
+                "IfNotPresent",
+                "Always",
+                "Never"
+              ],
+              "default": "IfNotPresent"
+            },
+            "tag": {
+              "type": "string",
+              "default": ""
+            }
+          }
+        },
+        "resources": {
+          "type": "object",
+          "form": true,
+          "properties": {
+            "limits": {
+              "type": "object",
+              "form": true,
+              "properties": {
+                "cpu": {
+                  "type": "string",
+                  "default": "2"
+                },
+                "memory": {
+                  "type": "string",
+                  "default": "4Gi"
+                }
+              }
+            },
+            "requests": {
+              "type": "object",
+              "form": true,
+              "properties": {
+                "cpu": {
+                  "type": "string",
+                  "default": "2"
+                },
+                "memory": {
+                  "type": "string",
+                  "default": "2Gi"
+                }
+              }
+            }
+          }
+        },
+        "configuration": {
+          "type": "object",
+          "form": true,
+          "properties": {
+            "database": {
+              "type": "object",
+              "form": true,
+              "properties": {
+                "poolSize": {
+                  "type": "integer",
+                  "default": 25
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "grafana": {
+      "type": "object",
+      "form": true,
+      "title": "Grafana",
+      "properties": {
+        "replicaCount": {
+          "type": "integer",
+          "default": 0
+        },
+        "image": {
+          "repository": {
             "type": "string",
-            "title": "Timezone",
-            "description": "Timezone used inside the containers"
-        },
-        "domain": {
+            "default": "opennms/helm"
+          },
+          "pullPolicy": {
+            "enum": [
+              "IfNotPresent",
+              "Always",
+              "Never"
+            ]
+          },
+          "tag": {
             "type": "string",
-            "title": "Domain"
+            "default": "9.0.9"
+          }
         },
-        "createNamespace": {
-            "type": "boolean",
-            "title": "Whether to create the namespace when releaseNamespace=true",
-            "default": false
-        },
-        "releaseNamespace": {
-            "type": "boolean",
-            "title": "Install resource objects into namespace named for the Helm release",
-            "default": false
-        },
-        "multiTenant": {
-            "type": "boolean",
-            "title": "Enable multi-tenant mode",
-            "default": false
-        },
-        "imagePullSecrets": {
-            "type": "array",
-            "title": "Image Pull Secrets",
-            "items": {
-                "type": "object",
-                "default": []
-            }
-        },
-        "dependencies": {
-            "type": "object",
-            "form": true,
-            "title": "Dependencies",
-            "properties": {
-                "clusterRole": {
-                    "type": "boolean",
-                    "title": "Create cluster role",
-                    "default": true
+        "resources": {
+          "type": "object",
+          "form": true,
+          "properties": {
+            "limits": {
+              "type": "object",
+              "form": true,
+              "properties": {
+                "cpu": {
+                  "type": "string",
+                  "default": "1Gi"
                 },
-                "clusterRoleBinding": {
-                    "type": "boolean",
-                    "title": "Create cluster role binding",
-                    "default": true
-                },
-                "securitycontext": {
-                    "type": "object",
-                    "form": true,
-                    "title": "Security Context",
-                    "properties": {
-                        "allowedCapabilities": {
-                            "type": "array",
-                            "description": "(Red Hat OpenShift only) Capabilities a container is allowed to use ",
-                            "items": {
-                                "type": "string",
-                                "default": [
-                                    "NET_BIND_SERVICE",
-                                    "CAP_NET_RAW"
-                                ]
-                            }
-                        },
-                        "allowPrivilegeEscalation": {
-                            "type": "boolean",
-                            "default": true,
-                            "description": "(Red Hat OpenShift only) Controls whether a process can gain more privileges than its parent process "
-                        },
-                        "securitycontextconstraints": {
-                            "type": "object",
-                            "title": "Constraints",
-                            "properties": {
-                                "enabled": {
-                                    "type": "boolean",
-                                    "default": true
-                                },
-                                "name": {
-                                    "type": "string",
-                                    "default": "opennms-scc"
-                                }
-                            }
-                        },
-                        "serviceaccount": {
-                            "type": "object",
-                            "title": "Service Account",
-                            "properties": {
-                                "enabled": {
-                                    "type": "boolean",
-                                    "default": true
-                                },
-                                "name": {
-                                    "type": "string",
-                                    "default": "opennms-sa"
-                                }
-                            }
-                        }
-                    }
-                },
-                "route": {
-                    "type": "boolean",
-                    "default": true
-                },
-                "truststore": {
-                    "type": "object",
-                    "form": true,
-                    "properties": {
-                        "content": {
-                            "type": "string"
-                        },
-                        "password": {
-                            "type": "string",
-                            "default": ""
-                        }
-                    }
-                },
-                "postgresql": {
-                    "type": "object",
-                    "form": true,
-                    "properties": {
-                        "hostname": {
-                            "type": "string",
-                            "default": "192.168.1.142"
-                        },
-                        "port": {
-                            "type": "integer",
-                            "default": "5432"
-                        },
-                        "username": {
-                            "type": "string",
-                            "default": "postgres"
-                        },
-                        "password": {
-                            "type": "string",
-                            "default": ""
-                        },
-                        "sslmode": {
-                            "enum": [
-                                "disable",
-                                "allow",
-                                "prefer",
-                                "require",
-                                "verify-ca",
-                                "verify-full"
-                            ],
-                            "default": "disable"
-                        },
-                        "sslfactory": {
-                            "enum": [
-                                "org.postgresql.ssl.LibPQFactory",
-                                "LibPQFactory",
-                                "DefaultJavaSSLFactory",
-                                "NonValidatingFactory"
-                            ],
-                            "default": "org.postgresql.ssl.LibPQFactory"
-                        },
-                        "caCert": {
-                            "type": "string",
-                            "default": ""
-                        },
-                        "idleTimeout": {
-                            "type": "integer",
-                            "default": 600
-                        },
-                        "loginTimeout": {
-                            "type": "integer",
-                            "default": 3 
-                        },
-                        "minPool": {
-                            "type": "integer",
-                            "default": 25
-                        },
-                        "maxPool": {
-                            "type": "integer",
-                            "default": 50
-                        }
-                    }
-                },
-                "kafka": {
-                    "type": "object",
-                    "form": true,
-                    "properties": {
-                        "hostname": {
-                            "type": "string",
-                            "default": ""
-                        },
-                        "port": {
-                            "type": "integer",
-                            "default": 9093
-                        },
-                        "username": {
-                            "type": "string",
-                            "default": "opennms"
-                        },
-                        "password": {
-                            "type": "string",
-                            "default": ""
-                        },
-                        "configuration": {
-                            "type": "object",
-                            "form": true,
-                            "properties": {
-                                "saslMechanism": {
-                                    "type": "string",
-                                    "default": "SCRAM-SHA-512"
-                                },
-                                "securityProtocol": {
-                                    "type": "string",
-                                    "default": "SASL_SSL"
-                                }
-                            }
-                        }
-                    }
-                },
-                "elasticsearch": {
-                    "type": "object",
-                    "form": true,
-                    "properties": {
-                        "hostname": {
-                            "type": "string",
-                            "default": ""
-                        },
-                        "port": {
-                            "type": "integer",
-                            "default": 9200
-                        },
-                        "username": {
-                            "type": "string",
-                            "default": "elastic"
-                        },
-                        "password": {
-                            "type": "string",
-                            "default": ""
-                        },
-                        "configuration": {
-                            "type": "object",
-                            "form": true,
-                            "properties": {
-                                "flows": {
-                                    "type": "object",
-                                    "form": true,
-                                    "properties": {
-                                        "indexStrategy": {
-                                            "type": "string",
-                                            "default": "daily"
-                                        },
-                                        "replicationFactor": {
-                                            "type": "integer",
-                                            "default": 0
-                                        },
-                                        "numShards": {
-                                            "type": "integer",
-                                            "default": 1
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "loki": {
-                    "type": "object",
-                    "form": true,
-                    "properties": {
-                        "hostname": {
-                            "type": "string",
-                            "default": ""
-                        },
-                        "username": {
-                            "type": "string",
-                            "default": ""
-                        },
-                        "password": {
-                            "type": "string",
-                            "default": ""
-                        },
-                        "caCert": {
-                            "type": "string",
-                            "default": ""
-                        },
-                        "port": {
-                            "type": "integer",
-                            "default": 3100
-                        }
-                    }
-                },
-                "cortex": {
-                    "type": "object",
-                    "form": true,
-                    "properties": {
-                        "writeUrl": {
-                            "type": "string",
-                            "default": "http://cortex-distributor.shared.svc.cluster.local:8080/api/v1/push"
-                        },
-                        "readUrl": {
-                            "type": "string",
-                            "default": "http://cortex-query-frontend.shared.svc.cluster.local:8080/prometheus/api/v1"
-                        },
-                        "maxConcurrentHttpConnections": {
-                            "type": "integer",
-                            "default": 100
-                        },
-                        "writeTimeoutInMs": {
-                            "type": "integer",
-                            "default": 1000
-                        },
-                        "readTimeoutInMs": {
-                            "type": "integer",
-                            "default": 1000
-                        },
-                        "metricCacheSize": {
-                            "type": "integer",
-                            "default": 1000
-                        },
-                        "externalTagsCacheSize": {
-                            "type": "integer",
-                            "default": 1000
-                        },
-                        "bulkheadMaxWaitDuration": {
-                            "type": "string",
-                            "default": "9223372036854775807"
-                        },
-                        "organizationId": {
-                            "type": "string",
-                            "default": "",
-                            "description": "Specify the `X-Scope-OrgID` header. This will override the tenant name when multiTenant=true."
-                        }
-                    }
+                "memory": {
+                  "type": "string",
+                  "default": "1Gi"
                 }
-            }
-        },
-        "ingress": {
-            "type": "object",
-            "form": true,
-            "title": "Ingress",
-            "properties": {
-                "className": {
-                    "type": "string",
-                    "default": "nginx"
+              }
+            },
+            "requests": {
+              "type": "object",
+              "form": true,
+              "properties": {
+                "cpu": {
+                  "type": "string",
+                  "default": "1Gi"
                 },
-                "annotations": {
-                    "type": "object",
-                    "default": {}
-                },
-                "certManager": {
-                    "type": "object",
-                    "form": true,
-                    "properties": {
-                        "clusterIssuer": {
-                            "type": "string",
-                            "default": "opennms-issuer"
-                        }
-                    }
+                "memory": {
+                  "type": "string",
+                  "default": "1Gi"
                 }
+              }
             }
+          }
         },
-        "sentinel": {
-            "type": "object",
-            "form": true,
-            "title": "Sentinel",
-            "properties": {
-                "replicaCount": {
-                    "type": "integer",
-                    "default": 0
+        "configuration": {
+          "type": "object",
+          "form": true,
+          "properties": {
+            "ui": {
+              "type": "object",
+              "properties": {
+                "adminPassword": {
+                  "type": "string"
+                }
+              }
+            },
+            "database": {
+              "type": "object",
+              "form": true,
+              "properties": {
+                "username": {
+                  "type": "string"
                 },
-                "terminationGracePeriodSeconds": {
-                    "type": "integer",
-                    "default": 60
+                "password": {
+                  "type": "string"
+                },
+                "sslmode": {
+                  "enum": [
+                    "require",
+                    "disable",
+                    "verify-full"
+                  ],
+                  "default": "require"
                 },
                 "image": {
-                    "type": "object",
-                    "form": true,
-                    "properties": {
-                        "repository": {
-                            "type": "string",
-                            "default": "opennms/sentinel"
-                        },
-                        "pullPolicy": {
-                            "enum": [
-                                "IfNotPresent",
-                                "Always",
-                                "Never"
-                            ],
-                            "default": "IfNotPresent"
-                        },
-                        "tag": {
-                            "type": "string",
-                            "default": ""
-                        }
-                    }
-                },
-                "resources": {
-                    "type": "object",
-                    "form": true,
-                    "properties": {
-                        "limits": {
-                            "type": "object",
-                            "form": true,
-                            "properties": {
-                                "cpu": {
-                                    "type": "string",
-                                    "default": "2"
-                                },
-                                "memory": {
-                                    "type": "string",
-                                    "default": "4Gi"
-                                }
-                            }
-                        },
-                        "requests": {
-                            "type": "object",
-                            "form": true,
-                            "properties": {
-                                "cpu": {
-                                    "type": "string",
-                                    "default": "2"
-                                },
-                                "memory": {
-                                    "type": "string",
-                                    "default": "2Gi"
-                                }
-                            }
-                        }
-                    }
-                },
-                "configuration": {
-                    "type": "object",
-                    "form": true,
-                    "properties": {
-                        "database": {
-                            "type": "object",
-                            "form": true,
-                            "properties": {
-                                "poolSize": {
-                                    "type": "integer",
-                                    "default": 25
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "grafana": {
-            "type": "object",
-            "form": true,
-            "title": "Grafana",
-            "properties": {
-                "replicaCount": {
-                    "type": "integer",
-                    "default": 0
-                },
-                "image": {
+                  "type": "object",
+                  "form": true,
+                  "properties": {
                     "repository": {
-                        "type": "string",
-                        "default": "opennms/helm"
+                      "type": "string",
+                      "default": "postgres"
                     },
                     "pullPolicy": {
-                        "enum": [
-                            "IfNotPresent",
-                            "Always",
-                            "Never"
-                        ]
+                      "enum": [
+                        "IfNotPresent",
+                        "Always",
+                        "Never"
+                      ]
                     },
                     "tag": {
-                        "type": "string",
-                        "default": "9.0.9"
+                      "type": "string",
+                      "default": "13"
                     }
-                },
-                "resources": {
-                    "type": "object",
-                    "form": true,
-                    "properties": {
-                        "limits": {
-                            "type": "object",
-                            "form": true,
-                            "properties": {
-                                "cpu": {
-                                    "type": "string",
-                                    "default": "1Gi"
-                                },
-                                "memory": {
-                                    "type": "string",
-                                    "default": "1Gi"
-                                }
-                            }
-                        },
-                        "requests": {
-                            "type": "object",
-                            "form": true,
-                            "properties": {
-                                "cpu": {
-                                    "type": "string",
-                                    "default": "1Gi"
-                                },
-                                "memory": {
-                                    "type": "string",
-                                    "default": "1Gi"
-                                }
-                            }
-                        }
-                    }
-                },
-                "configuration": {
-                    "type": "object",
-                    "form": true,
-                    "properties": {
-                        "ui": {
-                            "type": "object",
-                            "properties": {
-                                "adminPassword": {
-                                    "type": "string"
-                                }
-                            }
-                        },
-                        "database": {
-                            "type": "object",
-                            "form": true,
-                            "properties": {
-                                "username": {
-                                    "type": "string"
-                                },
-                                "password": {
-                                    "type": "string"
-                                },
-                                "sslmode": {
-                                    "enum": [
-                                        "require",
-                                        "disable",
-                                        "verify-full"
-                                    ],
-                                    "default": "require"
-                                },
-                                "image": {
-                                    "type": "object",
-                                    "form": true,
-                                    "properties": {
-                                        "repository": {
-                                            "type": "string",
-                                            "default": "postgres"
-                                        },
-                                        "pullPolicy": {
-                                            "enum": [
-                                                "IfNotPresent",
-                                                "Always",
-                                                "Never"
-                                            ]
-                                        },
-                                        "tag": {
-                                            "type": "string",
-                                            "default": "13"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "imageRenderer": {
-                    "replicaCount": 2,
-                    "image": {
-                        "repository": "grafana/grafana-image-renderer",
-                        "pullPolicy": {
-                            "enum": [
-                                "IfNotPresent",
-                                "Always",
-                                "Never"
-                            ]
-                        },
-                        "tag": "latest"
-                    },
-                    "resources": {
-                        "limits": {
-                            "cpu": "200m",
-                            "memory": "256Mi"
-                        },
-                        "requests": {
-                            "cpu": "100m",
-                            "memory": "128Mi"
-                        }
-                    }
+                  }
                 }
+              }
             }
+          }
         },
-        "promtail": {
-            "title": "Promtail",
-            "type": "object",
-            "form": true,
-            "properties": {
-                "image": {
-                    "type": "object",
-                    "form": true,
-                    "properties": {
-                        "repository": {
-                            "type": "string",
-                            "default": "grafana/promtail"
-                        },
-                        "pullPolicy": {
-                            "enum": [
-                                "IfNotPresent",
-                                "Always",
-                                "Never"
-                            ]
-                        },
-                        "tag": {
-                            "type": "string",
-                            "default": "latest"
-                        }
-                    }
-                },
-                "resources": {
-                    "type": "object",
-                    "form": true,
-                    "properties": {
-                        "limits": {
-                            "cpu": {
-                                "type": "string",
-                                "default": "50m"
-                            },
-                            "memory": {
-                                "type": "string",
-                                "default": "64Mi"
-                            }
-                        }
-                    }
-                }
+        "imageRenderer": {
+          "replicaCount": 2,
+          "image": {
+            "repository": "grafana/grafana-image-renderer",
+            "pullPolicy": {
+              "enum": [
+                "IfNotPresent",
+                "Always",
+                "Never"
+              ]
+            },
+            "tag": "latest"
+          },
+          "resources": {
+            "limits": {
+              "cpu": "200m",
+              "memory": "256Mi"
+            },
+            "requests": {
+              "cpu": "100m",
+              "memory": "128Mi"
             }
+          }
         }
+      }
+    },
+    "promtail": {
+      "title": "Promtail",
+      "type": "object",
+      "form": true,
+      "properties": {
+        "image": {
+          "type": "object",
+          "form": true,
+          "properties": {
+            "repository": {
+              "type": "string",
+              "default": "grafana/promtail"
+            },
+            "pullPolicy": {
+              "enum": [
+                "IfNotPresent",
+                "Always",
+                "Never"
+              ]
+            },
+            "tag": {
+              "type": "string",
+              "default": "latest"
+            }
+          }
+        },
+        "resources": {
+          "type": "object",
+          "form": true,
+          "properties": {
+            "limits": {
+              "cpu": {
+                "type": "string",
+                "default": "50m"
+              },
+              "memory": {
+                "type": "string",
+                "default": "64Mi"
+              }
+            }
+          }
+        }
+      }
     }
+  }
 }

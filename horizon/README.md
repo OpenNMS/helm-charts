@@ -22,8 +22,8 @@ helm install monms opennms/horizon --set domain=domain1.com  --create-namespace
 ## Version compatibility
 
 | Helm chart version | Horizon version(s) | Meridian version(s) |
-| ----------- | ----------- | ----------- |
-| 1.x | Horizon 32.x | Meridian 2023.x |
+|--------------------|--------------------|---------------------|
+| 1.x                | Horizon 32.x       | Meridian 2023.x     |
 
 ## Overlay ConfigMaps
 
