@@ -19,6 +19,35 @@ data:
   OPENNMS_DATABASE_CONNECTION_MAXPOOL: {{ .Values.core.configuration.database.maxPool | default "50" | quote }}
   ENABLE_ALEC: {{ ((.Values.core).configuration).enableAlec | default "false" | quote }}
   ENABLE_ACLS: {{ ((.Values.core).configuration).enableAcls | default "false" | quote }}
+  CORE_SERVICE_ALARMD_ENABLED: {{ .Values.core.configuration.services.alarmd.enabled | quote }}
+  CORE_SERVICE_BSMD_ENABLED: {{ .Values.core.configuration.services.bsmd.enabled | quote }}
+  CORE_SERVICE_TICKETER_ENABLED: {{ .Values.core.configuration.services.ticketer.enabled | quote }}
+  CORE_SERVICE_CORRELATOR_ENABLED: {{ .Values.core.configuration.services.correlator.enabled | quote }}
+  CORE_SERVICE_QUEUED_ENABLED: {{ .Values.core.configuration.services.queued.enabled | quote }}
+  CORE_SERVICE_ACTIOND_ENABLED: {{ .Values.core.configuration.services.actiond.enabled | quote }}
+  CORE_SERVICE_NOTIFD_ENABLED: {{ .Values.core.configuration.services.notifd.enabled | quote }}
+  CORE_SERVICE_SCRIPTD_ENABLED: {{ .Values.core.configuration.services.scriptd.enabled | quote }}
+  CORE_SERVICE_RTCD_ENABLED: {{ .Values.core.configuration.services.rtcd.enabled | quote }}
+  CORE_SERVICE_POLLERD_ENABLED: {{ .Values.core.configuration.services.pollerd.enabled | quote }}
+  CORE_SERVICE_SNMPPOLLER_ENABLED: {{ .Values.core.configuration.services.snmpPoller.enabled | quote }}
+  CORE_SERVICE_ENHANCEDLINKD_ENABLED: {{ .Values.core.configuration.services.enhancedLinkd.enabled | quote }}
+  CORE_SERVICE_COLLECTD_ENABLED: {{ .Values.core.configuration.services.collectd.enabled | quote }}
+  CORE_SERVICE_DISCOVERY_ENABLED: {{ .Values.core.configuration.services.discovery.enabled | quote }}
+  CORE_SERVICE_VACUUMD_ENABLED: {{ .Values.core.configuration.services.vacuumd.enabled | quote }}
+  CORE_SERVICE_EVENTTRANSLATOR_ENABLED: {{ .Values.core.configuration.services.eventTranslator.enabled | quote }}
+  CORE_SERVICE_PASSIVESTATUSD_ENABLED: {{ .Values.core.configuration.services.passiveStatusd.enabled | quote }}
+  CORE_SERVICE_STATSD_ENABLED: {{ .Values.core.configuration.services.statsd.enabled | quote }}
+  CORE_SERVICE_PROVISIOND_ENABLED: {{ .Values.core.configuration.services.provisiond.enabled | quote }}
+  CORE_SERVICE_REPORTD_ENABLED: {{ .Values.core.configuration.services.reportd.enabled | quote }}
+  CORE_SERVICE_ACKD_ENABLED: {{ .Values.core.configuration.services.ackd.enabled | quote }}
+  CORE_SERVICE_JETTYSERVER_ENABLED: {{ .Values.core.configuration.services.jettyServer.enabled | quote }}
+  CORE_SERVICE_KARAFSTARTUPMONITOR_ENABLED: {{ .Values.core.configuration.services.karafStartupMonitor.enabled | quote }}
+  CORE_SERVICE_TL1D_ENABLED: {{ .Values.core.configuration.services.tl1d.enabled | quote }}
+  CORE_SERVICE_SYSLOGD_ENABLED: {{ .Values.core.configuration.services.syslogd.enabled | quote }}
+  CORE_SERVICE_ASTERISKGATEWAY_ENABLED: {{ .Values.core.configuration.services.asteriskGateway.enabled | quote }}
+  CORE_SERVICE_TELEMETRYD_ENABLED: {{ .Values.core.configuration.services.telemetryd.enabled | quote }}
+  CORE_SERVICE_TRAPD_ENABLED: {{ .Values.core.configuration.services.trapd.enabled | quote }}
+  CORE_SERVICE_PERSPECTIVEPOLLER_ENABLED: {{ .Values.core.configuration.services.perspectivePoller.enabled | quote }}
   ENABLE_TELEMETRYD: {{ if gt ((.Values.sentinel).replicaCount|int) 0 }}"true"{{ else }}"false"{{ end }}
   ENABLE_CORTEX: {{ ((.Values.core).configuration).enableCortex | quote }}
   ENABLE_TSS_DUAL_WRITE: {{ ((.Values.core).configuration).enableTssDualWrite | quote }}
