@@ -22,8 +22,8 @@ helm install monms opennms/horizon --set domain=domain1.com  --create-namespace
 ## Version compatibility
 
 | Helm chart version | Horizon version(s) | Meridian version(s) |
-|--------------------|--------------------|---------------------|
-| 1.x                | Horizon 32.x       | Meridian 2023.x     |
+| ----------- | ----------- | ----------- |
+| 1.x | Horizon 32.x | Meridian 2023.x |
 
 ## Overlay ConfigMaps
 
@@ -158,7 +158,6 @@ kubectl create configmap -n $instance $configmap --from-file=lots-of-zeros.zip
 | core.configuration.storage.rrd | string | `"1000Gi"` |  |
 | core.configuration.timeSeriesStrategy | string | `"rrd"` |  |
 | core.configuration.tolerations | string | `nil` |  |
-| core.env | object | `{}` | Environment variables to set on the onms container. |
 | core.image.pullPolicy | string | `"IfNotPresent"` |  |
 | core.image.repository | string | `"opennms/horizon"` |  |
 | core.image.tag | string | `""` |  |

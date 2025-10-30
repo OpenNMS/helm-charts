@@ -246,8 +246,6 @@ core:
     ttlSecondsAfterFinished: 300
   # -- Experimental: a list of additional init containers
   initContainers: []
-  # -- Environment variables to set on the onms container.
-  env: {}
 
 # OpenNMS Sentinel for flow processing (Optional)
 sentinel:
