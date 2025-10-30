@@ -107,6 +107,303 @@
             "enableAcls": {
               "type": "boolean"
             },
+            "services": {
+              "type": "object",
+              "title": "Services",
+              "form": true,
+              "properties": {
+                "alarmd": {
+                  "type": "object",
+                  "form": true,
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                },
+                "bsmd": {
+                  "type": "object",
+                  "form": true,
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                },
+                "ticketer": {
+                  "type": "object",
+                  "form": true,
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                },
+                "correlator": {
+                  "type": "object",
+                  "form": true,
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean",
+                      "default": false
+                    }
+                  }
+                },
+                "queued": {
+                  "type": "object",
+                  "form": true,
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                },
+                "actiond": {
+                  "type": "object",
+                  "form": true,
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                },
+                "notifd": {
+                  "type": "object",
+                  "form": true,
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                },
+                "scriptd": {
+                  "type": "object",
+                  "form": true,
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                },
+                "rtcd": {
+                  "type": "object",
+                  "form": true,
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                },
+                "pollerd": {
+                  "type": "object",
+                  "form": true,
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                },
+                "snmpPoller": {
+                  "type": "object",
+                  "form": true,
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean",
+                      "default": false
+                    }
+                  }
+                },
+                "enhancedLinkd": {
+                  "type": "object",
+                  "form": true,
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                },
+                "collectd": {
+                  "type": "object",
+                  "form": true,
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                },
+                "discovery": {
+                  "type": "object",
+                  "form": true,
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                },
+                "vacuumd": {
+                  "type": "object",
+                  "form": true,
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                },
+                "eventTranslator": {
+                  "type": "object",
+                  "form": true,
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                },
+                "passiveStatusd": {
+                  "type": "object",
+                  "form": true,
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                },
+                "statsd": {
+                  "type": "object",
+                  "form": true,
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                },
+                "provisiond": {
+                  "type": "object",
+                  "form": true,
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                },
+                "reportd": {
+                  "type": "object",
+                  "form": true,
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                },
+                "ackd": {
+                  "type": "object",
+                  "form": true,
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                },
+                "jettyServer": {
+                  "type": "object",
+                  "form": true,
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                },
+                "karafStartupMonitor": {
+                  "type": "object",
+                  "form": true,
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                },
+                "tl1d": {
+                  "type": "object",
+                  "form": true,
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean",
+                      "default": false
+                    }
+                  }
+                },
+                "syslogd": {
+                  "type": "object",
+                  "form": true,
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean",
+                      "default": false
+                    }
+                  }
+                },
+                "asteriskGateway": {
+                  "type": "object",
+                  "form": true,
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean",
+                      "default": false
+                    }
+                  }
+                },
+                "telemetryd": {
+                  "type": "object",
+                  "form": true,
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                },
+                "trapd": {
+                  "type": "object",
+                  "form": true,
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                },
+                "perspectivePoller": {
+                  "type": "object",
+                  "form": true,
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                }
+              }
+            },
             "rras": {
               "type": "array",
               "items": {
