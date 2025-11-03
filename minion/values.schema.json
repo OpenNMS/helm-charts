@@ -117,6 +117,60 @@
                                     }
                                 }
                             }
+                        },
+                        "livenessProbe": {
+                            "title": "Liveness Probe",
+                            "type": "object",
+                            "form": true,
+                            "properties": {
+                                "initialDelaySeconds": {
+                                    "title": "Initial Delay Seconds",
+                                    "type": "integer",
+                                    "default": 10
+                                },
+                                "periodSeconds": {
+                                    "title": "Period Seconds",
+                                    "type": "integer",
+                                    "default": 10
+                                },
+                                "failureThreshold": {
+                                    "title": "Failure Threshold",
+                                    "type": "integer",
+                                    "default": 3
+                                },
+                                "timeoutSeconds": {
+                                      "title": "Timeout Seconds",
+                                      "type": "integer",
+                                      "default": 5
+                                }
+                            }
+                        },
+                        "readinessProbe": {
+                            "title": "Readiness Probe",
+                            "type": "object",
+                            "form": true,
+                            "properties": {
+                                "initialDelaySeconds": {
+                                  "title": "Initial Delay Seconds",
+                                  "type": "integer",
+                                  "default": 45
+                                },
+                                "periodSeconds": {
+                                  "title": "Period Seconds",
+                                  "type": "integer",
+                                  "default": 60
+                                },
+                                "failureThreshold": {
+                                  "title": "Failure Threshold",
+                                  "type": "integer",
+                                  "default": 3
+                                },
+                                "timeoutSeconds": {
+                                  "title": "Timeout Seconds",
+                                  "type": "integer",
+                                  "default": 20
+                                }
+                            }
                         }
                     }
                 },
