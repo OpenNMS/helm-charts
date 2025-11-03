@@ -158,6 +158,7 @@ kubectl create configmap -n $instance $configmap --from-file=lots-of-zeros.zip
 | core.configuration.storage.rrd | string | `"1000Gi"` |  |
 | core.configuration.timeSeriesStrategy | string | `"rrd"` |  |
 | core.configuration.tolerations | string | `nil` |  |
+| core.configuration.webBaseUrlScheme | string | `"https"` |  |
 | core.image.pullPolicy | string | `"IfNotPresent"` |  |
 | core.image.repository | string | `"opennms/horizon"` |  |
 | core.image.tag | string | `""` |  |

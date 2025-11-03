@@ -36,6 +36,7 @@
 # OPENNMS_DBUSER
 # OPENNMS_INSTANCE_ID
 # OPENNMS_RRAS
+# OPENNMS_WEB_BASEURL_SCHEME
 # POSTGRES_HOST
 # POSTGRES_PASSWORD
 # POSTGRES_PORT
@@ -74,7 +75,8 @@ echo "OpenNMS Core Configuration Script..."
 command -v rsync >/dev/null 2>&1 || { echo >&2 "rsync is required but it's not installed. Aborting."; exit 1; }
 
 # Defaults
-OPENNMS_DATABASE_CONNECTION_MAXPOOL=${OPENNMS_DATABASE_CONNECTION_MAXPOOL-50}
+OPENNMS_DATABASE_CONNECTION_MAXPOOL="${OPENNMS_DATABASE_CONNECTION_MAXPOOL:-50}"
+OPENNMS_WEB_BASEURL_SCHEME="${OPENNMS_WEB_BASEURL_SCHEME:-https}"
 KAFKA_SASL_MECHANISM=${KAFKA_SASL_MECHANISM-PLAIN}
 KAFKA_SECURITY_PROTOCOL=${KAFKA_SECURITY_PROTOCOL-SASL_PLAINTEXT}
 
@@ -440,7 +442,7 @@ EOF
 # Required changes in order to use HTTPS through Ingress
 echo "Creating ${CONFIG_DIR_OVERLAY}/opennms.properties.d/webui.properties"
 cat <<EOF > ${CONFIG_DIR_OVERLAY}/opennms.properties.d/webui.properties
-opennms.web.base-url=https://%x%c/
+opennms.web.base-url=${OPENNMS_WEB_BASEURL_SCHEME}://%x%c/
 org.opennms.security.disableLoginSuccessEvent=true
 org.opennms.web.defaultGraphPeriod=last_2_hour
 EOF

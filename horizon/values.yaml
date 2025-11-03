@@ -109,7 +109,7 @@ dependencies:
 
 # The Ingress to expose the OpenNMS and Grafana.
 ingress:
-  className: nginx
+  className: nginx  #  No Ingress deployed when the className is an empty String ''
   annotations: {}
   certManager:
     clusterIssuer: opennms-issuer
@@ -138,6 +138,7 @@ core:
     enableCortex: false  # See cortexTssImage below for how the KAR is retrieved
     enableTssDualWrite: false
     enableAcls: false
+    webBaseUrlScheme: https
     services:
       alarmd:
         enabled: true
