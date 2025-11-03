@@ -85,13 +85,23 @@ spec:
              - ALL
            {{- end }}
           {{- end }}
+          livenessProbe:
+            exec:
+              command:
+                - pgrep
+                - java
+            initialDelaySeconds: {{ .Values.minion.configuration.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.minion.configuration.livenessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.minion.configuration.livenessProbe.failureThreshold }}
+            timeoutSeconds: {{ .Values.minion.configuration.livenessProbe.timeoutSeconds }}
           readinessProbe:
             exec:
               command:
                 - /health.sh
-            failureThreshold: 3
-            periodSeconds: 30
-            timeoutSeconds: 20
+            initialDelaySeconds: {{ .Values.minion.configuration.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.minion.configuration.readinessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.minion.configuration.readinessProbe.failureThreshold }}
+            timeoutSeconds: {{ .Values.minion.configuration.readinessProbe.timeoutSeconds }}
           name: minion
           ports:
            {{- if .Values.minion.configuration.ports.karaf.enabled }}

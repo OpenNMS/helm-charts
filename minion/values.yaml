@@ -13,58 +13,68 @@ imagePullSecrets: []
 #   dockerEmail: admin@example.com
 
 minion:
- location: pod
- name: myminion
- kafkaBroker:
-  address: onms-kafka-bootstrap.shared.svc:9093
-  username: ''
-  password: ''
- configuration:
-  storage:
-   dataFolder: 5Gi
-  ports:
-   trapd:
-    enabled: true
-    externalPort: 1162
-   syslog:
-    enabled: true
-    externalPort: 1514
-   karaf:
-    enabled: true
-    externalPort: 8201
- image:
-  repository: opennms/minion
-  pullPolicy: IfNotPresent
-  tag: ''  # Defaults to the chart appVersion
- resources:
-  limits:
-   cpu: '2'
-   memory: 8Gi
-  requests:
-   cpu: '2'
-   memory: 4Gi
- javaOpts: ''
+  location: pod
+  name: myminion
+  kafkaBroker:
+    address: onms-kafka-bootstrap.shared.svc:9093
+    username: ''
+    password: ''
+  configuration:
+    storage:
+      dataFolder: 5Gi
+    ports:
+      trapd:
+        enabled: true
+        externalPort: 1162
+      syslog:
+        enabled: true
+        externalPort: 1514
+      karaf:
+        enabled: true
+        externalPort: 8201
+    livenessProbe:
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      failureThreshold: 3
+      timeoutSeconds: 5
+    readinessProbe:
+      initialDelaySeconds: 45
+      failureThreshold: 3
+      periodSeconds: 60
+      timeoutSeconds: 20
+  image:
+    repository: opennms/minion
+    pullPolicy: IfNotPresent
+    tag: ''  # Defaults to the chart appVersion
+  resources:
+    limits:
+      cpu: '2'
+      memory: 8Gi
+    requests:
+      cpu: '2'
+      memory: 4Gi
+  javaOpts: ''
 
 
 core:
- instanceID: monms  # Must match OpenNMS Core instance (namespace)
+  instanceID: monms  # Must match OpenNMS Core instance (namespace)
 
 # A common JKS to white-list all CA certificates .
 truststore:
- content: ''  # A base64 encoded content of the JKS Truststore file.
- password: ''
+  content: ''  # A base64 encoded content of the JKS Truststore file.
+  password: ''
 
 # Red Hat OpenShift related settings for creating the required security context for OpenNMS Minion
 securitycontext:
- allowedCapabilities:
-  - NET_BIND_SERVICE
-  - CAP_NET_RAW
- allowPrivilegeEscalation: true
- securitycontextconstraints:
-  enabled: true
-  create: true
-  name: minion-scc
- serviceaccount:
-  enabled: true
-  create: true
-  name: minion-sa
+  allowedCapabilities:
+    - NET_BIND_SERVICE
+    - CAP_NET_RAW
+  allowPrivilegeEscalation: true
+  securitycontextconstraints:
+    enabled: true
+    create: true
+    name: minion-scc
+  serviceaccount:
+    enabled: true
+    create: true
+    name: minion-sa
