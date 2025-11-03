@@ -278,6 +278,22 @@ entries:
     version: 0.0.7
   minion:
   - apiVersion: v2
+    appVersion: 34.0.2
+    created: "2025-11-03T16:09:04.099582838Z"
+    description: A Helm chart for running OpenNMS Minion in Kubernetes and Red Hat
+      OpenShift
+    digest: f4d956c02c52b2cbe46f9c41bcf28767e3359523e24564055faaac54dd4f50d5
+    home: https://github.com/OpenNMS/helm-charts
+    icon: https://www.opennms.com/wp-content/uploads/2021/04/OpenNMS_Favicon_36px.png
+    maintainers:
+    - name: The OpenNMS Group Inc.
+      url: https://www.opennms.com
+    name: minion
+    type: application
+    urls:
+    - https://github.com/OpenNMS/helm-charts/releases/download/minion-1.1.15/minion-1.1.15.tgz
+    version: 1.1.15
+  - apiVersion: v2
     appVersion: 34.0.1
     created: "2024-03-11T16:04:32.005402413Z"
     description: A Helm chart for running OpenNMS Minion in Kubernetes and Red Hat
@@ -504,4 +520,4 @@ entries:
     urls:
     - https://github.com/OpenNMS/helm-charts/releases/download/minion-0.0.7/minion-0.0.7.tgz
     version: 0.0.7
-generated: "2025-10-30T13:53:06.535779209Z"
+generated: "2025-11-03T16:09:04.099773864Z"
