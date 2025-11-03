@@ -120,7 +120,7 @@ if [[ "$PKG" == *"meridian"* ]]; then
   if (( $MAJOR > 2021 )); then
     USE_TWIN=true
   fi
-elif [[ "$PKG" == *"opennms"* ]] && [[ $MAJOR > 2021 ]];then
+elif [[ "$PKG" == *"opennms"* ]] && [[ $MAJOR -gt 2021 ]];then
   echo "OpenNMS Core $MAJOR detected"
   USE_TWIN=true
 else
