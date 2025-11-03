@@ -1,301 +1,301 @@
 {
-    "$schema": "http://json-schema.org/schema#",
-    "type": "object",
-    "properties": {
-        "imagePullSecrets": {
-            "type": "array",
-            "title": "Image Pull Secrets",
-            "items": {
-                "type": "object",
-                "default": []
+  "$schema": "http://json-schema.org/schema#",
+  "type": "object",
+  "properties": {
+    "imagePullSecrets": {
+      "type": "array",
+      "title": "Image Pull Secrets",
+      "items": {
+        "type": "object",
+        "default": []
+      }
+    },
+    "clusterRole": {
+      "type": "boolean",
+      "title": "Create cluster role",
+      "default": true
+    },
+    "clusterRoleBinding": {
+      "type": "boolean",
+      "title": "Create cluster role binding",
+      "default": true
+    },
+    "minion": {
+      "title": "Minion Settings",
+      "type": "object",
+      "form": true,
+      "properties": {
+        "location": {
+          "title": "Location",
+          "type": "string",
+          "default": "location"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string",
+          "default": "myminion"
+        },
+        "kafkaBroker": {
+          "title": "Kafka Broker Settings",
+          "type": "object",
+          "form": true,
+          "properties": {
+            "address": {
+              "title": "Address",
+              "type": "string",
+              "default": "onms-kafka-bootstrap.shared.svc:9093"
+            },
+            "username": {
+              "title": "Username",
+              "type": "string",
+              "default": ""
+            },
+            "password": {
+              "title": "Password",
+              "type": "string",
+              "default": ""
             }
+          }
         },
-        "clusterRole": {
-            "type": "boolean",
-            "title": "Create cluster role",
-            "default": true
-        },
-        "clusterRoleBinding": {
-            "type": "boolean",
-            "title": "Create cluster role binding",
-            "default": true
-        },
-        "minion": {
-            "title": "Minion Settings",
-            "type": "object",
-            "form": true,
-            "properties": {
-                "location": {
-                    "title": "Location",
-                    "type": "string",
-                    "default": "location"
-                },
-                "name": {
-                    "title": "Name",
-                    "type": "string",
-                    "default": "myminion"
-                },
-                "kafkaBroker": {
-                    "title": "Kafka Broker Settings",
-                    "type": "object",
-                    "form": true,
-                    "properties": {
-                        "address": {
-                            "title": "Address",
-                            "type": "string",
-                            "default": "onms-kafka-bootstrap.shared.svc:9093"
-                        },
-                        "username": {
-                            "title": "Username",
-                            "type": "string",
-                            "default": ""
-                        },
-                        "password": {
-                            "title": "Password",
-                            "type": "string",
-                            "default": ""
-                        }
-                    }
-                },
-                "configuration": {
-                    "title": "Configurations",
-                    "type": "object",
-                    "form": true,
-                    "properties": {
-                        "storage": {
-                            "title": "Storage",
-                            "type": "object",
-                            "form": true,
-                            "properties": {
-                                "dataFolder": {
-                                    "title": "Data Folder Size",
-                                    "type": "string",
-                                    "default": "5Gi"
-                                }
-                            }
-                        },
-                        "ports": {
-                            "type": "object",
-                            "properties": {
-                                "trapd": {
-                                    "type": "object",
-                                    "properties": {
-                                        "enabled": {
-                                            "type": "boolean",
-                                            "default": false
-                                        },
-                                        "externalPort": {
-                                            "type": "integer",
-                                            "default": 1162
-                                        }
-                                    }
-                                },
-                                "syslog": {
-                                    "type": "object",
-                                    "properties": {
-                                        "enabled": {
-                                            "type": "boolean",
-                                            "default": false
-                                        },
-                                        "externalPort": {
-                                            "type": "integer",
-                                            "default": 10514
-                                        }
-                                    }
-                                },
-                                "karaf": {
-                                    "type": "object",
-                                    "properties": {
-                                        "enabled": {
-                                            "type": "boolean",
-                                            "default": false
-                                        },
-                                        "externalPort": {
-                                            "type": "integer",
-                                            "default": 8101
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "livenessProbe": {
-                            "title": "Liveness Probe",
-                            "type": "object",
-                            "form": true,
-                            "properties": {
-                                "initialDelaySeconds": {
-                                    "title": "Initial Delay Seconds",
-                                    "type": "integer",
-                                    "default": 10
-                                },
-                                "periodSeconds": {
-                                    "title": "Period Seconds",
-                                    "type": "integer",
-                                    "default": 10
-                                },
-                                "failureThreshold": {
-                                    "title": "Failure Threshold",
-                                    "type": "integer",
-                                    "default": 3
-                                },
-                                "timeoutSeconds": {
-                                      "title": "Timeout Seconds",
-                                      "type": "integer",
-                                      "default": 5
-                                }
-                            }
-                        },
-                        "readinessProbe": {
-                            "title": "Readiness Probe",
-                            "type": "object",
-                            "form": true,
-                            "properties": {
-                                "initialDelaySeconds": {
-                                  "title": "Initial Delay Seconds",
-                                  "type": "integer",
-                                  "default": 45
-                                },
-                                "periodSeconds": {
-                                  "title": "Period Seconds",
-                                  "type": "integer",
-                                  "default": 60
-                                },
-                                "failureThreshold": {
-                                  "title": "Failure Threshold",
-                                  "type": "integer",
-                                  "default": 3
-                                },
-                                "timeoutSeconds": {
-                                  "title": "Timeout Seconds",
-                                  "type": "integer",
-                                  "default": 20
-                                }
-                            }
-                        }
-                    }
-                },
-                "image": {
-                    "title": "Image",
-                    "type": "object",
-                    "form": true,
-                    "properties": {
-                        "repository": {
-                            "title": "Repository",
-                            "type": "string",
-                            "default": "opennms/minion"
-                        },
-                        "pullPolicy": {
-                            "title": "Pull Policy",
-                            "enum": [
-                                "IfNotPresent",
-                                "Always",
-                                "Never"
-                            ],
-                            "default": "IfNotPresent"
-                        },
-                        "tag": {
-                            "title": "Tag",
-                            "type": "string",
-                            "default": ""
-                        }
-                    }
+        "configuration": {
+          "title": "Configurations",
+          "type": "object",
+          "form": true,
+          "properties": {
+            "storage": {
+              "title": "Storage",
+              "type": "object",
+              "form": true,
+              "properties": {
+                "dataFolder": {
+                  "title": "Data Folder Size",
+                  "type": "string",
+                  "default": "5Gi"
                 }
-            }
-        },
-        "core": {
-            "title": "Core Settings",
-            "type": "object",
-            "form": true,
-            "properties": {
-                "instanceID": {
-                    "title": "Instance Namespace",
-                    "type": "string",
-                    "default": "monms",
-                    "description": "OpenNMS Core instance namespace"
-                }
-            }
-        },
-        "truststore": {
-            "title": "Java KeyStore",
-            "type": "object",
-            "form": true,
-            "properties": {
-                "content": {
-                    "title": "Content",
-                    "type": "string",
-                    "default": "",
-                    "description": "A base64 encoded content of the Java Truststore file"
-                },
-                "password": {
-                    "title": "Password",
-                    "type": "string",
-                    "default": "",
-                    "description": "Passsword used for Java Truststore file"
-                }
-            }
-        },
-        "securitycontext": {
-            "type": "object",
-            "form": true,
-            "title": "Security Context",
-            "properties": {
-                "allowedCapabilities": {
-                    "type": "array",
-                    "description": "(Red Hat OpenShift only) Capabilities a container is allowed to use ",
-                    "items": {
-                        "type": "string",
-                        "default": [
-                            "NET_BIND_SERVICE",
-                            "CAP_NET_RAW"
-                        ]
+              }
+            },
+            "ports": {
+              "type": "object",
+              "properties": {
+                "trapd": {
+                  "type": "object",
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "externalPort": {
+                      "type": "integer",
+                      "default": 1162
                     }
+                  }
                 },
-                "allowPrivilegeEscalation": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "(Red Hat OpenShift only) Controls whether a process can gain more privileges than its parent process "
-                },
-                "securitycontextconstraints": {
-                    "type": "object",
-                    "title": "Constraints",
-                    "properties": {
-                        "enabled": {
-                            "type": "boolean",
-                            "default": true
-                        },
-                        "create": {
-                            "type": "boolean",
-                            "default": true
-                        },
-                        "name": {
-                            "type": "string",
-                            "default": "opennms-scc"
-                        }
+                "syslog": {
+                  "type": "object",
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "externalPort": {
+                      "type": "integer",
+                      "default": 10514
                     }
+                  }
                 },
-                "serviceaccount": {
-                    "type": "object",
-                    "title": "Service Account",
-                    "properties": {
-                        "enabled": {
-                            "type": "boolean",
-                            "default": true
-                        },
-                        "create": {
-                            "type": "boolean",
-                            "default": true
-                        },
-                        "name": {
-                            "type": "string",
-                            "default": "opennms-sa"
-                        }
+                "karaf": {
+                  "type": "object",
+                  "properties": {
+                    "enabled": {
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "externalPort": {
+                      "type": "integer",
+                      "default": 8101
                     }
+                  }
                 }
+              }
+            },
+            "livenessProbe": {
+              "title": "Liveness Probe",
+              "type": "object",
+              "form": true,
+              "properties": {
+                "initialDelaySeconds": {
+                  "title": "Initial Delay Seconds",
+                  "type": "integer",
+                  "default": 10
+                },
+                "periodSeconds": {
+                  "title": "Period Seconds",
+                  "type": "integer",
+                  "default": 10
+                },
+                "failureThreshold": {
+                  "title": "Failure Threshold",
+                  "type": "integer",
+                  "default": 3
+                },
+                "timeoutSeconds": {
+                  "title": "Timeout Seconds",
+                  "type": "integer",
+                  "default": 5
+                }
+              }
+            },
+            "readinessProbe": {
+              "title": "Readiness Probe",
+              "type": "object",
+              "form": true,
+              "properties": {
+                "initialDelaySeconds": {
+                  "title": "Initial Delay Seconds",
+                  "type": "integer",
+                  "default": 45
+                },
+                "periodSeconds": {
+                  "title": "Period Seconds",
+                  "type": "integer",
+                  "default": 60
+                },
+                "failureThreshold": {
+                  "title": "Failure Threshold",
+                  "type": "integer",
+                  "default": 3
+                },
+                "timeoutSeconds": {
+                  "title": "Timeout Seconds",
+                  "type": "integer",
+                  "default": 20
+                }
+              }
             }
+          }
         },
-        "route": {
-            "type": "boolean",
-            "default": true
+        "image": {
+          "title": "Image",
+          "type": "object",
+          "form": true,
+          "properties": {
+            "repository": {
+              "title": "Repository",
+              "type": "string",
+              "default": "opennms/minion"
+            },
+            "pullPolicy": {
+              "title": "Pull Policy",
+              "enum": [
+                "IfNotPresent",
+                "Always",
+                "Never"
+              ],
+              "default": "IfNotPresent"
+            },
+            "tag": {
+              "title": "Tag",
+              "type": "string",
+              "default": ""
+            }
+          }
         }
+      }
+    },
+    "core": {
+      "title": "Core Settings",
+      "type": "object",
+      "form": true,
+      "properties": {
+        "instanceID": {
+          "title": "Instance Namespace",
+          "type": "string",
+          "default": "monms",
+          "description": "OpenNMS Core instance namespace"
+        }
+      }
+    },
+    "truststore": {
+      "title": "Java KeyStore",
+      "type": "object",
+      "form": true,
+      "properties": {
+        "content": {
+          "title": "Content",
+          "type": "string",
+          "default": "",
+          "description": "A base64 encoded content of the Java Truststore file"
+        },
+        "password": {
+          "title": "Password",
+          "type": "string",
+          "default": "",
+          "description": "Passsword used for Java Truststore file"
+        }
+      }
+    },
+    "securitycontext": {
+      "type": "object",
+      "form": true,
+      "title": "Security Context",
+      "properties": {
+        "allowedCapabilities": {
+          "type": "array",
+          "description": "(Red Hat OpenShift only) Capabilities a container is allowed to use ",
+          "items": {
+            "type": "string",
+            "default": [
+              "NET_BIND_SERVICE",
+              "CAP_NET_RAW"
+            ]
+          }
+        },
+        "allowPrivilegeEscalation": {
+          "type": "boolean",
+          "default": true,
+          "description": "(Red Hat OpenShift only) Controls whether a process can gain more privileges than its parent process "
+        },
+        "securitycontextconstraints": {
+          "type": "object",
+          "title": "Constraints",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true
+            },
+            "create": {
+              "type": "boolean",
+              "default": true
+            },
+            "name": {
+              "type": "string",
+              "default": "opennms-scc"
+            }
+          }
+        },
+        "serviceaccount": {
+          "type": "object",
+          "title": "Service Account",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true
+            },
+            "create": {
+              "type": "boolean",
+              "default": true
+            },
+            "name": {
+              "type": "string",
+              "default": "opennms-sa"
+            }
+          }
+        }
+      }
+    },
+    "route": {
+      "type": "boolean",
+      "default": true
     }
+  }
 }
