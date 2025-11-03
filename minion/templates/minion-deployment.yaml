@@ -85,6 +85,15 @@ spec:
              - ALL
            {{- end }}
           {{- end }}
+          livenessProbe:
+            exec:
+              command:
+                - pgrep
+                - java
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            failureThreshold: 3
+            timeoutSeconds: 2
           readinessProbe:
             exec:
               command:
