@@ -107,15 +107,6 @@ spec:
                 name: app-settings
             - secretRef:
                 name: app-credentials
-          env:
-            - name: OPENNMS_DATABASE_CONNECTION_IDLETIMEOUT
-              value: {{ .Values.core.configuration.database.idleTimeout | default "3" | quote }}
-            - name: OPENNMS_DATABASE_CONNECTION_LOGINTIMEOUT
-              value: {{ .Values.core.configuration.database.loginTimeout | default "600" | quote }}
-            - name: OPENNMS_DATABASE_CONNECTION_MINPOOL
-              value: {{ .Values.core.configuration.database.minPool | default "25" | quote }}
-            - name: OPENNMS_DATABASE_CONNECTION_MAXPOOL
-              value: {{ .Values.core.configuration.database.maxPool | default "50" | quote }}
           volumeMounts:
             - name: etc
               mountPath: /opennms-etc # Required by the script - CONFIG_DIR

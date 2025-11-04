@@ -17,6 +17,7 @@ data:
   OPENNMS_DATABASE_CONNECTION_LOGINTIMEOUT: {{ .Values.core.configuration.database.loginTimeout | default "600" | quote }}
   OPENNMS_DATABASE_CONNECTION_MINPOOL: {{ .Values.core.configuration.database.minPool | default "25" | quote }}
   OPENNMS_DATABASE_CONNECTION_MAXPOOL: {{ .Values.core.configuration.database.maxPool | default "50" | quote }}
+  OPENNMS_WEB_BASEURL_SCHEME: {{ .Values.core.configuration.webBaseUrlScheme | quote }}
   ENABLE_ALEC: {{ ((.Values.core).configuration).enableAlec | default "false" | quote }}
   ENABLE_ACLS: {{ ((.Values.core).configuration).enableAcls | default "false" | quote }}
   CORE_SERVICE_ALARMD_ENABLED: {{ .Values.core.configuration.services.alarmd.enabled | quote }}

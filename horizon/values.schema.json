@@ -107,6 +107,11 @@
             "enableAcls": {
               "type": "boolean"
             },
+            "webBaseUrlScheme": {
+              "type": "string",
+              "enum": ["http", "https"],
+              "default": "https"
+            },
             "services": {
               "type": "object",
               "title": "Services",
