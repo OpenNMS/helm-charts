@@ -112,6 +112,7 @@ kubectl create configmap -n $instance $configmap --from-file=lots-of-zeros.zip
 | core.configuration.http.adminPassword | string | `"admin"` |  |
 | core.configuration.http.restPassword | string | `"admin"` |  |
 | core.configuration.http.restUsername | string | `"opennms"` |  |
+| core.configuration.instanceId | string | `"OpenNMS"` | Used only when multiTenant=false, otherwise it uses the release name |
 | core.configuration.nodeSelector | string | `nil` |  |
 | core.configuration.ports.karaf.enabled | bool | `true` |  |
 | core.configuration.ports.karaf.externalPort | int | `8101` |  |
@@ -246,7 +247,7 @@ kubectl create configmap -n $instance $configmap --from-file=lots-of-zeros.zip
 | ingress.annotations | object | `{}` |  |
 | ingress.certManager.clusterIssuer | string | `"opennms-issuer"` |  |
 | ingress.className | string | `"nginx"` |  |
-| multiTenant | bool | `false` | Enable multi-tenant mode. This will use the release name as the per-tenant identifier for the OpenNMS instance ID, databases, Kakfa topics, ElasticSearch indices, and Prometheus organization ID. |
+| multiTenant | bool | `false` | Enable multi-tenant mode. This will use the release name as the per-tenant identifier for the OpenNMS instance ID, databases, Kafka topics, ElasticSearch indices, and Prometheus organization ID. |
 | promtail.image.pullPolicy | string | `"IfNotPresent"` |  |
 | promtail.image.repository | string | `"grafana/promtail"` |  |
 | promtail.image.tag | string | `"latest"` |  |
