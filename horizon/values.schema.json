@@ -117,6 +117,28 @@
               "enum": ["http", "https"],
               "default": "https"
             },
+            "logConsoleStartupOutput": {
+              "type": "string",
+              "enum": ["ConsolePlain", "ConsoleJson", "ConsoleNull"],
+              "default": "ConsolePlain",
+              "description": "Controls the format of manager logging output on startup. 'ConsolePlain' outputs human-readable text, 'ConsoleJson' outputs structured JSON for machine parsing, and 'ConsoleNull' suppresses console output."
+            },
+            "logConsoleDaemonOutput": {
+              "type": "string",
+              "enum": ["ConsolePlain", "ConsoleJson", "ConsoleNull"],
+              "default": "ConsolePlain",
+              "description": "Controls the format of daemon logging output. 'ConsolePlain' outputs human-readable text, 'ConsoleJson' outputs structured JSON for machine parsing, and 'ConsoleNull' suppresses console output."
+            },
+            "logDistribution": {
+              "type": "string",
+              "default": "horizon",
+              "description": "Specifies the distribution identifier for logging purposes. This can help differentiate logs from different OpenNMS distributions."
+            },
+            "logEnvironment": {
+              "type": "string",
+              "default": "",
+              "description": "Specifies the environment identifier for logging purposes. Common values include 'production', 'staging', or 'development'."
+            },
             "services": {
               "type": "object",
               "title": "Services",

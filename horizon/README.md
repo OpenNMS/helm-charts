@@ -113,6 +113,10 @@ kubectl create configmap -n $instance $configmap --from-file=lots-of-zeros.zip
 | core.configuration.http.restPassword | string | `"admin"` |  |
 | core.configuration.http.restUsername | string | `"opennms"` |  |
 | core.configuration.instanceId | string | `"OpenNMS"` | Used only when multiTenant=false, otherwise it uses the release name |
+| core.configuration.logConsoleDaemonOutput | string | `"ConsolePlain"` |  |
+| core.configuration.logConsoleStartupOutput | string | `"ConsolePlain"` |  |
+| core.configuration.logDistribution | string | `"horizon"` |  |
+| core.configuration.logEnvironment | string | `""` |  |
 | core.configuration.nodeSelector | string | `nil` |  |
 | core.configuration.ports.karaf.enabled | bool | `true` |  |
 | core.configuration.ports.karaf.externalPort | int | `8101` |  |

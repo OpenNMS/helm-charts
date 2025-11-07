@@ -141,6 +141,10 @@ core:
     enableTssDualWrite: false
     enableAcls: false
     webBaseUrlScheme: https
+    logConsoleStartupOutput: ConsolePlain
+    logConsoleDaemonOutput: ConsolePlain
+    logDistribution: horizon
+    logEnvironment: ''
     services:
       alarmd:
         enabled: true
