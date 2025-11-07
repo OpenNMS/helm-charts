@@ -117,6 +117,28 @@
               "enum": ["http", "https"],
               "default": "https"
             },
+            "opennms_log_console_startup_output": {
+              "type": "string",
+              "enum": ["ConsolePlain", "ConsoleJson", "ConsoleNull"],
+              "default": "ConsolePlain"
+            },
+            "opennms_log_console_daemon_output": {
+              "type": "string",
+              "enum": ["ConsolePlain", "ConsoleJson", "ConsoleNull"],
+              "default": "ConsolePlain"
+            },
+            "opennms_log_distribution": {
+              "type": "string",
+              "default": "horizon"
+            },
+            "opennms_environment": {
+              "type": "string",
+              "default": ""
+            },
+            "opennms_instance_id": {
+              "type": "string",
+              "default": "OpenNMS"
+            },            
             "services": {
               "type": "object",
               "title": "Services",

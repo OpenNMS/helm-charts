@@ -114,6 +114,11 @@ kubectl create configmap -n $instance $configmap --from-file=lots-of-zeros.zip
 | core.configuration.http.restUsername | string | `"opennms"` |  |
 | core.configuration.instanceId | string | `"OpenNMS"` | Used only when multiTenant=false, otherwise it uses the release name |
 | core.configuration.nodeSelector | string | `nil` |  |
+| core.configuration.opennms_enviroment | string | `""` |  |
+| core.configuration.opennms_instance_id | string | `"OpenNMS"` |  |
+| core.configuration.opennms_log_console_daemon_output | string | `"ConsolePlain"` |  |
+| core.configuration.opennms_log_console_startup_output | string | `"ConsolePlain"` |  |
+| core.configuration.opennms_log_distribution | string | `"horizon"` |  |
 | core.configuration.ports.karaf.enabled | bool | `true` |  |
 | core.configuration.ports.karaf.externalPort | int | `8101` |  |
 | core.configuration.ports.syslog.enabled | bool | `true` |  |

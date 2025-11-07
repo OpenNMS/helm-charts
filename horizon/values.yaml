@@ -141,6 +141,11 @@ core:
     enableTssDualWrite: false
     enableAcls: false
     webBaseUrlScheme: https
+    opennms_log_console_startup_output: ConsolePlain
+    opennms_log_console_daemon_output: ConsolePlain
+    opennms_log_distribution: horizon
+    opennms_enviroment: ''
+    opennms_instance_id: OpenNMS
     services:
       alarmd:
         enabled: true
