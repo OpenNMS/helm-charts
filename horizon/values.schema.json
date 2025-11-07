@@ -92,6 +92,11 @@
             "alwaysRollDeployment": {
               "type": "boolean"
             },
+            "instanceId": {
+              "type": "string",
+              "default": "OpenNMS",
+              "description": "Sets the OpenNMS instance ID. When multiTenant=true, this value is ignored and the release name is used instead."
+            },
             "timeSeriesStrategy": {
               "type": "string"
             },

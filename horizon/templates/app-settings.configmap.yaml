@@ -56,7 +56,7 @@ data:
   {{- if .Values.multiTenant }}
   OPENNMS_INSTANCE_ID: {{ .Release.Name | quote }}
   {{- else }}
-  OPENNMS_INSTANCE_ID: ""
+  OPENNMS_INSTANCE_ID: {{ .Values.core.configuration.instanceId | quote }}
   {{- end }}
   OPENNMS_SERVER: {{ include "namespace" . | printf "onms-core.%s.svc" | quote }}
   {{- if .Values.multiTenant }}
