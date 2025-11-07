@@ -117,28 +117,28 @@
               "enum": ["http", "https"],
               "default": "https"
             },
-            "opennms_log_console_startup_output": {
+            "logConsoleStartupOutput": {
               "type": "string",
               "enum": ["ConsolePlain", "ConsoleJson", "ConsoleNull"],
-              "default": "ConsolePlain"
+              "default": "ConsolePlain",
+              "description": "Controls the format of manager logging output on startup. 'ConsolePlain' outputs human-readable text, 'ConsoleJson' outputs structured JSON for machine parsing, and 'ConsoleNull' suppresses console output."
             },
-            "opennms_log_console_daemon_output": {
+            "logConsoleDaemonOutput": {
               "type": "string",
               "enum": ["ConsolePlain", "ConsoleJson", "ConsoleNull"],
-              "default": "ConsolePlain"
+              "default": "ConsolePlain",
+              "description": "Controls the format of daemon logging output. 'ConsolePlain' outputs human-readable text, 'ConsoleJson' outputs structured JSON for machine parsing, and 'ConsoleNull' suppresses console output."
             },
-            "opennms_log_distribution": {
+            "logDistribution": {
               "type": "string",
-              "default": "horizon"
+              "default": "horizon",
+              "description": "Specifies the distribution identifier for logging purposes. This can help differentiate logs from different OpenNMS distributions."
             },
-            "opennms_environment": {
+            "logEnvironment": {
               "type": "string",
-              "default": ""
+              "default": "",
+              "description": "Specifies the environment identifier for logging purposes. Common values include 'production', 'staging', or 'development'."
             },
-            "opennms_instance_id": {
-              "type": "string",
-              "default": "OpenNMS"
-            },            
             "services": {
               "type": "object",
               "title": "Services",
