@@ -159,6 +159,11 @@ kubectl create configmap -n $instance $configmap --from-file=lots-of-zeros.zip
 | core.configuration.timeSeriesStrategy | string | `"rrd"` |  |
 | core.configuration.tolerations | string | `nil` |  |
 | core.configuration.webBaseUrlScheme | string | `"https"` |  |
+| core.configuration.opennms_log_console_startup_output | string | `"ConsolePlain"` |  |
+| core.configuration.opennms_log_console_daemon_output | string | `"ConsolePlain"` |  |
+| core.configuration.opennms_log_distribution | string | `"horizon"` |  |
+| core.configuration.opennms_enviroment | string | `"unspecified"` |  |
+| core.configuration.opennms_instance_id | string | `"OpenNMS"` |  |
 | core.image.pullPolicy | string | `"IfNotPresent"` |  |
 | core.image.repository | string | `"opennms/horizon"` |  |
 | core.image.tag | string | `""` |  |
