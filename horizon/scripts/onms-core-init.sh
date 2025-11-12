@@ -30,7 +30,11 @@
 # KAFKA_SASL_USERNAME
 # KAFKA_SECURITY_PROTOCOL
 # OPENNMS_ADMIN_PASS
+# OPENNMS_DATABASE_CONNECTION_IDLETIMEOUT
+# OPENNMS_DATABASE_CONNECTION_LOGINTIMEOUT
+# OPENNMS_DATABASE_CONNECTION_MINPOOL
 # OPENNMS_DATABASE_CONNECTION_MAXPOOL
+# OPENNMS_DATABASE_CONNECTION_MAXSIZE
 # OPENNMS_DBNAME
 # OPENNMS_DBPASS
 # OPENNMS_DBUSER
@@ -75,7 +79,11 @@ echo "OpenNMS Core Configuration Script..."
 command -v rsync >/dev/null 2>&1 || { echo >&2 "rsync is required but it's not installed. Aborting."; exit 1; }
 
 # Defaults
+OPENNMS_DATABASE_CONNECTION_IDLETIMEOUT="${OPENNMS_DATABASE_CONNECTION_IDLETIMEOUT:-600}"
+OPENNMS_DATABASE_CONNECTION_LOGINTIMEOUT="${OPENNMS_DATABASE_CONNECTION_LOGINTIMEOUT:-3}"
+OPENNMS_DATABASE_CONNECTION_MINPOOL="${OPENNMS_DATABASE_CONNECTION_MAXSIZE:-25}"
 OPENNMS_DATABASE_CONNECTION_MAXPOOL="${OPENNMS_DATABASE_CONNECTION_MAXPOOL:-50}"
+OPENNMS_DATABASE_CONNECTION_MAXSIZE="${OPENNMS_DATABASE_CONNECTION_MAXSIZE:-50}"
 OPENNMS_WEB_BASEURL_SCHEME="${OPENNMS_WEB_BASEURL_SCHEME:-https}"
 KAFKA_SASL_MECHANISM="${KAFKA_SASL_MECHANISM:-PLAIN}"
 KAFKA_SECURITY_PROTOCOL="${KAFKA_SECURITY_PROTOCOL:-SASL_PLAINTEXT}"
@@ -309,11 +317,11 @@ cat <<EOF > ${CONFIG_DIR_OVERLAY}/opennms-datasources.xml
   http://www.opennms.org/xsd/config/opennms-datasources.xsd ">
 
   <connection-pool factory="org.opennms.core.db.HikariCPConnectionFactory"
-    idleTimeout="600"
-    loginTimeout="3"
-    minPool="50"
+    idleTimeout="${OPENNMS_DATABASE_CONNECTION_IDLETIMEOUT}"
+    loginTimeout="${OPENNMS_DATABASE_CONNECTION_LOGINTIMEOUT}"
+    minPool="${OPENNMS_DATABASE_CONNECTION_MINPOOL}"
     maxPool="${OPENNMS_DATABASE_CONNECTION_MAXPOOL}"
-    maxSize="50" />
+    maxSize="${OPENNMS_DATABASE_CONNECTION_MAXSIZE}" />
 
   <jdbc-data-source name="opennms" 
                     database-name="${OPENNMS_DBNAME}" 
@@ -331,10 +339,10 @@ cat <<EOF >> ${CONFIG_DIR_OVERLAY}/opennms-datasources.xml
                     url="jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/template1?sslmode=${POSTGRES_SSL_MODE}&amp;sslfactory=${POSTGRES_SSL_FACTORY}"
                     user-name="${POSTGRES_USER}"
                     password="${POSTGRES_PASSWORD}">
-    <connection-pool idleTimeout="600"
-                     minPool="0"
-                     maxPool="10"
-                     maxSize="50" />
+    <connection-pool idleTimeout="${OPENNMS_DATABASE_CONNECTION_IDLETIMEOUT}"
+                     minPool="${OPENNMS_DATABASE_CONNECTION_MINPOOL}"
+                     maxPool="${OPENNMS_DATABASE_CONNECTION_MAXPOOL}"
+                     maxSize="${OPENNMS_DATABASE_CONNECTION_MAXSIZE}" />
   </jdbc-data-source>
   
   <jdbc-data-source name="opennms-monitor" 
@@ -343,10 +351,10 @@ cat <<EOF >> ${CONFIG_DIR_OVERLAY}/opennms-datasources.xml
                     url="jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/postgres?sslmode=${POSTGRES_SSL_MODE}&amp;sslfactory=${POSTGRES_SSL_FACTORY}"
                     user-name="${POSTGRES_USER}"
                     password="${POSTGRES_PASSWORD}">
-    <connection-pool idleTimeout="600"
-                     minPool="0"
-                     maxPool="10"
-                     maxSize="50" />
+    <connection-pool idleTimeout="${OPENNMS_DATABASE_CONNECTION_IDLETIMEOUT}"
+                     minPool="${OPENNMS_DATABASE_CONNECTION_MINPOOL}"
+                     maxPool="${OPENNMS_DATABASE_CONNECTION_MAXPOOL}"
+                     maxSize="${OPENNMS_DATABASE_CONNECTION_MAXSIZE}" />
   </jdbc-data-source>
 </datasource-configuration>
 EOF
