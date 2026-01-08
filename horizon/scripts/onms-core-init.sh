@@ -30,11 +30,7 @@
 # KAFKA_SASL_USERNAME
 # KAFKA_SECURITY_PROTOCOL
 # OPENNMS_ADMIN_PASS
-# OPENNMS_DATABASE_CONNECTION_IDLETIMEOUT
-# OPENNMS_DATABASE_CONNECTION_LOGINTIMEOUT
-# OPENNMS_DATABASE_CONNECTION_MINPOOL
 # OPENNMS_DATABASE_CONNECTION_MAXPOOL
-# OPENNMS_DATABASE_CONNECTION_MAXSIZE
 # OPENNMS_DBNAME
 # OPENNMS_DBPASS
 # OPENNMS_DBUSER
@@ -79,11 +75,7 @@ echo "OpenNMS Core Configuration Script..."
 command -v rsync >/dev/null 2>&1 || { echo >&2 "rsync is required but it's not installed. Aborting."; exit 1; }
 
 # Defaults
-OPENNMS_DATABASE_CONNECTION_IDLETIMEOUT="${OPENNMS_DATABASE_CONNECTION_IDLETIMEOUT:-600}"
-OPENNMS_DATABASE_CONNECTION_LOGINTIMEOUT="${OPENNMS_DATABASE_CONNECTION_LOGINTIMEOUT:-3}"
-OPENNMS_DATABASE_CONNECTION_MINPOOL="${OPENNMS_DATABASE_CONNECTION_MINSIZE:-25}"
 OPENNMS_DATABASE_CONNECTION_MAXPOOL="${OPENNMS_DATABASE_CONNECTION_MAXPOOL:-50}"
-OPENNMS_DATABASE_CONNECTION_MAXSIZE="${OPENNMS_DATABASE_CONNECTION_MAXSIZE:-50}"
 OPENNMS_WEB_BASEURL_SCHEME="${OPENNMS_WEB_BASEURL_SCHEME:-https}"
 KAFKA_SASL_MECHANISM="${KAFKA_SASL_MECHANISM:-PLAIN}"
 KAFKA_SECURITY_PROTOCOL="${KAFKA_SECURITY_PROTOCOL:-SASL_PLAINTEXT}"
@@ -293,82 +285,7 @@ acknowledged-by=admin
 acknowledged-at=Sun Mar 01 00\:00\:00 EDT 2020
 EOF
 
-# Configure Database access
-USE_UPDATED_DATASOURCE=false
-if [ "${MAJOR}" -eq 32 ];then
-  if [ "${MINOR}" -gt 0 ];then
-    USE_UPDATED_DATASOURCE=true
-  elif [ "${MINOR}" -eq 0 ] && [ "${PATCH}" -ge 4 ];then
-    USE_UPDATED_DATASOURCE=true
-  else
-    USE_UPDATED_DATASOURCE=false
-  fi
-elif [ "${MAJOR}" -ge 33 ] && [ "${MAJOR}" -lt 2000 ]; then
-  USE_UPDATED_DATASOURCE=true
-else
-  USE_UPDATED_DATASOURCE=false
-fi
-echo "Creating datasource configuration in ${CONFIG_DIR_OVERLAY}/opennms-datasources.xml (USE_UPDATED_DATASOURCE: $USE_UPDATED_DATASOURCE)"
-cat <<EOF > ${CONFIG_DIR_OVERLAY}/opennms-datasources.xml
-<?xml version="1.0" encoding="UTF-8"?>
-<datasource-configuration xmlns:this="http://xmlns.opennms.org/xsd/config/opennms-datasources" 
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-  xsi:schemaLocation="http://xmlns.opennms.org/xsd/config/opennms-datasources 
-  http://www.opennms.org/xsd/config/opennms-datasources.xsd ">
 
-  <connection-pool factory="org.opennms.core.db.HikariCPConnectionFactory"
-    idleTimeout="${OPENNMS_DATABASE_CONNECTION_IDLETIMEOUT}"
-    loginTimeout="${OPENNMS_DATABASE_CONNECTION_LOGINTIMEOUT}"
-    minPool="${OPENNMS_DATABASE_CONNECTION_MINPOOL}"
-    maxPool="${OPENNMS_DATABASE_CONNECTION_MAXPOOL}"
-    maxSize="${OPENNMS_DATABASE_CONNECTION_MAXSIZE}" />
-
-  <jdbc-data-source name="opennms" 
-                    database-name="${OPENNMS_DBNAME}" 
-                    class-name="org.postgresql.Driver" 
-                    url="jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${OPENNMS_DBNAME}?sslmode=${POSTGRES_SSL_MODE}&amp;sslfactory=${POSTGRES_SSL_FACTORY}"
-                    user-name="${OPENNMS_DBUSER}"
-                    password="${OPENNMS_DBPASS}" />
-
-EOF
-if $USE_UPDATED_DATASOURCE; then
-cat <<EOF >> ${CONFIG_DIR_OVERLAY}/opennms-datasources.xml
-  <jdbc-data-source name="opennms-admin" 
-                    database-name="template1" 
-                    class-name="org.postgresql.Driver" 
-                    url="jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/template1?sslmode=${POSTGRES_SSL_MODE}&amp;sslfactory=${POSTGRES_SSL_FACTORY}"
-                    user-name="${POSTGRES_USER}"
-                    password="${POSTGRES_PASSWORD}">
-    <connection-pool idleTimeout="${OPENNMS_DATABASE_CONNECTION_IDLETIMEOUT}"
-                     minPool="${OPENNMS_DATABASE_CONNECTION_MINPOOL}"
-                     maxPool="${OPENNMS_DATABASE_CONNECTION_MAXPOOL}"
-                     maxSize="${OPENNMS_DATABASE_CONNECTION_MAXSIZE}" />
-  </jdbc-data-source>
-  
-  <jdbc-data-source name="opennms-monitor" 
-                    database-name="postgres" 
-                    class-name="org.postgresql.Driver" 
-                    url="jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/postgres?sslmode=${POSTGRES_SSL_MODE}&amp;sslfactory=${POSTGRES_SSL_FACTORY}"
-                    user-name="${POSTGRES_USER}"
-                    password="${POSTGRES_PASSWORD}">
-    <connection-pool idleTimeout="${OPENNMS_DATABASE_CONNECTION_IDLETIMEOUT}"
-                     minPool="${OPENNMS_DATABASE_CONNECTION_MINPOOL}"
-                     maxPool="${OPENNMS_DATABASE_CONNECTION_MAXPOOL}"
-                     maxSize="${OPENNMS_DATABASE_CONNECTION_MAXSIZE}" />
-  </jdbc-data-source>
-</datasource-configuration>
-EOF
-else
-cat <<EOF >> ${CONFIG_DIR_OVERLAY}/opennms-datasources.xml
-  <jdbc-data-source name="opennms-admin"
-                    database-name="template1"
-                    class-name="org.postgresql.Driver"
-                    url="jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/template1?sslmode=${POSTGRES_SSL_MODE}&amp;sslfactory=${POSTGRES_SSL_FACTORY}"
-                    user-name="${POSTGRES_USER}"
-                    password="${POSTGRES_PASSWORD}"/>
-</datasource-configuration>
-EOF
-fi
 
 # Enable storeByGroup to improve performance
 # RRD Strategy is enabled by default
