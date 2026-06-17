@@ -141,6 +141,8 @@ DEPLOY_DIR="/opennms-deploy"       # Mounted Externally
 
 CONFIG_DIR_OVERLAY=${OVERLAY_DIR}/etc
 
+OVERLAY_CONFIG_MAPS="/opennms-overlay-configmaps"          # Mounted externally
+
 KARAF_FILES=( \
 "config.properties" \
 "startup.properties" \
@@ -407,6 +409,20 @@ EOF
 opennms-timeseries-api
 EOF
   fi
+
+else 
+  echo "Cortex is not enabled"
+  if [[ -e "${CONFIG_DIR}/opennms.properties.d/timeseries.properties" ]];then
+   rm ${CONFIG_DIR}/opennms.properties.d/timeseries.properties
+  fi
+
+  if [[ -e "${CONFIG_DIR}/org.opennms.plugins.tss.cortex.cfg" ]];then
+   rm ${CONFIG_DIR}/org.opennms.plugins.tss.cortex.cfg
+  fi
+
+  if [[ -e "${CONFIG_DIR}/featuresBoot.d/cortex.boot" ]];then
+   rm ${CONFIG_DIR}/featuresBoot.d/cortex.boot
+  fi
 fi
 
   mkdir -p ${CONFIG_DIR_OVERLAY}/opennms.properties.d
@@ -457,6 +473,11 @@ if [[ ${ENABLE_ALEC} == "true" ]]; then
   cat <<EOF > ${CONFIG_DIR_OVERLAY}/featuresBoot.d/alec.boot
 alec-opennms-standalone wait-for-kar=opennms-alec-plugin
 EOF
+else 
+  echo "ALEC is not enabled"
+  if [[ -e "${CONFIG_DIR}/featuresBoot.d/alec.boot" ]];then
+   rm ${CONFIG_DIR}/featuresBoot.d/alec.boot
+  fi
 fi
 
 # Configure Sink and RPC to use Kafka, and the Kafka Producer.
@@ -590,6 +611,8 @@ else
   fi
 fi
 
+
+
 echo "Updating admin password in ${CONFIG_DIR}/users.xml"
 if [[ -e "/opt/opennms/bin/password" ]];then 
    cp ${CONFIG_DIR}/users.xml /opt/opennms/etc/users.xml 
@@ -603,4 +626,30 @@ elif command -v perl   >/dev/null 2>&1; then
 else
  echo "We are unable to update Admin password. Exiting."
  exit 1
+fi
+
+if [ -d ${OVERLAY_CONFIG_MAPS} ]; then
+echo "Processing overlay config maps ..."
+  # We need to make sure the directories are numerically sorted to match the configured configmap order.
+  for dir in $(ls -1d ${OVERLAY_CONFIG_MAPS}/* | sort -n); do
+    # When we first copy off of the configmap volume, we copy symlinks as files and ignore Kubernetes configmap volume ".." files.
+    # See: https://github.com/spring-projects/spring-boot/issues/23232
+    if [[ $(basename $dir) =~ .*-uncompress ]]; then
+      echo "  Copying files from $dir to ${OVERLAY_DIR}/ (and uncompressing .zip files) ..."
+      mkdir /tmp/uncompress
+      rsync -arO -L --exclude='..*' --no-perms --no-owner --no-group $dir/ /tmp/uncompress # don't bother outputting files copied yet
+      while IFS= read -r -d '' file
+      do 
+       tmpfolder=$(dirname "$file")
+       echo "   Extracting $file to $tmpfolder"
+       unzip -d "$tmpfolder" "$file" 2>&1
+       rm "$file"
+      done < <(find /tmp/uncompress -type f -name "*.zip" -print0)
+      rsync -arO --no-perms --no-owner --no-group --out-format="%n %C" /tmp/uncompress/ ${OVERLAY_DIR}/ | sed 's/^/    /'
+      rm -rf /tmp/uncompress
+    else
+      echo "  Copying files from $dir to ${OVERLAY_DIR}/ ..."
+      rsync -arO -L --exclude='..*' --no-perms --no-owner --no-group --out-format="%n %C" $dir/ ${OVERLAY_DIR}/ | sed 's/^/    /'
+    fi
+  done
 fi

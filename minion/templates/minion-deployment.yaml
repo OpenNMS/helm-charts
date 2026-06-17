@@ -5,7 +5,6 @@ metadata:
   name: minion
   labels:
     app: minion
-  namespace: {{ .Release.Name }}
 spec:
   replicas: 1
   selector:
@@ -62,7 +61,7 @@ spec:
               value: America/New_York
           image: {{ $image }}
           imagePullPolicy: {{ .Values.minion.image.pullPolicy }}
-          {{- if .Values.minion.resources }}
+          {{- with .Values.minion.resources }}
           resources:
            {{- toYaml . | nindent 11 }}
           {{- end }}
@@ -98,7 +97,6 @@ spec:
               protocol: UDP
               name: syslog
            {{- end }}
-          resources: {}
           volumeMounts:
             - mountPath: /opt/minion/minion-config.yaml
               name: minion-settings

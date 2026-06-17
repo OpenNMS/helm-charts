@@ -1,9 +1,8 @@
-{{- if and (eq (include "onOpenShift" .) "true") ((.Values.securitycontext).securitycontextconstraints.enabled) }}
+{{- if and (eq (include "onOpenShift" .) "true") ((.Values.securitycontext).securitycontextconstraints.create) ((.Values.securitycontext).securitycontextconstraints.enabled) }}
 ---
 kind: SecurityContextConstraints
 metadata:
   name: {{ (.Values.securitycontext).securitycontextconstraints.name | quote }}
-  namespace: {{ .Release.Name }}
 allowHostDirVolumePlugin: false
 allowHostIPC: false
 allowHostNetwork: false

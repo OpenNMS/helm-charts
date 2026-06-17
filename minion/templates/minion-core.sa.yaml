@@ -1,8 +1,7 @@
-{{- if and (eq (include "onOpenShift" .) "true") ((.Values.securitycontext).serviceaccount.enabled) }}
+{{- if and (eq (include "onOpenShift" .) "true") ((.Values.securitycontext).serviceaccount.create) ((.Values.securitycontext).serviceaccount.enabled) }}
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: {{ (.Values.securitycontext).serviceaccount.name | quote }}
-  namespace: {{ .Release.Name }}
 {{- end }}

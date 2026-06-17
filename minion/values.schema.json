@@ -2,11 +2,6 @@
     "$schema": "http://json-schema.org/schema#",
     "type": "object",
     "properties": {
-        "createNamespace": {
-            "type": "boolean",
-            "title": "Create Namespace",
-            "default": false
-        },
         "imagePullSecrets": {
             "type": "array",
             "title": "Image Pull Secrets",
@@ -214,6 +209,10 @@
                             "type": "boolean",
                             "default": true
                         },
+                        "create": {
+                            "type": "boolean",
+                            "default": true
+                        },
                         "name": {
                             "type": "string",
                             "default": "opennms-scc"
@@ -225,6 +224,10 @@
                     "title": "Service Account",
                     "properties": {
                         "enabled": {
+                            "type": "boolean",
+                            "default": true
+                        },
+                        "create": {
                             "type": "boolean",
                             "default": true
                         },

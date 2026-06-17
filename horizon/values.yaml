@@ -5,6 +5,7 @@
 timezone: America/New_York
 domain: example.com  # The common domain for the Ingress resource.
 createNamespace: false  # Whether to create the namespace for this deployment
+deploymentMode: Single
 
 # Optionally specify an array of imagePullSecrets.
 # Secrets are created by templates/docker.secret.yaml
@@ -108,6 +109,7 @@ ingress:
 core:
  inspector:
   enabled: false
+ overlayConfigMaps: []
  terminationGracePeriodSeconds: 120
  image:
   repository: opennms/horizon

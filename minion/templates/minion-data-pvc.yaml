@@ -3,7 +3,6 @@ kind: PersistentVolumeClaim
 metadata:
   creationTimestamp: null
   name: minion-data-folder
-  namespace: {{ .Release.Name }}
 spec:
   accessModes:
     - ReadWriteOnce
